@@ -1,2 +1,4 @@
 listings/**/*.jpg
 *.zip
+v2-listings/**/*.jpg
+!v2-listings/BEFORE-AFTER-covers.jpg
