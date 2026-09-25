@@ -33,7 +33,7 @@ Shipping: Turn shipping ON in the listing's delivery options (and keep local pic
 Price check: Facebook URL/model association is crossed with the site. Do not rely on this URL until checked live.
 Current listing: https://www.facebook.com/marketplace/item/2262026264339995/ (Live (verified 2026-09-21))
 
-PHOTO EDITS (your photos only; nothing generated or added):
+PHOTO EDITS (nothing AI-generated):
 01.jpg  (from your photo day2-101-219.jpg): cropped to square; white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening
 02.jpg  (from your photo day2-101-218.jpg): white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening
 03.jpg  (from your photo day2-101-217.jpg): white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening

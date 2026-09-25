@@ -32,7 +32,7 @@ Package decision: IMPROVE EXISTING. The saved photos indicate a possible finish 
 Shipping: Turn shipping ON in the listing's delivery options (and keep local pickup on). Weigh the packed box before you pick the label weight.
 Current listing: https://www.facebook.com/marketplace/item/1819146039083926/ (Live (verified 2026-09-21))
 
-PHOTO EDITS (your photos only; nothing generated or added):
+PHOTO EDITS (nothing AI-generated):
 01.jpg  (from your photo day2-075-155.jpg): cropped to square; levels (auto-contrast, 0.3% clip); light sharpening; white balance left alone to keep the true finish color
 02.jpg  (from your photo day2-075-154.jpg): levels (auto-contrast, 0.3% clip); light sharpening; white balance left alone to keep the true finish color
 03.jpg  (from your photo day2-075-153.jpg): levels (auto-contrast, 0.3% clip); light sharpening; white balance left alone to keep the true finish color

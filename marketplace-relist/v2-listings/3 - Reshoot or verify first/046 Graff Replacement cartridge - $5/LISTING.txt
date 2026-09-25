@@ -33,5 +33,5 @@ Shipping: Leave shipping OFF on its own; low price. Ship only as part of a bundl
 Check: Filename mislabel noted in your workbook (photo shows 46). Correct item.
 Current listing: https://www.facebook.com/marketplace/item/899584076343930/ (Live (verified 2026-09-21))
 
-PHOTO EDITS (your photos only; nothing generated or added):
+PHOTO EDITS (nothing AI-generated):
 01.jpg  (from your photo day2-045-068.jpg): cropped to square; white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening

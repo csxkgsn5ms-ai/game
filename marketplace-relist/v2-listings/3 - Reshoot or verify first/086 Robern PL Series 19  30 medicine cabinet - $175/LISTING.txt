@@ -30,9 +30,10 @@ Upload 01.jpg, 02.jpg in that order. 01.jpg is the square cover.
 Group: 3 - Reshoot or verify first.
 Package decision: HOLD. Add a straight-on mirror photo and open-door/interior photos; confirm shelves and hardware before listing them.
 Shipping: Leave shipping OFF (local pickup only). Too long or too fragile to ship profitably.
+Stock image NOT added: image carries "for representation only" text and cabinet contents are unchecked.
 Check: Inventory says the cabinet body, mirror door, shelves and hardware still need checking. Check them before listing.
 Current listing: https://www.facebook.com/marketplace/item/1105256031852861/ (Live (verified 2026-09-21))
 
-PHOTO EDITS (your photos only; nothing generated or added):
+PHOTO EDITS (nothing AI-generated):
 01.jpg  (from your photo day2-086-179.jpg): cropped to square; white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); brightened (gamma 0.75); light sharpening
 02.jpg  (from your photo day2-086-178.jpg): white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening

@@ -34,5 +34,5 @@ Shipping: Turn shipping ON in the listing's delivery options (and keep local pic
 Check: Check the price: $185 against a workbook retail of $365, while the satin-nickel version (093) is $499/$1,099.
 Current listing: https://www.facebook.com/marketplace/item/1830270914815609/ (Live (verified 2026-09-21))
 
-PHOTO EDITS (your photos only; nothing generated or added):
+PHOTO EDITS (nothing AI-generated):
 01.jpg  (from your photo day2-099-213.jpg): cropped to square; white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening

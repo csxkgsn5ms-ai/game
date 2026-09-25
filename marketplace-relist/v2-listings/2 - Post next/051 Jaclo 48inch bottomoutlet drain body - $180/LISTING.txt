@@ -32,7 +32,7 @@ Package decision: IMPROVE EXISTING. Show the 48-inch drain body, not a different
 Shipping: Leave shipping OFF (local pickup only). Too long or too fragile to ship profitably.
 Current listing: https://www.facebook.com/marketplace/item/1118676503822222/ (Live (verified 2026-09-21))
 
-PHOTO EDITS (your photos only; nothing generated or added):
+PHOTO EDITS (nothing AI-generated):
 01.jpg  (from your photo day2-051-081.jpg): cropped, then padded to a square with a plain border (no content added); white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening
 02.jpg  (from your photo day2-051-082.jpg): white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening
 03.jpg  (from your photo day2-051-080.jpg): white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening

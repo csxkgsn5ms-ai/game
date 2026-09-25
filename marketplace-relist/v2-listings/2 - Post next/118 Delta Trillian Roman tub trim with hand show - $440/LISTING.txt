@@ -33,7 +33,7 @@ Package decision: IMPROVE EXISTING. Lead with tub trim/spout, then kit contents 
 Shipping: Turn shipping ON in the listing's delivery options (and keep local pickup on). Weigh the packed box before you pick the label weight.
 Current listing: https://www.facebook.com/marketplace/item/1233563388947328/ (Live (verified 2026-09-21))
 
-PHOTO EDITS (your photos only; nothing generated or added):
+PHOTO EDITS (nothing AI-generated):
 01.jpg  (from your photo day2-118-223.jpg): cropped to square; white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening
 02.jpg  (from your photo day2-118-222.jpg): white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening
 03.jpg  (from your photo day2-118-221.jpg): white balance (neutralized color cast, max 6%); levels (auto-contrast, 0.3% clip); light sharpening

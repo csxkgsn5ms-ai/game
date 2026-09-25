@@ -71,6 +71,14 @@ def use_line(t):
     for keys,line in USE:
         if any(k in t for k in keys): return line
     return ""
+STOCKDIR=PKG+'/Listing-folders'
+STOCK_SKIP={'086':'image carries "for representation only" text and cabinet contents are unchecked','097':'image finish looks gold/champagne, not satin nickel'}
+BOXCOVER={'030','032','033','034','049','060','065','067','070','076','077','081','088','089','090','091','095','096','097','098','099','100','102'}
+def stock_image(src):
+    im=Image.open(src).convert('RGB'); s=1080
+    k=min(s*0.9/max(im.size),2.0); im=im.resize((int(im.width*k),int(im.height*k)),Image.LANCZOS)
+    e=np.concatenate([np.asarray(im)[0],np.asarray(im)[-1]]); col=tuple(int(v) for v in np.median(e,0))
+    bg=Image.new('RGB',(s,s),col); bg.paste(im,((s-im.width)//2,(s-im.height)//2)); return bg
 def money(v): return f"${v:,.0f}"
 
 if os.path.exists(OUT): shutil.rmtree(OUT)
@@ -100,7 +108,11 @@ for p in sorted(order):
     if cp.get('price') and cp.get('seller') and 'workbook' not in cp['seller'].lower():
         dt=cp.get('date','')
         L.append(f"Retail at {cp['seller']}: {money(cp['price'])} (checked {'Sep' if dt[5:7]=='09' else dt[5:7]} {int(dt[8:10])}, {dt[:4]}). My price: {money(price)}.")
-    L+=["","Photos are of the actual item."]
+    stock=f"{STOCKDIR}/REF_{p}/REFERENCE_ONLY_STOCK_IMAGE.jpg"
+    has_stock=os.path.exists(stock) and p not in STOCK_SKIP
+    spos=(2 if p in BOXCOVER else len(order[p])+1) if has_stock else None
+    if has_stock: L+=["",f"Photo {spos} is the manufacturer's product image for reference. All other photos show the actual item."]
+    else: L+=["","Photos are of the actual item."]
     L.append({'both':"Pickup in Gilbert, AZ by appointment, or shipped with tracking.",
               'local':"Local pickup in Gilbert, AZ by appointment.",
               'bundle':"Pickup in Gilbert, AZ by appointment. Can ship together with other items; ask for a bundle price."}[ship])
@@ -110,7 +122,13 @@ for p in sorted(order):
     folder=f"{OUT}/{group}/{p} {x['brand'].split(' /')[0].title()} {short} - ${price}"
     os.makedirs(folder,exist_ok=True)
     edits=[]
-    for i,name in enumerate(order[p],1):
+    seq=list(order[p])
+    if has_stock: seq.insert(spos-1,'STOCK')
+    for i,name in enumerate(seq,1):
+        if name=='STOCK':
+            stock_image(stock).save(f"{folder}/{i:02d}.jpg",quality=92)
+            edits.append(f"{i:02d}.jpg  = manufacturer product image (from your package's stock reference, used with your permission); resized onto a square canvas, not otherwise edited")
+            continue
         im=ImageOps.exif_transpose(Image.open(f"{S}/raw/{name}.jpg")).convert('RGB')
         e=[]
         r=ROT.get(name)
@@ -128,12 +146,14 @@ for p in sorted(order):
     notes=[f"Group: {group}.",f"Package decision: {d['decision']}. {d['reason']}",f"Shipping: {shipnote}"]
     if pnote: notes.append(pnote)
     if d['price_note'] and p not in ('092','093','100'): notes.append("Price check: "+d['price_note'])
+    if p in STOCK_SKIP: notes.append("Stock image NOT added: "+STOCK_SKIP[p]+".")
+    if has_stock: notes.append(f"Photo {spos:02d}.jpg is the manufacturer image. "+("It is 2nd because your cover is still a box, so buyers see the product right away. " if spos==2 else "It is last so your real photo stays the cover. ")+"Do not make it the cover.")
     if p in MISSING: notes.append("Check: "+MISSING[p])
     if p in WEAK: notes.append("Cover is still the box or tray, and no better photo exists. Take a new photo of the product out of the box before posting.")
     if d['facebook_url']: notes.append(f"Current listing: {d['facebook_url']} ({d['archived_status']})")
     txt=(f"TITLE\n{title}\n\nPRICE\n{price}\n\nCATEGORY\nHome Improvement Supplies\n\nCONDITION\nNew\n\nDESCRIPTION\n{desc}\n\n"
-         f"PHOTOS\nUpload {', '.join(f'{i:02d}.jpg' for i in range(1,len(order[p])+1))} in that order. 01.jpg is the square cover.\n\n"
-         "----- NOTES FOR YOU (do not paste) -----\n"+"\n".join(notes)+"\n\nPHOTO EDITS (your photos only; nothing generated or added):\n"+"\n".join(edits)+"\n")
+         f"PHOTOS\nUpload {', '.join(f'{i:02d}.jpg' for i in range(1,len(order[p])+1+(1 if has_stock else 0)))} in that order. 01.jpg is the square cover.\n\n"
+         "----- NOTES FOR YOU (do not paste) -----\n"+"\n".join(notes)+"\n\nPHOTO EDITS (nothing AI-generated):\n"+"\n".join(edits)+"\n")
     open(f"{folder}/LISTING.txt",'w').write(txt)
     rows.append(dict(ref=p,group=group,title=title,title_chars=len(title),price=price,qty=qty,shipping=ship,photos=len(order[p]),folder=os.path.relpath(folder,OUT)))
 w=csv.DictWriter(open(f"{OUT}/INDEX.csv",'w',newline=''),fieldnames=rows[0].keys()); w.writeheader(); w.writerows(rows)
