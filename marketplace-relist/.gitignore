@@ -1,0 +1,5 @@
+listings/**/*.jpg
+*.zip
+v2-listings/**/*.jpg
+!v2-listings/BEFORE-AFTER-covers.jpg
+clearance-post/0[1-8]_*.jpg
