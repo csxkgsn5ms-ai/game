@@ -81,7 +81,7 @@ def stock_image(src):
     bg=Image.new('RGB',(s,s),col); bg.paste(im,((s-im.width)//2,(s-im.height)//2)); return bg
 def money(v): return f"${v:,.0f}"
 
-if os.path.exists(OUT): shutil.rmtree(OUT)
+for g in glob.glob(OUT+'/[123] - */'): shutil.rmtree(g)  # keep guide and images at the top level
 rows=[]
 for p in sorted(order):
     x=inv[p]; d=dec[p]; title,what,extra,cat=C[p]
