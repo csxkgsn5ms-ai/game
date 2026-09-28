@@ -5,7 +5,7 @@ I finished reviewing every listing. Update my saved Facebook Marketplace drafts 
 1. Save everything as a DRAFT. Do not publish anything and do not delete any old listing. I tap Publish myself.
 2. For each EXISTING draft below, change ONLY the fields listed under it. Leave every other field exactly as it is now, including title, price, description wording, condition, and any photo not mentioned. Don't re-upload photos unless the block says to.
 3. For each NEW draft, create it with every field exactly as written.
-4. Don't reword, add claims, or change prices anywhere.
+4. Don't reword, add claims, or change prices anywhere. The only new text is the "Retail at ..." lines written below; add them exactly as written.
 5. Shipping: your tool can't turn on shipping, so leave delivery as it is. I'll turn shipping on myself where the block says "shipping ON".
 6. Don't touch 030, 027, 097, 099 or 053.
 7. When done, send me a table: ref, draft link, what you changed, number of photos, category, and anything you couldn't do.
@@ -15,6 +15,8 @@ PART 1 — 38 EXISTING DRAFTS: change only what's listed
 --- REF 028 ---
 Draft: https://www.facebook.com/marketplace/item/4595334263945788/
  - Category → Home Improvement Supplies (it is Household now)
+ - Description: add this one new line right after the line "This is the non-ECO version." (change nothing else in the description):
+     Retail at Brizo: $1,062 (checked Sep 28, 2026). My price: $380.
 
 --- REF 029 ---
 Draft: https://www.facebook.com/marketplace/item/1020771890981723/
@@ -63,6 +65,8 @@ Draft: https://www.facebook.com/marketplace/item/1559875778768537/
 --- REF 051 ---
 Draft: https://www.facebook.com/marketplace/item/2306838956734215/
  - Category → Home Improvement Supplies (it is Household now)
+ - Description: add this one new line right after the line "Drain body only. Grate not included." (change nothing else in the description):
+     Retail at Focal Point Hardware: $485 (checked Sep 28, 2026). My price: $180.
 
 --- REF 052 ---
 Draft: https://www.facebook.com/marketplace/item/1268724988715414/
@@ -91,10 +95,14 @@ Draft: https://www.facebook.com/marketplace/item/2602194860261782/
 --- REF 058 ---
 Draft: https://www.facebook.com/marketplace/item/1097795109318488/
  - Category → Home Improvement Supplies (it is Household now)
+ - Description: add this one new line right after the line "Model: S456-GPH" (change nothing else in the description):
+     Retail at Plumbing Overstock (list price): $285 (checked Sep 28, 2026). My price: $105.
 
 --- REF 059 ---
 Draft: https://www.facebook.com/marketplace/item/1030897843331064/
  - Category → Home Improvement Supplies (it is Household now)
+ - Description: add this one new line right after the line "NPT threaded spout (not the 373-S slip-fit version)." (change nothing else in the description):
+     Retail at KB Authority: $73.62 (checked Sep 28, 2026). My price: $25.
 
 --- REF 061 ---
 Draft: https://www.facebook.com/marketplace/item/1960615884616872/
@@ -109,11 +117,15 @@ Draft: https://www.facebook.com/marketplace/item/1487386309886359/
 Draft: https://www.facebook.com/marketplace/item/1612981500619049/
  - Category → Home Improvement Supplies (it is Household now)
  - Photos (draft has 3 photos, should have 4) → remove the current photos and upload from folder "2 - Post next/063 Moen Wynford Roman tub trim - $310" in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg, 4=04.jpg (manufacturer image)
+ - Description: add this one new line right after the line "2 available (price is each)." (change nothing else in the description):
+     Retail at Moen: $845.85 (checked Sep 28, 2026). My price: $310.
 
 --- REF 064 ---
 Draft: https://www.facebook.com/marketplace/item/1430403011933491/
  - Category → Home Improvement Supplies (it is Household now)
  - Photos (draft has 3 photos, should have 4; new photo order) → remove the current photos and upload from folder "2 - Post next/064 Moen Wynford Roman tub trim - $290" in this order: 1=02.jpg, 2=01.jpg, 3=03.jpg, 4=04.jpg (manufacturer image)
+ - Description: add this one new line right after the line "2 available (price is each)." (change nothing else in the description):
+     Retail at AF Supply (list price): $934.10 (checked Sep 28, 2026). My price: $290.
 
 --- REF 066 ---
 Draft: https://www.facebook.com/marketplace/item/1052176491204463/
@@ -139,6 +151,8 @@ Draft: https://www.facebook.com/marketplace/item/38899699509645425/
 Draft: https://www.facebook.com/marketplace/item/1753522685924693/
  - Category → Home Improvement Supplies (it is Household now)
  - Photos (draft has 2 photos, should have 3) → remove the current photos and upload from folder "2 - Post next/072 Pfister Freestanding tubfiller rough valve - $95" in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg (manufacturer image)
+ - Description: add this one new line right after the line "3 available (price is each)." (change nothing else in the description):
+     Retail at Pfister: $325 (checked Sep 28, 2026). My price: $95.
 
 --- REF 073 ---
 Draft: https://www.facebook.com/marketplace/item/1059296876977644/
@@ -165,6 +179,8 @@ Draft: https://www.facebook.com/marketplace/item/1422233219853165/
 Draft: https://www.facebook.com/marketplace/item/1781452296465786/
  - Category → Home Improvement Supplies (it is Household now)
  - Photos (draft has 2 photos, should have 3) → remove the current photos and upload from folder "2 - Post next/079 Riobel Salome  Equinox supply elbow - $40" in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg (manufacturer image)
+ - Description: add this one new line right after the line "Model: 772BK" (change nothing else in the description):
+     Retail at F.W. Webb: $141 (checked Sep 28, 2026). My price: $40.
 
 --- REF 080 ---
 Draft: https://www.facebook.com/marketplace/item/2305620943558466/
@@ -216,6 +232,7 @@ New, never installed. Delta Dorval 24-inch single towel bar in Stainless.
 Bathroom hardware for a remodel or quick refresh.
 
 Model: 75624-SS
+Retail at Delta: $290.45 (checked Sep 28, 2026). My price: $100.
 
 Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
 Pickup in Gilbert, AZ by appointment, or shipped with tracking.
@@ -239,6 +256,7 @@ Bathroom hardware for a remodel or quick refresh.
 Model: 77560
 Check that it fits your toilet before buying.
 8 available (price is each).
+Retail at Delta: $63.95 (checked Sep 28, 2026). My price: $15.
 
 Photo 2 is the manufacturer's product image for reference. All other photos show the actual item.
 Pickup in Gilbert, AZ by appointment. Can ship together with other items; ask for a bundle price.
@@ -261,6 +279,7 @@ Bathroom hardware for a remodel or quick refresh.
 
 Model: 79424-RB
 2 available (price is each).
+Retail at Delta: $106.55 (checked Sep 28, 2026). My price: $30.
 
 Photo 2 is the manufacturer's product image for reference. All other photos show the actual item.
 Pickup in Gilbert, AZ by appointment. Can ship together with other items; ask for a bundle price.
@@ -439,6 +458,7 @@ For a tiled shower build or drain upgrade.
 
 Model: 6226-60-BSS
 Grate only. No drain body. It will not fit a 24- or 48-inch channel.
+Retail at Jaclo: $265 (checked Sep 28, 2026). My price: $100.
 
 Photo 2 is the manufacturer's product image for reference. All other photos show the actual item.
 Local pickup in Gilbert, AZ by appointment.
@@ -597,6 +617,7 @@ New, never installed. QM Drain Delmar series Kai 48-inch standard-length plain-e
 For a tiled shower build or drain upgrade.
 
 Model: 33.200.48GD
+Retail at QualityBath: $801 (checked Sep 28, 2026). My price: $400.
 
 Photos are of the actual item.
 Local pickup in Gilbert, AZ by appointment.
@@ -642,6 +663,7 @@ New, never installed. Riobel Salome single-hole bathroom faucet with joystick ha
 Great for a bathroom remodel or vanity upgrade.
 
 Model: SA01C
+Retail at PatioLiving: $501 (checked Sep 28, 2026). My price: $335.
 
 Photo 3 is the manufacturer's product image for reference. All other photos show the actual item.
 Pickup in Gilbert, AZ by appointment, or shipped with tracking.
@@ -686,6 +708,7 @@ Bathroom hardware for a remodel or quick refresh.
 
 Model: PLM2030B
 Surface mounting needs a side kit (not included).
+Retail at EasyPlumbing (list price): $629 (checked Sep 28, 2026). My price: $175.
 
 Photos are of the actual item.
 Local pickup in Gilbert, AZ by appointment.
@@ -820,6 +843,7 @@ New, never installed. Rohl Myrina single-hole bar and prep faucet in polished ch
 Great for a kitchen remodel, bar sink or prep sink.
 
 Model: MY61D1LMAPC
+Retail at EasyPlumbing (list price): $748 (checked Sep 28, 2026). My price: $270.
 
 Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
 Pickup in Gilbert, AZ by appointment, or shipped with tracking.
