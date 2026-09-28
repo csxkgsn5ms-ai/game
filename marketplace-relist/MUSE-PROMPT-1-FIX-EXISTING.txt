@@ -5,7 +5,7 @@ PROMPT 1 FOR MUSE — fix my 38 existing Marketplace drafts (change ONLY what's 
 3. Don't reword anything, add claims, or change prices. The only new text is any "Retail at ..." line written below; add it exactly as written.
 4. Your tool can't turn on shipping, so leave delivery as it is. I'll turn shipping on myself.
 5. Don't touch 030, 027, 097, 099 or 053, or any draft not listed here.
-6. Photos: use the folder I gave you, made by unzipping V2_Final_part1..4 into ONE folder. Each block names the listing's folder and file names. Ignore any older photo zips.
+6. Photos: use the folder I gave you, made by unzipping V2_Final_part1..5 into ONE folder. Each block names the listing's folder and file names. Ignore any older photo zips.
 7. When done, send me a table: ref, draft link, what you changed, number of photos, category, and anything you couldn't do.
 
 PART 1 — 38 EXISTING DRAFTS: change only what's listed

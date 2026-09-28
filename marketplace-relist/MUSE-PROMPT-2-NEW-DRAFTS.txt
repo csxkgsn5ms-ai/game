@@ -4,7 +4,7 @@ PROMPT 2 FOR MUSE — create 33 NEW Marketplace drafts
 2. Use every field exactly as written: title, price, category, condition, description, photo order. Don't reword anything, add claims, or change prices.
 3. Your tool can't turn on shipping, so set local pickup. I'll turn shipping on myself where it says so.
 4. Don't create drafts for 030, 027, 097, 099 or 053.
-5. Photos: use the folder I gave you, made by unzipping V2_Final_part1..4 into ONE folder. Each block names the listing's folder and file names. Ignore any older photo zips.
+5. Photos: use the folder I gave you, made by unzipping V2_Final_part1..5 into ONE folder. Each block names the listing's folder and file names. Ignore any older photo zips.
 6. When done, send me a table: ref, new draft link, title, price, number of photos, category, and anything you couldn't do.
 
 PART 2 — 33 NEW DRAFTS: create with everything below
