@@ -1,0 +1,756 @@
+PROMPT 2 FOR MUSE — create 33 NEW Marketplace drafts
+------------------------------------------------------------------------------
+1. Create each listing below as a NEW DRAFT. Do not publish anything and do not delete any old listing.
+2. Use every field exactly as written: title, price, category, condition, description, photo order. Don't reword anything, add claims, or change prices.
+3. Your tool can't turn on shipping, so set local pickup. I'll turn shipping on myself where it says so.
+4. Don't create drafts for 030, 027, 097, 099 or 053.
+5. Photos: use the folder I gave you, made by unzipping V2_Final_part1..5 into ONE folder. Each block names the listing's folder and file names. Ignore any older photo zips.
+6. When done, send me a table: ref, new draft link, title, price, number of photos, category, and anything you couldn't do.
+
+PART 2 — 33 NEW DRAFTS: create with everything below
+
+=== REF 031 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/031 Delta Dorval 24inch towel bar - $100
+Title: Delta Dorval 24" Towel Bar, Stainless - New (75624-SS)
+Price: $100
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=04.jpg (manufacturer image), 2=01.jpg, 3=02.jpg, 4=03.jpg
+Description:
+New, never installed. Delta Dorval 24-inch single towel bar in Stainless.
+Bathroom hardware for a remodel or quick refresh.
+
+Model: 75624-SS
+Retail at Delta: $290.45 (checked Sep 28, 2026). My price: $100.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #031
+
+=== REF 032 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/032 Delta Ara toilet tank lever - $15
+Title: Delta Ara Toilet Tank Lever, Chrome - New (77560)
+Price: $15
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=01.jpg, 2=02.jpg (manufacturer image), 3=03.jpg, 4=04.jpg
+Description:
+New, never installed. Delta Ara toilet tank lever in polished chrome. The box is labeled "Universal Tank Lever."
+Bathroom hardware for a remodel or quick refresh.
+
+Model: 77560
+Check that it fits your toilet before buying.
+8 available (price is each).
+Retail at Delta: $63.95 (checked Sep 28, 2026). My price: $15.
+
+Photo 2 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment. Can ship together with other items; ask for a bundle price.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #032
+
+=== REF 033 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/033 Delta Linden 24inch towel bar - $30
+Title: Delta Linden 24" Towel Bar, Venetian Bronze - New (79424-RB)
+Price: $30
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=01.jpg, 2=02.jpg (manufacturer image), 3=03.jpg, 4=04.jpg
+Description:
+New, never installed. Delta Linden 24-inch single towel bar in Venetian Bronze.
+Bathroom hardware for a remodel or quick refresh.
+
+Model: 79424-RB
+2 available (price is each).
+Retail at Delta: $106.55 (checked Sep 28, 2026). My price: $30.
+
+Photo 2 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment. Can ship together with other items; ask for a bundle price.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #033
+
+=== REF 034 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/034 Delta Dorval handle - $45
+Title: Delta Dorval Cross Handle Kit, Stainless - New (H562SS)
+Price: $45
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Delta Dorval single cross handle kit in Stainless.
+Bathroom hardware for a remodel or quick refresh.
+
+Model: H562SS
+Handle only. Check that your Delta faucet takes this handle before buying.
+Retail at Delta: $144 (checked Sep 12, 2026). My price: $45.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #034
+
+=== REF 037 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/037 Isenberg Round shower slide bar - $115
+Title: Isenberg/Flusso Round Shower Slide Bar, Chrome - New
+Price: $115
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg
+Description:
+New, never installed. Isenberg / Flusso round shower slide bar in chrome. Original Isenberg-branded box.
+An easy shower upgrade.
+
+Model: 100.601001ACP
+3 available (price is each).
+
+Photos are of the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #037
+
+=== REF 040 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/040 Isenberg 8inch widespread bathroom faucet - $210
+Title: Isenberg/Flusso 8" Widespread Bathroom Faucet, Brushed Nickel - New
+Price: $210
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg
+Description:
+New, never installed. Isenberg / Flusso 3-hole, 8-inch widespread two-handle bathroom faucet in brushed nickel. Original Isenberg-branded box.
+Great for a bathroom remodel or vanity upgrade.
+
+Model: 260.2000BN
+2 available (price is each).
+
+Photos are of the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #040
+
+=== REF 041 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/041 Isenberg Roman tub faucet with hand shower - $295
+Title: Isenberg/Flusso Roman Tub Faucet w/ Hand Shower, Brushed Nickel - New
+Price: $295
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg, 4=04.jpg
+Description:
+New, never installed. Isenberg / Flusso 4-hole deck-mount Roman tub faucet with hand shower in brushed nickel. Original Isenberg-branded box.
+An easy shower upgrade.
+
+Model: 260.2400BN
+
+Photos are of the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #041
+
+=== REF 042 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/042 Isenberg Pressurebalance valve with stops - $115
+Title: Isenberg/Flusso Pressure-Balance Rough Valve w/ Stops - New
+Price: $115
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg
+Description:
+New, never installed. Isenberg / Flusso pressure-balance rough valve with stops (PBV.1005AS-BN).
+For a shower or tub remodel or repair. Plumbers and contractors welcome.
+
+Model: PBV.1005AS-BN
+Rough valve only. Trim not included.
+
+Photos are of the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #042
+
+=== REF 045 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/045 Graff Replacement cartridge - $5
+Title: Graff Replacement Cartridge V2038.32.5Z - New
+Price: $5
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=01.jpg
+Description:
+New, never installed. Graff replacement cartridge, part V2038.32.5Z.
+Replacement part for repairing a Graff faucet or valve.
+
+Model: V2038.32.5Z
+Match the full part number to your valve before buying. Hot/cold side is not confirmed.
+
+Photos are of the actual item.
+Pickup in Gilbert, AZ by appointment. Can ship together with other items; ask for a bundle price.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #045
+Note from Levi: find an exact-match manufacturer image if you can, and add it as the LAST photo. If there is no exact model and finish match, skip it.
+
+=== REF 046 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/046 Graff Replacement cartridge - $5
+Title: Graff Replacement Cartridge V-2038.31.5Z - New
+Price: $5
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=01.jpg
+Description:
+New, never installed. Graff replacement cartridge, part V-2038.31.5Z.
+Replacement part for repairing a Graff faucet or valve.
+
+Model: V-2038.31.5Z
+Match the full part number to your valve before buying. Hot/cold side is not confirmed.
+
+Photos are of the actual item.
+Pickup in Gilbert, AZ by appointment. Can ship together with other items; ask for a bundle price.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #046
+Note from Levi: find an exact-match manufacturer image if you can, and add it as the LAST photo. If there is no exact model and finish match, skip it.
+
+=== REF 049 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/049 Jaclo 60inch tilein channel grate  grate onl - $100
+Title: Jaclo 60" Tile-In Shower Channel Grate, Brushed Stainless - New
+Price: $100
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=03.jpg, 2=02.jpg (manufacturer image), 3=01.jpg, 4=04.jpg
+Description:
+New, never installed. Jaclo 60-inch slim shower channel square grate in brushed stainless steel.
+For a tiled shower build or drain upgrade.
+
+Model: 6226-60-BSS
+Grate only. No drain body. It will not fit a 24- or 48-inch channel.
+Retail at Jaclo: $265 (checked Sep 28, 2026). My price: $100.
+
+Photo 2 is the manufacturer's product image for reference. All other photos show the actual item.
+Local pickup in Gilbert, AZ by appointment.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #049
+
+=== REF 060 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/060 Kohler Memoirs Stately volumecontrol trim - $100
+Title: Kohler Memoirs Stately Volume Control Trim, Brushed Nickel - New
+Price: $100
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg, 3=03.jpg
+Description:
+New, never installed. Kohler Memoirs Stately wall-mount volume-control trim with lever handle, Vibrant Brushed Nickel.
+For a shower or tub remodel or repair. Plumbers and contractors welcome.
+
+Model: K-T10423-4S-BN
+Trim only. Rough valve not included.
+2 available (price is each).
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #060
+
+=== REF 065 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/065 Moen Weymouth Roman tub trim with hand show - $1455
+Title: Moen Weymouth Roman Tub Faucet w/ Hand Shower, Brushed Nickel - New
+Price: $1455
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg, 3=03.jpg
+Description:
+New, never installed. Moen Weymouth two-handle deck-mount widespread Roman tub filler trim with hand shower, brushed nickel. 1.75 GPM.
+An easy shower upgrade.
+
+Model: TS21104BN
+Trim only. Rough valve required (not included).
+Retail at Moen: $2,909 (checked Sep 11, 2026). My price: $1,455.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Local pickup in Gilbert, AZ by appointment.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #065
+
+=== REF 067 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/067 Moen MCORE tub  shower trim - $195
+Title: Moen Wynford M-CORE Tub & Shower Trim, Chrome - New (UT24503EP)
+Price: $195
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg, 3=03.jpg
+Description:
+New, never installed. Moen Wynford M-CORE 2-Series single-handle tub and shower trim kit in chrome. 1.75 GPM, WaterSense.
+For a shower or tub remodel or repair. Plumbers and contractors welcome.
+
+Model: UT24503EP
+Trim only. M-CORE rough valve not included.
+2 available (price is each).
+Retail at Moen: $393 (checked Sep 11, 2026). My price: $195.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #067
+
+=== REF 070 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/070 Mti Incline 2 undermount bathroom sink - $540
+Title: MTI Incline 2 Undermount Bathroom Sink, Matte White - New
+Price: $540
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=01.jpg (manufacturer image), 2=02.jpg, 3=03.jpg
+Description:
+New, never installed. MTI Incline 2 rectangular undermount bathroom sink in matte white, 20-3/8 x 14-3/8 in.
+Great for a bathroom remodel or vanity upgrade.
+
+Model: MTCS770-WH-MT
+Retail at PlumbTile: $1,080 (checked Sep 12, 2026). My price: $540.
+
+Photos are of the actual item.
+Local pickup in Gilbert, AZ by appointment.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #070
+
+=== REF 075 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 1 - Post first/075 Phylrich Singlehandle lavatory faucet - $200
+Title: Phylrich Single-Handle Bathroom Faucet, French Brass - New
+Price: $200
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg
+Description:
+New, never installed. Phylrich 7-1/2-inch single-handle lavatory set with knurled handle, French Brass (002).
+Great for a bathroom remodel or vanity upgrade.
+
+Model: 230-18/002
+2 available (price is each).
+
+Photos are of the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #075
+
+=== REF 076 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/076 Phylrich Pushpull manual diverter - $55
+Title: Phylrich Push-Pull Manual Diverter Part - New (DPB2100X21C)
+Price: $55
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Phylrich push-pull manual diverter, internal replacement part.
+For a shower or tub remodel or repair. Plumbers and contractors welcome.
+
+Model: DPB2100X21C
+Replacement part only. Match the part number to your fixture.
+5 available (price is each).
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #076
+
+=== REF 077 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/077 Qmdrain Delmar Kai 48inch linear drain - $400
+Title: QM Drain Delmar Kai 48" Linear Shower Drain, Gold - New
+Price: $400
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg
+Description:
+New, never installed. QM Drain Delmar series Kai 48-inch standard-length plain-edge linear drain in gold.
+For a tiled shower build or drain upgrade.
+
+Model: 33.200.48GD
+Retail at QualityBath: $801 (checked Sep 28, 2026). My price: $400.
+
+Photos are of the actual item.
+Local pickup in Gilbert, AZ by appointment.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #077
+Note from Levi: find an exact-match manufacturer image if you can, and add it as the LAST photo. If there is no exact model and finish match, skip it.
+
+=== REF 081 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/081 Riobel Thermostatic  pressurebalance rough va - $165
+Title: Riobel R46 Thermostatic/Pressure-Balance Rough Valve - New
+Price: $165
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=01.jpg, 2=02.jpg (manufacturer image), 3=03.jpg
+Description:
+New, never installed. Riobel R46 4-way thermostatic / pressure-balance rough valve.
+For a shower or tub remodel or repair. Plumbers and contractors welcome.
+
+Model: R46
+Rough valve only. Trim not included.
+4 available (price is each).
+
+Photo 2 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #081
+
+=== REF 082 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/082 Riobel Salome bathroom faucet with popup - $335
+Title: Riobel Salome Single-Hole Bathroom Faucet, Chrome - New (SA01C)
+Price: $335
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg (manufacturer image)
+Description:
+New, never installed. Riobel Salome single-hole bathroom faucet with joystick handle and pop-up drain, chrome. 1 GPM.
+Great for a bathroom remodel or vanity upgrade.
+
+Model: SA01C
+Retail at PatioLiving: $501 (checked Sep 28, 2026). My price: $335.
+
+Photo 3 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #082
+
+=== REF 085 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/085 Robern PL Portray 24  30 medicine cabinet - $300
+Title: Robern PL Portray 24x30 Medicine Cabinet, Beveled Mirror - New
+Price: $300
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg (manufacturer image)
+Description:
+New, never installed. Robern PL Portray 24 x 30 in. medicine cabinet with beveled mirror door and magnification mirror.
+Bathroom hardware for a remodel or quick refresh.
+
+Model: P2C2430D4FBMM
+Retail at Universal Appliance & Kitchen: $599 (checked Sep 13, 2026). My price: $300.
+
+Photo 3 is the manufacturer's product image for reference. All other photos show the actual item.
+Local pickup in Gilbert, AZ by appointment.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #085
+
+=== REF 086 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/086 Robern PL Series 19  30 medicine cabinet - $175
+Title: Robern PL Series 19.25x30 Medicine Cabinet, Black Interior - New
+Price: $175
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup only. Leave shipping OFF.
+Photos in this order: 1=01.jpg, 2=02.jpg
+Description:
+New, never installed. Robern PL Series 19-1/4 x 30 in. medicine cabinet, black interior, plain polished-edge mirror door.
+Bathroom hardware for a remodel or quick refresh.
+
+Model: PLM2030B
+Surface mounting needs a side kit (not included).
+Retail at EasyPlumbing (list price): $629 (checked Sep 28, 2026). My price: $175.
+
+Photos are of the actual item.
+Local pickup in Gilbert, AZ by appointment.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #086
+
+=== REF 088 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/088 Rohl Campo pressurebalance trim - $110
+Title: Rohl Campo Pressure-Balance Shower Trim, Chrome - New
+Price: $110
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Rohl Campo 1/2-inch pressure-balance trim without diverter, polished chrome.
+For a shower or tub remodel or repair. Plumbers and contractors welcome.
+
+Model: A2210ILAPC
+Trim only. Rough valve not included.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #088
+
+=== REF 089 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/089 Rohl Campo pressurebalance trim - $200
+Title: Rohl Campo Pressure-Balance Shower Trim, Satin Nickel - New
+Price: $200
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Rohl Campo 1/2-inch pressure-balance trim without diverter, satin nickel.
+For a shower or tub remodel or repair. Plumbers and contractors welcome.
+
+Model: A2210ILSTN
+Trim only. Rough valve not included.
+2 available (price is each).
+Retail at Voomi Supply: $401 (checked Sep 12, 2026). My price: $200.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #089
+
+=== REF 090 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/090 Rohl Meda pressurebalance trim - $250
+Title: Rohl Meda Pressure-Balance Shower Trim, Chrome - New (LV110L-APC)
+Price: $250
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Rohl Meda pressure-balance trim, polished chrome.
+For a shower or tub remodel or repair. Plumbers and contractors welcome.
+
+Model: LV110L-APC
+Trim only. Rough valve not included.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #090
+
+=== REF 091 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/091 Rohl Meda pressurebalance trim - $300
+Title: Rohl Meda Pressure-Balance Shower Trim, Satin Nickel - New
+Price: $300
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Rohl Meda 1/2-inch pressure-balance trim without diverter, satin nickel.
+For a shower or tub remodel or repair. Plumbers and contractors welcome.
+
+Model: LV110L-STN
+Trim only. Rough valve not included.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #091
+
+=== REF 092 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/092 Rohl 1983 bar  prep faucet - $499
+Title: Rohl 1983 Bar/Prep Faucet, Satin Nickel - New (R7514SLMSTN-2)
+Price: $499
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg, 2=01.jpg, 3=03.jpg, 4=04.jpg, 5=05.jpg (manufacturer image)
+Description:
+New, never installed. Rohl 1983 single-hole bar and prep faucet in satin nickel, single lever. 1.8 GPM.
+Great for a kitchen remodel, bar sink or prep sink.
+
+Model: R7514SLMSTN-2
+2 available (price is each).
+Retail at Chicago Faucet Shoppe: $1,061 (checked Sep 12, 2026). My price: $499.
+
+Photo 5 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #092
+
+=== REF 095 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/095 Rohl Myrina bar  prep faucet - $270
+Title: Rohl Myrina Bar/Prep Faucet, Polished Chrome - New (MY61D1LMAPC)
+Price: $270
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Rohl Myrina single-hole bar and prep faucet in polished chrome, single lever. 1.8 GPM.
+Great for a kitchen remodel, bar sink or prep sink.
+
+Model: MY61D1LMAPC
+Retail at EasyPlumbing (list price): $748 (checked Sep 28, 2026). My price: $270.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #095
+
+=== REF 096 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/096 Rohl Myrina bar  prep faucet - $420
+Title: Rohl Myrina Bar/Prep Faucet, Matte Black - New (MY61D1LMMB)
+Price: $420
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Rohl Myrina single-hole bar and prep faucet in matte black, single lever. 1.8 GPM.
+Great for a kitchen remodel, bar sink or prep sink.
+
+Model: MY61D1LMMB
+2 available (price is each).
+Retail at Chicago Faucet Shoppe: $839 (checked Sep 12, 2026). My price: $420.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #096
+
+=== REF 098 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/098 Rohl 1983 bar  prep faucet - $395
+Title: Rohl 1983 Bar/Prep Faucet, Polished Chrome - New (R7514SLMAPC-2)
+Price: $395
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Rohl 1983 single-hole bar and prep faucet in polished chrome, single lever. 1.8 GPM.
+Great for a kitchen remodel, bar sink or prep sink.
+
+Model: R7514SLMAPC-2
+2 available (price is each).
+Retail at Chicago Faucet Shoppe: $786 (checked Sep 12, 2026). My price: $395.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #098
+
+=== REF 100 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/100 Rohl Lux pulldown kitchen faucet - $499
+Title: Rohl Lux Pull-Down Kitchen Faucet, Polished Nickel - New (R7520PN)
+Price: $499
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Rohl Lux single-hole pull-down kitchen faucet in polished nickel, single lever. 1.8 GPM.
+Great for a kitchen remodel, bar sink or prep sink.
+
+Model: R7520PN
+Retail at QualityBath: $1,082 (checked Sep 12, 2026). My price: $499.
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #100
+
+=== REF 101 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/101 Rohl Baltera multifunction showerhead - $155
+Title: Rohl Baltera Multifunction Showerhead, Satin Nickel - New (WI0197STN)
+Price: $155
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=01.jpg, 2=02.jpg, 3=03.jpg
+Description:
+New, never installed. Rohl Baltera multifunction showerhead in satin nickel.
+An easy shower upgrade.
+
+Model: WI0197STN
+7 available (price is each).
+
+Photos are of the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #101
+
+=== REF 102 — CREATE a new draft ===
+Draft: none yet
+Photo folder: 3 - Reshoot or verify first/102 Rohl Baltera multifunction showerhead - $90
+Title: Rohl Baltera Multifunction Showerhead, Polished Chrome - New
+Price: $90
+Category: Home Improvement Supplies
+Condition: New
+Delivery: Local pickup now (Levi turns shipping ON later).
+Photos in this order: 1=02.jpg (manufacturer image), 2=01.jpg
+Description:
+New, never installed. Rohl Baltera multifunction showerhead in polished chrome.
+An easy shower upgrade.
+
+Model: WI0197APC
+Manufacturer model WI0197APC. The dealer sticker may read WI0197-APC.
+4 available (price is each).
+
+Photo 1 is the manufacturer's product image for reference. All other photos show the actual item.
+Pickup in Gilbert, AZ by appointment, or shipped with tracking.
+Reasonable offers welcome. Bundle discount on 3 or more items.
+Message me with any questions or for more photos.
+Ref #102

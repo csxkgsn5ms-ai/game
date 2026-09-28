@@ -1,0 +1,70 @@
+PROMPT 3 FOR MUSE — add the retail price line to these drafts (nothing else)
+------------------------------------------------------------------------------
+1. Drafts only. Do not publish anything and do not delete anything.
+2. For each draft below, open it and check the description. If it ALREADY has a line starting with "Retail at", do nothing to that draft.
+3. If it does NOT, add the one line shown, on its own line, directly after the line that starts with "Model:" (or after the quantity line, e.g. "2 available (price is each).", if there is one right under Model). Change nothing else: no other text, photos, price, title, category or delivery.
+4. When done, send me a table: ref, draft link, "added" or "already there", and anything you couldn't do.
+
+--- REF 028 ---
+Draft: https://www.facebook.com/marketplace/item/4595334263945788/
+Line to add: Retail at Brizo: $1,062 (checked Sep 28, 2026). My price: $380.
+
+--- REF 031 ---
+Draft: https://www.facebook.com/marketplace/item/1812962549903838/
+Line to add: Retail at Delta: $290.45 (checked Sep 28, 2026). My price: $100.
+
+--- REF 032 ---
+Draft: https://www.facebook.com/marketplace/item/1074379728569193/
+Line to add: Retail at Delta: $63.95 (checked Sep 28, 2026). My price: $15.
+
+--- REF 033 ---
+Draft: https://www.facebook.com/marketplace/item/1101271855985115/
+Line to add: Retail at Delta: $106.55 (checked Sep 28, 2026). My price: $30.
+
+--- REF 049 ---
+Draft: https://www.facebook.com/marketplace/item/1311205617659285/
+Line to add: Retail at Jaclo: $265 (checked Sep 28, 2026). My price: $100.
+
+--- REF 051 ---
+Draft: https://www.facebook.com/marketplace/item/2306838956734215/
+Line to add: Retail at Focal Point Hardware: $485 (checked Sep 28, 2026). My price: $180.
+
+--- REF 058 ---
+Draft: https://www.facebook.com/marketplace/item/1097795109318488/
+Line to add: Retail at Plumbing Overstock (list price): $285 (checked Sep 28, 2026). My price: $105.
+
+--- REF 059 ---
+Draft: https://www.facebook.com/marketplace/item/1030897843331064/
+Line to add: Retail at KB Authority: $73.62 (checked Sep 28, 2026). My price: $25.
+
+--- REF 063 ---
+Draft: https://www.facebook.com/marketplace/item/1612981500619049/
+Line to add: Retail at Moen: $845.85 (checked Sep 28, 2026). My price: $310.
+
+--- REF 064 ---
+Draft: https://www.facebook.com/marketplace/item/1430403011933491/
+Line to add: Retail at AF Supply (list price): $934.10 (checked Sep 28, 2026). My price: $290.
+
+--- REF 072 ---
+Draft: https://www.facebook.com/marketplace/item/1753522685924693/
+Line to add: Retail at Pfister: $325 (checked Sep 28, 2026). My price: $95.
+
+--- REF 077 ---
+Draft: https://www.facebook.com/marketplace/item/2130009757903259/
+Line to add: Retail at QualityBath: $801 (checked Sep 28, 2026). My price: $400.
+
+--- REF 079 ---
+Draft: https://www.facebook.com/marketplace/item/1781452296465786/
+Line to add: Retail at F.W. Webb: $141 (checked Sep 28, 2026). My price: $40.
+
+--- REF 082 ---
+Draft: https://www.facebook.com/marketplace/item/2251839375385634/
+Line to add: Retail at PatioLiving: $501 (checked Sep 28, 2026). My price: $335.
+
+--- REF 086 ---
+Draft: https://www.facebook.com/marketplace/item/1763136938224145/
+Line to add: Retail at EasyPlumbing (list price): $629 (checked Sep 28, 2026). My price: $175.
+
+--- REF 095 ---
+Draft: https://www.facebook.com/marketplace/item/931357149649019/
+Line to add: Retail at EasyPlumbing (list price): $748 (checked Sep 28, 2026). My price: $270.
