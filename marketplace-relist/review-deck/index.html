@@ -1,0 +1,199 @@
+<title>Listing Review Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;600;700&display=swap">
+<style>
+:root{
+  --bg:#f2f3f1;--card:#ffffff;--ink:#1b2125;--muted:#5b656b;--line:#d8dcd9;--chip:#e9ecea;
+  --accent:#a8612d;--accent-ink:#fff;--soft:#f6ece3;
+  --ok:#2f7a4f;--ok-soft:#e3f1e8;--bad:#b3372f;--bad-soft:#f8e4e2;--warn:#9a6b00;--warn-soft:#fbf1d6;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141819;--card:#1e2427;--ink:#e7ebe9;--muted:#9ba6aa;--line:#323a3e;--chip:#2a3135;
+  --accent:#d98a4e;--accent-ink:#1a1206;--soft:#2c231c;
+  --ok:#6cc494;--ok-soft:#1c3327;--bad:#ee8076;--bad-soft:#3a2220;--warn:#e3b54f;--warn-soft:#352c14;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141819;--card:#1e2427;--ink:#e7ebe9;--muted:#9ba6aa;--line:#323a3e;--chip:#2a3135;
+  --accent:#d98a4e;--accent-ink:#1a1206;--soft:#2c231c;
+  --ok:#6cc494;--ok-soft:#1c3327;--bad:#ee8076;--bad-soft:#3a2220;--warn:#e3b54f;--warn-soft:#352c14;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45;padding:0 16px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:16px 60px;display:flex;flex-direction:column;gap:16px}
+h1{font-size:1.35rem;margin:0}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
+.bar select,.bar button{font:600 .9rem var(--sans)}
+select{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;max-width:100%}
+button{cursor:pointer;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 12px;font:600 .9rem var(--sans)}
+button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.grow{flex:1 1 220px;min-width:0}
+.tally{display:flex;gap:6px;flex-wrap:wrap;font-size:.8rem}
+.pill{padding:3px 9px;border-radius:999px;background:var(--chip);white-space:nowrap;font-variant-numeric:tabular-nums}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}.pill.bad{background:var(--bad-soft);color:var(--bad)}.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.slide{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:860px){.slide{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.head{display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.big{width:100%;aspect-ratio:1;object-fit:contain;background:var(--chip);border-radius:10px;display:block}
+.strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.tile{position:relative;display:flex;flex-direction:column;gap:4px;border:2px solid transparent;border-radius:10px;padding:3px;background:var(--bg);touch-action:manipulation}
+.tile.sel{border-color:var(--accent)}
+.tile.drag{opacity:.4}.tile.over{border-color:var(--ok);border-style:dashed}
+.tile img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:7px;display:block;cursor:grab}
+.tile .n{position:absolute;top:6px;left:6px;background:var(--ink);color:var(--bg);font:600 .72rem var(--mono);padding:1px 6px;border-radius:6px}
+.tile .tag{position:absolute;top:6px;right:6px;background:var(--warn-soft);color:var(--warn);font:600 .65rem var(--sans);padding:1px 5px;border-radius:6px}
+.moves{display:flex;gap:4px}.moves button{flex:1;padding:3px 0;font-size:.85rem}
+.hint{font-size:.82rem;color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:4px}
+.fhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.label{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.value{white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg);border-radius:8px;padding:8px 10px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+button.copy{padding:4px 10px;font-size:.8rem}
+button.copy.done{background:var(--ok);color:#fff;border-color:var(--ok)}
+.status{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.status label{display:flex;align-items:center;justify-content:center;gap:6px;border:2px solid var(--line);border-radius:10px;padding:10px 6px;font-weight:600;cursor:pointer;text-align:center}
+.status input{accent-color:var(--accent)}
+.status label.on.approved{border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.status label.on.not_approved{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.status label.on.reshoot{border-color:var(--warn);background:var(--warn-soft);color:var(--warn)}
+.checks{display:flex;flex-direction:column;gap:6px}
+.checks label{display:flex;gap:8px;align-items:flex-start}
+.checks input{margin-top:3px;accent-color:var(--accent);width:17px;height:17px;flex:none}
+textarea{width:100%;min-height:74px;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px}
+ul.notes{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px;font-size:.9rem}
+.save{font-size:.8rem;color:var(--muted)}
+.links a{color:var(--accent);overflow-wrap:anywhere}
+.loading{padding:40px 0;color:var(--muted)}
+</style>
+
+<div class="wrap">
+  <header class="head">
+    <h1>Listing Review Deck</h1>
+    <p class="hint">One listing per slide. Drag photos (or use the arrows) into the order you want, pick Approved, Not approved or Needs reshoot, and tick the reshoot checklist. Your choices save automatically. Copy the prompt to hand the listing to Muse exactly as shown.</p>
+  </header>
+
+  <div class="bar">
+    <button id="prev" type="button" aria-label="Previous listing">&larr; Prev</button>
+    <select id="jump" class="grow" aria-label="Jump to listing"></select>
+    <button id="next" type="button" aria-label="Next listing">Next &rarr;</button>
+    <select id="filter" aria-label="Filter listings">
+      <option value="all">All 76</option>
+      <option value="g1">1 - Post first</option>
+      <option value="g2">2 - Post next</option>
+      <option value="g3">3 - Reshoot or verify first</option>
+      <option value="draft">Has a Facebook draft</option>
+      <option value="undecided">Not decided yet</option>
+      <option value="approved">Approved</option>
+      <option value="not_approved">Not approved</option>
+      <option value="reshoot">Needs reshoot</option>
+    </select>
+    <div class="tally" id="tally"></div>
+  </div>
+
+  <div id="slide" class="loading">Loading listings and photos…</div>
+</div>
+
+<script src="img1.js"></script>
+<script src="img2.js"></script>
+<script>
+(function(){
+var L=[],view=[],pos=0,state={},db=null,saveTimers={};
+var RESHOOT=["New cover: product out of the box on white poster board near a window","Finish close-up in daylight","All included parts laid out together","Box label with model number, straight on and readable","Checked in person: model, finish and quantity match the listing"];
+var $=function(id){return document.getElementById(id)};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function st(ref){if(!state[ref])state[ref]={order:null,status:"",checks:{},notes:""};return state[ref]}
+function ordered(it){var s=st(it.ref),ids=it.photos.map(function(p){return p.id});
+  if(s.order&&s.order.length===ids.length&&s.order.every(function(i){return ids.indexOf(i)>=0}))return s.order.map(function(i){return it.photos.filter(function(p){return p.id===i})[0]});
+  return it.photos.slice()}
+function lsGet(){try{return JSON.parse(localStorage.getItem("review-state")||"{}")}catch(e){return {}}}
+function lsSet(){try{localStorage.setItem("review-state",JSON.stringify(state))}catch(e){}}
+function persist(ref){lsSet();$("saveMsg")&&($("saveMsg").textContent=db?"Saving…":"Saved on this device");
+  if(!db)return;clearTimeout(saveTimers[ref]);saveTimers[ref]=setTimeout(function(){
+    var s=st(ref);db.doc("reviews/"+ref).set({ref:ref,order:s.order||[],status:s.status,checks:s.checks,notes:s.notes,updatedAt:new Date().toISOString()})
+    .then(function(){var m=$("saveMsg");if(m&&cur()&&cur().ref===ref)m.textContent="Saved"})
+    .catch(function(){var m=$("saveMsg");if(m)m.textContent="Could not save to the shared record. Saved on this device only."})},600)}
+function cur(){return view[pos]}
+function matches(it,f){var s=st(it.ref).status;
+  if(f==="all")return true;if(f==="g1")return it.group[0]==="1";if(f==="g2")return it.group[0]==="2";if(f==="g3")return it.group[0]==="3";
+  if(f==="draft")return !!it.draftUrl;if(f==="undecided")return !s;return s===f}
+function rebuild(keepRef){var f=$("filter").value;view=L.filter(function(it){return matches(it,f)});
+  var j=$("jump");j.innerHTML=view.map(function(it,i){var s=st(it.ref).status;var mark=s==="approved"?"✓ ":s==="not_approved"?"✗ ":s==="reshoot"?"↻ ":"";
+    return '<option value="'+i+'">'+mark+it.ref+" · "+esc(it.title.slice(0,60))+" · $"+esc(it.price)+"</option>"}).join("");
+  pos=0;if(keepRef){view.forEach(function(it,i){if(it.ref===keepRef)pos=i})}render()}
+function tally(){var c={approved:0,not_approved:0,reshoot:0,"":0};L.forEach(function(it){c[st(it.ref).status||""]++});
+  $("tally").innerHTML='<span class="pill ok">'+c.approved+' approved</span><span class="pill bad">'+c.not_approved+' not approved</span><span class="pill warn">'+c.reshoot+' reshoot</span><span class="pill">'+c[""]+' to review</span>'}
+function prompt(it){var ph=ordered(it);
+  return "Prepare this Facebook Marketplace listing exactly as written below. Do not publish until I approve it, and do not change any wording, price, or photo order.\n\n"+
+  "Inventory ref: "+it.ref+"\n"+(it.draftUrl?"Existing draft: "+it.draftUrl+"\n":"")+
+  "Title: "+it.title+"\nPrice: $"+it.price+"\nCategory: "+it.category+"\nCondition: "+it.condition+"\nDelivery: "+it.shipping+"\n\n"+
+  "Description:\n"+it.description+"\n\n"+
+  "Photos, upload in this order (files are in the v2 folder for ref "+it.ref+"):\n"+
+  ph.map(function(p,i){return (i+1)+". "+p.file+(p.stock?" (manufacturer reference image - never the cover)":"")+(i===0?" (cover)":"")}).join("\n")}
+function copy(btn,text){function ok(){btn.textContent="Copied";btn.classList.add("done");setTimeout(function(){btn.textContent="Copy";btn.classList.remove("done")},1600)}
+  try{navigator.clipboard.writeText(text).then(ok,function(){btn.textContent="Select and copy manually"})}catch(e){btn.textContent="Select and copy manually"}}
+function field(label,val,id){return '<div class="field"><div class="fhead"><span class="label">'+label+'</span><button class="copy" type="button" data-copy="'+id+'">Copy</button></div><div class="value" id="'+id+'">'+esc(val)+'</div></div>'}
+var sel=0,dragIdx=null;
+function render(){var it=cur();tally();
+  if(!it){$("slide").className="";$("slide").innerHTML='<p class="hint">No listings match this filter.</p>';return}
+  $("jump").value=String(pos);$("prev").disabled=pos===0;$("next").disabled=pos===view.length-1;
+  var s=st(it.ref),ph=ordered(it);if(sel>=ph.length)sel=0;
+  var g=it.group.slice(4);
+  var html='<div class="slide">'+
+  '<section class="panel" aria-label="Photos">'+
+    '<div class="eyebrow"><span>Ref '+it.ref+'</span><span>·</span><span>'+esc(g)+'</span><span>·</span><span>'+(pos+1)+' of '+view.length+'</span></div>'+
+    '<img class="big" id="big" alt="Selected photo" src="data:image/jpeg;base64,'+(window.IMG[ph[sel].id]||"")+'">'+
+    '<p class="hint">Photo 1 is the cover. Drag a photo onto another to swap places, or use the arrows. Tap a photo to preview it.</p>'+
+    '<div class="strip" id="strip">'+ph.map(function(p,i){return '<div class="tile'+(i===sel?" sel":"")+'" draggable="true" data-i="'+i+'">'+
+      '<img alt="Photo '+(i+1)+'" src="data:image/jpeg;base64,'+(window.IMG[p.id]||"")+'"><span class="n">'+(i+1)+(i===0?" cover":"")+'</span>'+(p.stock?'<span class="tag">Stock</span>':'')+
+      '<div class="moves"><button type="button" data-mv="-1" data-i="'+i+'" aria-label="Move photo '+(i+1)+' earlier"'+(i===0?" disabled":"")+'>&larr;</button><button type="button" data-mv="1" data-i="'+i+'" aria-label="Move photo '+(i+1)+' later"'+(i===ph.length-1?" disabled":"")+'>&rarr;</button></div></div>'}).join("")+'</div>'+
+    '<button type="button" id="resetOrder">Reset to my recommended order</button>'+
+  '</section>'+
+  '<section class="panel" aria-label="Listing and review">'+
+    '<div class="field"><span class="label">Your decision</span><div class="status">'+
+      [["approved","Approved"],["not_approved","Not approved"],["reshoot","Needs reshoot"]].map(function(o){return '<label class="'+o[0]+(s.status===o[0]?" on":"")+'"><input type="radio" name="status" value="'+o[0]+'"'+(s.status===o[0]?" checked":"")+'>'+o[1]+'</label>'}).join("")+
+    '</div><span class="save" id="saveMsg">'+(s.status?"Saved":"Not decided yet")+'</span></div>'+
+    field("Title",it.title,"f-title")+
+    '<div class="row">'+field("Price","$"+it.price,"f-price")+field("Category",it.category,"f-cat")+field("Condition",it.condition,"f-cond")+'</div>'+
+    field("Delivery",it.shipping,"f-ship")+
+    field("Description ("+it.copySource+")",it.description,"f-desc")+
+    (it.notes.length?'<div class="field"><span class="label">Why it is flagged / what to check</span><ul class="notes">'+it.notes.map(function(n){return "<li>"+esc(n)+"</li>"}).join("")+'</ul></div>':'')+
+    '<div class="field"><span class="label">Reshoot and check list</span><div class="checks">'+RESHOOT.map(function(r,i){return '<label><input type="checkbox" data-ck="'+i+'"'+(s.checks[i]?" checked":"")+'><span>'+esc(r)+'</span></label>'}).join("")+'</div></div>'+
+    '<div class="field"><label class="label" for="notes">Your notes</label><textarea id="notes" placeholder="Example: finish is actually chrome, reshoot label">'+esc(s.notes)+'</textarea></div>'+
+    '<div class="field"><div class="fhead"><span class="label">Prompt for Muse (uses your photo order)</span><button class="copy primary" type="button" id="copyPrompt">Copy prompt</button></div><div class="value" id="f-prompt" style="max-height:220px;overflow:auto;font-size:.85rem">'+esc(prompt(it))+'</div></div>'+
+    '<div class="field links"><span class="label">Links</span><div class="value">'+(it.draftUrl?'Draft: <a href="'+esc(it.draftUrl)+'" target="_blank" rel="noopener">'+esc(it.draftUrl)+'</a><br>':'No Facebook draft yet<br>')+(it.oldUrl?'Old listing: <a href="'+esc(it.oldUrl)+'" target="_blank" rel="noopener">'+esc(it.oldUrl)+'</a>':'')+(it.draftCategory?'<br>Draft was created with category: '+esc(it.draftCategory):'')+'</div></div>'+
+  '</section></div>';
+  $("slide").className="";$("slide").innerHTML=html;wire(it)}
+function setOrder(it,arr){st(it.ref).order=arr.map(function(p){return p.id});persist(it.ref);render()}
+function wire(it){var ph=ordered(it);
+  document.querySelectorAll("[data-copy]").forEach(function(b){b.onclick=function(){copy(b,$(b.dataset.copy).textContent)}});
+  $("copyPrompt").onclick=function(){var b=$("copyPrompt");copy(b,prompt(it));setTimeout(function(){b.textContent="Copy prompt"},1700)};
+  document.querySelectorAll('input[name="status"]').forEach(function(r){r.onchange=function(){st(it.ref).status=r.value;persist(it.ref);var f=$("filter").value;
+    if(f!=="all"&&!matches(it,f)){rebuild()}else{rebuild(it.ref)}}});
+  document.querySelectorAll("[data-ck]").forEach(function(c){c.onchange=function(){st(it.ref).checks[c.dataset.ck]=c.checked;persist(it.ref)}});
+  $("notes").oninput=function(){st(it.ref).notes=$("notes").value;persist(it.ref)};
+  $("resetOrder").onclick=function(){st(it.ref).order=null;persist(it.ref);sel=0;render()};
+  document.querySelectorAll("[data-mv]").forEach(function(b){b.onclick=function(e){e.stopPropagation();var i=+b.dataset.i,j=i+(+b.dataset.mv);var a=ph.slice();var t=a[i];a[i]=a[j];a[j]=t;sel=j;setOrder(it,a)}});
+  document.querySelectorAll(".tile").forEach(function(t){var i=+t.dataset.i;
+    t.querySelector("img").onclick=function(){sel=i;render()};
+    t.addEventListener("dragstart",function(e){dragIdx=i;t.classList.add("drag");try{e.dataTransfer.setData("text/plain",String(i))}catch(x){}});
+    t.addEventListener("dragend",function(){t.classList.remove("drag")});
+    t.addEventListener("dragover",function(e){e.preventDefault();t.classList.add("over")});
+    t.addEventListener("dragleave",function(){t.classList.remove("over")});
+    t.addEventListener("drop",function(e){e.preventDefault();t.classList.remove("over");if(dragIdx===null||dragIdx===i)return;
+      var a=ph.slice();var m=a.splice(dragIdx,1)[0];a.splice(i,0,m);sel=i;dragIdx=null;setOrder(it,a)})})}
+$("prev").onclick=function(){if(pos>0){pos--;sel=0;render();scrollTo(0,0)}};
+$("next").onclick=function(){if(pos<view.length-1){pos++;sel=0;render();scrollTo(0,0)}};
+$("jump").onchange=function(){pos=+$("jump").value;sel=0;render()};
+$("filter").onchange=function(){sel=0;rebuild(cur()&&cur().ref)};
+document.addEventListener("keydown",function(e){if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;if(e.key==="ArrowRight")$("next").click();if(e.key==="ArrowLeft")$("prev").click()});
+state=lsGet();
+fetch("listings.json").then(function(r){return r.json()}).then(function(data){L=data;rebuild();
+  if(window.claude&&window.claude.use){window.claude.use("db").then(function(d){if(!d)return;db=d;
+    db.collection("reviews").onSnapshot(function(snap){var keep=cur()&&cur().ref;var editing=document.activeElement&&document.activeElement.id==="notes";
+      snap.docs.forEach(function(doc){var v=doc.data();if(!v)return;state[doc.id]={order:v.order&&v.order.length?v.order.slice():null,status:v.status||"",checks:Object.assign({},v.checks||{}),notes:v.notes||""}});
+      lsSet();if(!editing)rebuild(keep);else tally()},function(){})}).catch(function(){})}
+}).catch(function(){$("slide").textContent="Could not load the listings. Reload the page."});
+})();
+</script>
