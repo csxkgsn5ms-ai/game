@@ -80,8 +80,8 @@ Scores are 1 to 5 (5 is best), multiplied by weight.
 ```
  ┌───────────────┐   ┌───────────────┐   ┌────────────────┐   ┌───────────────┐
  │ 1. Profile    │──▶│ 2. Matcher    │──▶│ 3. Apply queue │──▶│ 4. Tracker    │
- │ ~90 questions │   │ checks rules, │   │ ranked by $,   │   │ status,       │
- │ in 8 steps    │   │ shows reasons │   │ effort, due    │   │ deadlines,    │
+ │ ~95 questions │   │ checks rules, │   │ ranked by $,   │   │ status,       │
+ │ in 10 steps   │   │ shows reasons │   │ effort, due    │   │ deadlines,    │
  └──────┬────────┘   └───────────────┘   └───────┬────────┘   │ calendar file │
         │                                        │            └───────────────┘
         │            ┌───────────────┐   ┌───────▼────────┐
@@ -106,7 +106,7 @@ Scores are 1 to 5 (5 is best), multiplied by weight.
 | Built-in scholarship list goes out of date (deadlines change every year) | High | Every card says "verify"; deadlines shown as a typical month; you can add or import scholarships |
 | Autofill guesses the wrong field | Medium | Conservative matching rules; filled fields highlighted for review; never touches passwords, files or Submit buttons |
 | The bookmarklet carries a copy of your data | Medium | It only includes form fields (no essays, no references' contact info by default); regenerate it after edits; don't share it |
-| Long questionnaire makes people quit | Medium | 8 short steps, autosave, "skip" allowed, matcher shows what each answer unlocks |
+| Long questionnaire makes people quit | Medium | 10 short steps, autosave, "skip" allowed, matcher shows what each answer unlocks |
 | Data stored only in the browser can be lost | Medium | Export/import a backup file |
 | Copying essays across applications is unethical when prompts differ | Medium | Word count and theme checks; the tailor prompt asks for adaptation, not a new essay; you must edit |
 | Local and state scholarships aren't in a national list (these have the best odds) | High | "Local sources checklist" plus "Add scholarship" for awards from your counselor, community foundation, employer or credit union |
@@ -143,6 +143,28 @@ Everything lives in one file: `scholarships/index.html` (no build step, no serve
 - Shared counselor view for a whole school.
 
 ---
+
+## Step 11: Second review and redesign (round 2)
+
+An outside review (GPT) went through every scholarship and the code. Before changing anything, we checked its claims against published sources in October 2026. It was right on almost everything, with two exceptions: Golden Door Scholars doesn't include Indiana, and the review missed that Cameron Impact moved to high school juniors.
+
+**What changed**
+
+| Problem found | Fix |
+|---|---|
+| A deadline month alone can send you to a round that already closed | Each award now stores real `opens` / `closes` dates (or several `rounds`). Closed rounds are labeled and kept out of the apply queue. Undated awards say "date not posted yet" instead of guessing "this month". |
+| Wrong rules on many awards (e.g. Cooke now needs a 3.75 GPA; Gates dropped its race requirement; APIA is open to all backgrounds; Horatio Alger's $25,000 award is juniors-only; Elks amounts changed) | All 41 entries updated; 9 added (NHS, Coolidge, Marine Corps Scholarship Foundation, Goldwater, Truman, Udall, HACER, Dream Award); directories like UNCF, Bold.org and state grants moved to a separate "Directories to search" list. |
+| GPA was converted or swapped (weighted ↔ unweighted, 100-point → 4.0) | Uses only the exact GPA you entered. 100-point scales ask you for your transcript's 4.0 equivalent. |
+| Pell eligibility was guessed from income | Only your FAFSA answer counts. Otherwise "Maybe". |
+| Skipped answers counted as "not eligible" | Skipped = Maybe. Only an explicit "No" / "None" rules you out. |
+| Age checked against today | Checked against the deadline when one is posted. |
+| Ranking used headline maximums ($250,000 contests, drawings) | Ranks by a realistic typical award; drawings never enter the queue. |
+| Autofill mixed clues from different labels, substituted related values, guessed date order | Reads one source at a time (autocomplete hint, label, placeholder, name, id); fills a text date only when the format is stated; never puts an income range in an exact-amount box; skips "eligible non-citizen", mailing (when different), parent and billing fields; shows a list of what it filled and how many fields it left for you. |
+| New questions needed | College GPA, prior 4-year college, mailing address same?, LGBTQ+ ally option, Marine-parent option, "None of these" memberships. |
+
+**Round 2 test results** (headless Chromium): 3.2 weighted GPA fails Gates; a 3.5 unweighted with Pell unknown is "Maybe" for Gates; a 100-point GPA is "Maybe" with a request for the 4.0 equivalent; an ally is eligible for Point; a skipped membership is "Maybe" and "None" is "Not eligible"; a Texas DACA student is correctly excluded from Golden Door. Autofill filled 19 fields on the practice form and correctly left the parent email, eligible-non-citizen question, exact-income box, essay, password and checkbox alone. A "Birth date (MM/DD/YYYY)" box initially got only the month; that bug was fixed and retested. No sideways scrolling at 390px.
+
+**Still true:** award details change every year. Each card says when its date was checked; confirm on the official site before applying.
 
 ### Second opinion
 

@@ -128,7 +128,7 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .card .head { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; }
 .card .head > div { min-width: 0; }
-.amt { font: 500 0.95rem var(--font-data); color: var(--gold); white-space: nowrap; text-align: right; }
+.amt { font: 500 0.92rem var(--font-data); color: var(--gold); text-align: right; max-width: 45%; flex: none; overflow-wrap: anywhere; }
 .pill { display: inline-flex; align-items: center; gap: 5px; font: 600 0.74rem var(--font-body); letter-spacing: .04em; text-transform: uppercase; border-radius: 99px; padding: 3px 9px; background: var(--sunken); color: var(--muted); }
 .pill.eligible { background: var(--good-soft); color: var(--good); }
 .pill.maybe { background: var(--warn-soft); color: var(--warn); }
@@ -144,7 +144,8 @@ fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
 
 /* queue / kit */
 details.kit { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
-details.kit > summary { list-style: none; cursor: pointer; padding: 14px 16px; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+details.kit > summary { list-style: none; cursor: pointer; padding: 14px 16px; display: grid; grid-template-columns: 34px minmax(0, 1fr) minmax(0, 38%); gap: 12px; align-items: center; }
+details.kit > summary .amt { max-width: none; }
 details.kit > summary::-webkit-details-marker { display: none; }
 details.kit[open] > summary { border-bottom: 1px solid var(--line); }
 .rank { font: 500 0.9rem var(--font-data); color: var(--muted); text-align: center; }
@@ -223,8 +224,8 @@ const UG = ['cc', 'c1', 'c2', 'c3', 'c4'];
 const STATES = [['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],['CO','Colorado'],['CT','Connecticut'],['DE','Delaware'],['DC','District of Columbia'],['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],['ME','Maine'],['MD','Maryland'],['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],['NV','Nevada'],['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],['NC','North Carolina'],['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],['PA','Pennsylvania'],['PR','Puerto Rico'],['RI','Rhode Island'],['SC','South Carolina'],['SD','South Dakota'],['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming'],['GU','Guam'],['VI','U.S. Virgin Islands'],['XX','Outside the U.S.']];
 const CITIZEN = [['citizen','U.S. citizen'],['national','U.S. national'],['pr','Permanent resident (green card)'],['refugee','Refugee or asylee'],['daca','DACA recipient'],['undocumented','Undocumented'],['intl','International student (visa)']];
 const ETHNICITY = [['black','Black or African American'],['hispanic','Hispanic or Latino/a'],['asian','Asian American'],['nhpi','Native Hawaiian or Pacific Islander'],['aian','American Indian or Alaska Native'],['mena','Middle Eastern or North African'],['white','White'],['other','Another identity']];
-const MILITARY = [['self','I serve or served'],['parent','A parent serves or served'],['spouse','My spouse serves or served'],['none','None']];
-const MEMBERSHIPS = [['dc','College-readiness program (AVID, Upward Bound, TRIO, GEAR UP…)'],['nhs','National Honor Society'],['ffa','FFA'],['4h','4-H'],['eagle','Eagle Scout'],['gold','Girl Scout Gold Award'],['jrotc','JROTC'],['elks','Parent/grandparent is an Elk'],['deca','DECA / FBLA'],['skills','SkillsUSA / HOSA'],['bgc','Boys & Girls Club'],['key','Key Club / Interact'],['faith','Church or faith youth group']];
+const MILITARY = [['self','I serve or served'],['parent','A parent serves or served'],['spouse','My spouse serves or served'],['marine','A parent is/was a Marine (or Navy corpsman/chaplain with Marines)'],['none','None']];
+const MEMBERSHIPS = [['dc','College-readiness program (AVID, Upward Bound, TRIO, GEAR UP…)'],['nhs','National Honor Society'],['ffa','FFA'],['4h','4-H'],['eagle','Eagle Scout'],['gold','Girl Scout Gold Award'],['jrotc','JROTC'],['elks','Parent/grandparent is an Elk'],['deca','DECA / FBLA'],['skills','SkillsUSA / HOSA'],['bgc','Boys & Girls Club'],['key','Key Club / Interact'],['faith','Church or faith youth group'],['none','None of these']];
 const MAJORCATS = [['eng','Engineering'],['cs','Computer science / IT'],['sci','Science or math'],['health','Health, nursing, medicine'],['biz','Business, finance, accounting'],['edu','Education / teaching'],['arts','Arts, music, design, film'],['hum','Humanities or social sciences'],['ag','Agriculture / environment'],['trades','Skilled trades / technical'],['law','Law, government, public service'],['undecided','Undecided']];
 const INCOME = [['lt30','Under $30,000',0,30000],['30_50','$30,000–$50,000',30000,50000],['50_65','$50,000–$65,000',50000,65000],['65_95','$65,000–$95,000',65000,95000],['95_125','$95,000–$125,000',95000,125000],['125_200','$125,000–$200,000',125000,200000],['gt200','Over $200,000',200000,1e12],['unsure','Not sure',null,null]];
 const YESNO = [['yes','Yes'],['no','No'],['unsure','Not sure']];
@@ -246,49 +247,63 @@ const THEMES = [
   ['video', 'Video script (60–120 sec)', 'Talking points for video applications. Speak naturally; this is a guide, not a script to read.']
 ];
 
-/* Effort: quick = form or under 250 words, short = one essay under 500 words, essay = 1–2 longer essays, heavy = several essays + recs + transcript. */
+/* Award data, reviewed October 2, 2026.
+ * closes / opens: posted dates for the current round (YYYY-MM-DD). rounds: several closing dates; the next future one is used.
+ * month: typical closing month when the next date isn't posted yet. checked: true when the date was confirmed against a published source in Oct 2026.
+ * typical: realistic award for ranking (amountMax is the headline maximum). portal: a directory of many awards, not one application.
+ * Effort: quick = form or under 250 words, short = one essay under 500 words, essay = 1–2 longer essays, heavy = several essays + recs + transcript. */
 const SCHOLARSHIPS = [
-  { id:'coke', name:'Coca-Cola Scholars Program', org:'Coca-Cola Scholars Foundation', url:'https://www.coca-colascholarsfoundation.org/apply/', amount:'$20,000', amountMax:20000, month:9, effort:'short', kind:'scholarship', themes:['leadership','service'], docs:['Activity list','Transcript (if a semifinalist)'], rules:{ grades:['hs12'], minGpa:3.0, citizenship:['citizen','national','pr','refugee'] }, notes:'First round is a short online application about activities and leadership.' },
-  { id:'gates', name:'The Gates Scholarship', org:'The Gates Scholarship', url:'https://www.thegatesscholarship.org/scholarship', amount:'Full cost of attendance', amountMax:200000, month:9, effort:'heavy', kind:'scholarship', themes:['personal','adversity','leadership','identity','career'], docs:['Transcript','2 recommendations','FAFSA / financial info'], rules:{ grades:['hs12'], minGpaW:3.3, pell:true, ethnicity:['black','hispanic','asian','nhpi','aian'], citizenship:['citizen','national','pr'] }, notes:'For Pell-eligible minority high school seniors. Very competitive.' },
-  { id:'jkc', name:'Jack Kent Cooke College Scholarship', org:'Jack Kent Cooke Foundation', url:'https://www.jkcf.org/our-scholarships/college-scholarship-program/', amount:'Up to $55,000 / year', amountMax:220000, month:11, effort:'heavy', kind:'scholarship', themes:['personal','adversity','career','leadership'], docs:['Transcript','Recommendations','Income documentation'], rules:{ grades:['hs12'], minGpa:3.5, maxIncome:95000 }, notes:'Unmet financial need is required. The income limit has been about $95,000 recently.' },
-  { id:'jkct', name:'Jack Kent Cooke Undergraduate Transfer Scholarship', org:'Jack Kent Cooke Foundation', url:'https://www.jkcf.org/our-scholarships/undergraduate-transfer-scholarship/', amount:'Up to $55,000 / year', amountMax:165000, month:11, effort:'heavy', kind:'scholarship', themes:['personal','adversity','career'], docs:['College transcript','Recommendations'], rules:{ grades:['cc'], minGpa:3.5, maxIncome:95000 }, notes:'For community college students transferring to a 4-year college.' },
-  { id:'quest', name:'QuestBridge National College Match', org:'QuestBridge', url:'https://www.questbridge.org/high-school-students/national-college-match', amount:'Full 4-year scholarship', amountMax:250000, month:9, effort:'heavy', kind:'scholarship', themes:['personal','adversity','identity'], docs:['Transcript','2 teacher recommendations','Counselor recommendation'], rules:{ grades:['hs12'], minGpa:3.5, maxIncome:65000, softIncome:true }, notes:'No strict income cutoff, but most finalists come from families earning under about $65,000.' },
-  { id:'dell', name:'Dell Scholars Program', org:'Michael & Susan Dell Foundation', url:'https://www.dellscholars.org/scholarship/', amount:'$20,000 + laptop', amountMax:20000, month:12, effort:'essay', kind:'scholarship', themes:['adversity','career','personal'], docs:['Transcript','Proof of program participation'], rules:{ grades:['hs12'], minGpa:2.4, pell:true, memberships:['dc'] }, notes:'Requires participation in an approved college-readiness program (AVID, Upward Bound, TRIO and others).' },
-  { id:'elksmvs', name:'Elks Most Valuable Student', org:'Elks National Foundation', url:'https://www.elks.org/scholars/scholarships/mvs.cfm', amount:'Up to $50,000', amountMax:50000, month:11, effort:'essay', kind:'scholarship', themes:['leadership','service','need'], docs:['Transcript','Test scores','Recommendations','Parent tax info'], rules:{ grades:['hs12'], citizenship:['citizen'] }, notes:'You do not need an Elks connection. Judged on scholarship, leadership and financial need.' },
-  { id:'elkslegacy', name:'Elks Legacy Awards', org:'Elks National Foundation', url:'https://www.elks.org/scholars/scholarships/Legacy.cfm', amount:'$4,000', amountMax:4000, month:2, effort:'short', kind:'scholarship', themes:['personal'], docs:['Elks member sponsor'], rules:{ grades:['hs12'], memberships:['elks'] }, notes:'For children and grandchildren of Elks members.' },
-  { id:'bk', name:'Burger King Scholars', org:'Burger King Foundation', url:'https://burgerkingfoundation.org/programs/burger-king-scholars', amount:'$1,000–$60,000', amountMax:60000, month:12, effort:'short', kind:'scholarship', themes:['service','leadership'], docs:['Transcript'], rules:{ grades:['hs12'], minGpa:2.5 }, notes:'Open to students in the U.S., Puerto Rico and Canada. Larger awards for community leaders.' },
-  { id:'horatio', name:'Horatio Alger National Scholarship', org:'Horatio Alger Association', url:'https://scholars.horatioalger.org/scholarships/', amount:'$25,000', amountMax:25000, month:10, effort:'essay', kind:'scholarship', themes:['adversity','service','need'], docs:['Transcript','Financial info','Counselor certification'], rules:{ grades:['hs11','hs12'], minGpa:2.0, maxIncome:65000, citizenship:['citizen'] }, notes:'For students who have overcome adversity and have critical financial need. Check which grade the current cycle accepts.' },
-  { id:'ronbrown', name:'Ron Brown Scholar Program', org:'Ron Brown Scholar Fund', url:'https://ronbrown.org/', amount:'$40,000', amountMax:40000, month:1, effort:'heavy', kind:'scholarship', themes:['personal','service','leadership'], docs:['Transcript','2 recommendations','Test scores'], rules:{ grades:['hs12'], ethnicity:['black'], citizenship:['citizen','pr'] }, notes:'For Black/African American high school seniors with academic excellence and community commitment.' },
-  { id:'hsf', name:'Hispanic Scholarship Fund', org:'HSF', url:'https://www.hsf.net/scholarship', amount:'$500–$5,000', amountMax:5000, month:2, effort:'essay', kind:'scholarship', themes:['identity','career','personal'], docs:['Transcript','FAFSA or state Dream Act application'], rules:{ grades:['hs12'].concat(UG, ['grad']), minGpa:{ hs:3.0, other:2.5 }, ethnicity:['hispanic'], citizenship:['citizen','national','pr','daca'], fafsa:true }, notes:'3.0 GPA for high school seniors, 2.5 for college students. Must plan to enroll full-time.' },
-  { id:'apia', name:'APIA Scholars', org:'Asian & Pacific Islander American Scholarship Fund', url:'https://apiascholars.org/', amount:'$2,500–$20,000', amountMax:20000, month:1, effort:'essay', kind:'scholarship', themes:['identity','service','career'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'].concat(UG), ethnicity:['asian','nhpi'], citizenship:['citizen','national','pr','daca','undocumented','refugee'], fafsa:true }, notes:'Open to many immigration statuses. Several scholarships through one application.' },
-  { id:'aicf', name:'American Indian College Fund Scholarships', org:'American Indian College Fund', url:'https://collegefund.org/students/scholarships/', amount:'Varies', amountMax:5000, month:5, effort:'essay', kind:'scholarship', themes:['identity','career','personal'], docs:['Proof of tribal enrollment or descent','Transcript'], rules:{ grades:['hs12'].concat(UG, ['grad']), ethnicity:['aian'], tribal:true }, notes:'One application covers many scholarships, including tribal college awards.' },
-  { id:'dreamus', name:'TheDream.US National Scholarship', org:'TheDream.US', url:'https://www.thedream.us/scholarships/', amount:'Up to $33,000', amountMax:33000, month:2, effort:'essay', kind:'scholarship', themes:['personal','career','identity'], docs:['Transcript','Proof of immigration status'], rules:{ grades:['hs12','cc','c1'], citizenship:['daca','undocumented'] }, notes:'For immigrant students with DACA or TPS, or who are undocumented. Used at partner colleges.' },
-  { id:'goldendoor', name:'Golden Door Scholars', org:'Golden Door Scholars', url:'https://www.goldendoorscholars.org/', amount:'Full tuition, room & board', amountMax:200000, month:10, effort:'heavy', kind:'scholarship', themes:['personal','adversity','career'], docs:['Transcript','Recommendations'], rules:{ grades:['hs12'], citizenship:['daca','undocumented'] }, notes:'For undocumented and DACA students. Strong interest in STEM or business helps.' },
-  { id:'point', name:'Point Foundation Scholarship', org:'Point Foundation', url:'https://pointfoundation.org/point-apply/', amount:'Varies (often $5,000+ / year)', amountMax:20000, month:1, effort:'heavy', kind:'scholarship', themes:['identity','leadership','career'], docs:['Transcript','Recommendations'], rules:{ grades:UG.concat(['grad']), lgbtq:true }, notes:'For LGBTQ+ college and graduate students with leadership and community involvement.' },
-  { id:'afe', name:'Amazon Future Engineer Scholarship', org:'Amazon', url:'https://www.amazonfutureengineer.com/scholarships', amount:'$40,000 + paid internship', amountMax:40000, month:12, effort:'essay', kind:'scholarship', themes:['major','career','need'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'], majorCats:['cs','eng'], maxIncome:125000, softIncome:true }, notes:'For high school seniors with financial need planning to study computer science.' },
-  { id:'sts', name:'Regeneron Science Talent Search', org:'Society for Science', url:'https://www.societyforscience.org/regeneron-sts/', amount:'Up to $250,000', amountMax:250000, month:11, effort:'heavy', kind:'contest', themes:['innovation','major','personal'], docs:['Research report','Transcript','Recommendations'], rules:{ grades:['hs12'], research:true }, notes:'For seniors with an original research project.' },
-  { id:'davidson', name:'Davidson Fellows Scholarship', org:'Davidson Institute', url:'https://www.davidsongifted.org/gifted-programs/fellows-scholarship/', amount:'$25,000–$50,000', amountMax:50000, month:2, effort:'heavy', kind:'contest', themes:['innovation','personal'], docs:['Project portfolio','Nominator forms','Video'], rules:{ ageMax:18, citizenship:['citizen','pr'], research:true }, notes:'For a significant piece of work in STEM, literature, music, philosophy or "outside the box".' },
-  { id:'vod', name:'VFW Voice of Democracy', org:'Veterans of Foreign Wars', url:'https://www.vfw.org/community/youth-and-education/youth-scholarships', amount:'Up to $35,000', amountMax:35000, month:10, effort:'short', kind:'contest', video:true, themes:['personal'], docs:['Recorded audio essay (3–5 min)'], rules:{ grades:HS, citizenship:['citizen','pr'] }, notes:'Audio essay on a patriotic theme. Enter through your local VFW post, usually due Oct 31.' },
-  { id:'ppen', name:"VFW Patriot's Pen", org:'Veterans of Foreign Wars', url:'https://www.vfw.org/community/youth-and-education/youth-scholarships', amount:'Up to $5,000', amountMax:5000, month:10, effort:'short', kind:'contest', themes:['personal'], docs:['300–400 word essay'], rules:{ grades:['ms'] }, notes:'Essay contest for grades 6–8 through a local VFW post.' },
-  { id:'legion', name:'American Legion Oratorical Contest', org:'The American Legion', url:'https://www.legion.org/', amount:'Up to $25,000', amountMax:25000, month:12, effort:'essay', kind:'contest', themes:['personal'], docs:['Prepared speech on the Constitution'], rules:{ grades:HS, ageMax:19, citizenship:['citizen','pr'] }, notes:'Speech contest. Starts at local posts; dates vary by state.' },
-  { id:'tacobell', name:'Live Más Scholarship', org:'Taco Bell Foundation', url:'https://www.tacobellfoundation.org/live-mas-scholarship/', amount:'$5,000–$25,000', amountMax:25000, month:1, effort:'short', kind:'scholarship', video:true, themes:['video','career'], docs:['2-minute video'], rules:{ ageMin:16, ageMax:26, grades:HS.concat(UG, ['grad','adult']) }, notes:'No GPA or essay. A 2-minute video about your passion.' },
-  { id:'cameron', name:'Cameron Impact Scholarship', org:'Bryan Cameron Education Foundation', url:'https://www.bryancameroneducationfoundation.org/', amount:'Full tuition', amountMax:200000, month:9, effort:'heavy', kind:'scholarship', themes:['service','leadership','personal'], docs:['Transcript','Recommendations'], rules:{ grades:['hs12'], minGpa:3.7, citizenship:['citizen','pr'], volunteerMin:50 }, notes:'For seniors with strong community service and leadership.' },
-  { id:'gereagan', name:'GE-Reagan Foundation Scholarship', org:'Ronald Reagan Presidential Foundation', url:'https://www.reaganfoundation.org/education/scholarship-programs/ge-reagan-foundation-scholarship-program/', amount:'$10,000 / year (renewable)', amountMax:40000, month:1, effort:'essay', kind:'scholarship', themes:['leadership','service','need'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'], minGpa:3.0, citizenship:['citizen'] }, notes:'Leadership, drive, integrity and citizenship. Financial need considered.' },
-  { id:'stophunger', name:'Stephen J. Brady STOP Hunger Scholarship', org:'Sodexo Stop Hunger Foundation', url:'https://www.sodexofoundation.org/', amount:'$5,000 + $5,000 grant to your charity', amountMax:5000, month:12, effort:'essay', kind:'scholarship', themes:['service'], docs:['Description of hunger-relief work','Recommendation'], rules:{ ageMin:5, ageMax:25, volunteerMin:1 }, notes:'For students who have fought hunger in their community.' },
-  { id:'rotc', name:'Army ROTC Scholarship', org:'U.S. Army', url:'https://www.goarmy.com/', amount:'Full tuition + stipend', amountMax:160000, month:2, effort:'essay', kind:'scholarship', themes:['leadership','career'], docs:['Transcript','Test scores','Interview','Fitness test'], rules:{ grades:['hs12','c1','c2'], minGpa:2.5, citizenship:['citizen'], ageMin:17, ageMax:26 }, notes:'Comes with a service commitment after graduation. Navy and Air Force ROTC have similar programs.' },
-  { id:'smc', name:'Scholarships for Military Children', org:'Fisher House Foundation', url:'https://militaryscholar.org/', amount:'$2,000+', amountMax:2000, month:2, effort:'short', kind:'scholarship', themes:['personal'], docs:['Military ID / DEERS','Transcript'], rules:{ grades:['hs12'].concat(UG), minGpa:3.0, military:['parent'], ageMax:22 }, notes:'For children of service members, retirees and fallen service members.' },
-  { id:'tillman', name:'Tillman Scholars', org:'Pat Tillman Foundation', url:'https://pattillmanfoundation.org/', amount:'Varies (about $10,000)', amountMax:10000, month:2, effort:'heavy', kind:'scholarship', themes:['leadership','service','career'], docs:['Transcript','Recommendations'], rules:{ grades:UG.concat(['grad']), military:['self','spouse'] }, notes:'For veterans, service members and military spouses.' },
-  { id:'swe', name:'Society of Women Engineers Scholarships', org:'SWE', url:'https://swe.org/scholarships/', amount:'$1,000–$15,000', amountMax:15000, month:2, effort:'essay', kind:'scholarship', themes:['major','career','leadership'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'].concat(UG, ['grad']), gender:['Female'], majorCats:['eng','cs'] }, notes:'For women studying engineering, engineering technology or computer science.' },
-  { id:'nms', name:'National Merit Scholarship Program', org:'National Merit Scholarship Corporation', url:'https://www.nationalmerit.org/', amount:'$2,500 + corporate & college awards', amountMax:2500, month:10, effort:'quick', kind:'scholarship', themes:['personal'], docs:['Take the PSAT/NMSQT in 11th grade'], rules:{ grades:['hs10','hs11'], citizenship:['citizen','pr'] }, notes:'You enter by taking the PSAT/NMSQT in October of junior year. Sign up through your school.' },
-  { id:'scholastic', name:'Scholastic Art & Writing Awards', org:'Alliance for Young Artists & Writers', url:'https://www.artandwriting.org/', amount:'Up to $12,500', amountMax:12500, month:12, effort:'essay', kind:'contest', themes:['personal'], docs:['Art or writing samples / portfolio'], rules:{ grades:['ms'].concat(HS), ageMin:13, portfolio:true }, notes:'For student artists and writers in grades 7–12.' },
-  { id:'ffa', name:'FFA Scholarships', org:'National FFA Organization', url:'https://www.ffa.org/participate/scholarships/', amount:'$1,000–$10,000', amountMax:10000, month:1, effort:'essay', kind:'scholarship', themes:['career','leadership'], docs:['Transcript','FFA advisor signature'], rules:{ grades:['hs12'].concat(UG), memberships:['ffa'] }, notes:'One application covers hundreds of sponsor scholarships.' },
-  { id:'nesa', name:'NESA Eagle Scout Scholarships', org:'National Eagle Scout Association', url:'https://nesa.org/', amount:'Up to $50,000', amountMax:50000, month:12, effort:'essay', kind:'scholarship', themes:['leadership','service'], docs:['Eagle Scout certificate','Transcript'], rules:{ grades:['hs12'].concat(UG), memberships:['eagle'] }, notes:'For Eagle Scouts. Girl Scout councils offer similar awards for Gold Award recipients.' },
-  { id:'pell', name:'Federal Pell Grant', org:'U.S. Department of Education', url:'https://studentaid.gov/understand-aid/types/grants/pell', amount:'Up to about $7,400 / year', amountMax:29600, month:6, effort:'quick', kind:'grant', themes:[], docs:['FAFSA'], rules:{ grades:['hs12'].concat(UG, ['adult']), pell:true, citizenship:['citizen','national','pr','refugee'], fafsa:true }, notes:'Free money you do not repay. The FAFSA is the only application. File it as early as possible.' },
-  { id:'state', name:"Your state's grant programs", org:'State higher-education agency', url:'https://studentaid.gov/', amount:'Varies by state', amountMax:5000, month:3, effort:'quick', kind:'grant', themes:[], docs:['FAFSA (or your state Dream Act form)'], rules:{ grades:['hs12'].concat(UG), fafsa:true }, notes:'Most states award grants from your FAFSA. Some deadlines are as early as February.' },
-  { id:'uncf', name:'UNCF Scholarships', org:'United Negro College Fund', url:'https://uncf.org/scholarships', amount:'Varies', amountMax:5000, month:3, effort:'essay', kind:'scholarship', themes:['personal','career','need'], docs:['Transcript','FAFSA'], rules:{ grades:['hs12'].concat(UG), minGpa:2.5, fafsa:true }, notes:'Hundreds of scholarships, many for HBCU students. Most are for students of color; check each listing.' },
-  { id:'tmcf', name:'Thurgood Marshall College Fund', org:'TMCF', url:'https://www.tmcf.org/', amount:'Varies', amountMax:5000, month:3, effort:'essay', kind:'scholarship', themes:['career','leadership'], docs:['Transcript'], rules:{ grades:['hs12'].concat(UG), minGpa:3.0 }, notes:'For students at public HBCUs and predominantly Black institutions.' },
-  { id:'bold', name:'Bold.org no-essay scholarships', org:'Bold.org', url:'https://bold.org/scholarships/', amount:'Usually $500–$25,000', amountMax:25000, month:0, effort:'quick', kind:'sweepstakes', themes:['bio'], docs:['Free Bold.org profile'], rules:{ ageMin:13 }, notes:'Quick entries with low odds of winning. Good for spare minutes, never instead of real applications.' },
-  { id:'niche', name:'Niche $25,000 No Essay Scholarship', org:'Niche', url:'https://www.niche.com/colleges/scholarships/no-essay-scholarship/', amount:'$25,000 (one winner)', amountMax:25000, month:0, effort:'quick', kind:'sweepstakes', themes:[], docs:['Free Niche account'], rules:{ ageMin:13 }, notes:'A drawing. Takes two minutes. Expect marketing emails from Niche.' }
+  { id:'coke', name:'Coca-Cola Scholars Program', org:'Coca-Cola Scholars Foundation', url:'https://www.coca-colascholarsfoundation.org/apply/', amount:'$20,000', typical:20000, amountMax:20000, closes:'2026-09-30', month:9, effort:'short', kind:'scholarship', themes:['leadership','service'], docs:['Activity list','Transcript (if a semifinalist)'], rules:{ grades:['hs12'], minGpa:3.0, citizenship:['citizen','national','pr','refugee'] }, notes:'Needs a 3.0 unweighted GPA. Also open to Cuban-Haitian entrants and humanitarian parolees. The round for the class of 2027 closed Sept 30, 2026; the next one opens around August.' },
+  { id:'gates', name:'The Gates Scholarship', org:'The Gates Scholarship', url:'https://www.thegatesscholarship.org/scholarship', amount:'Unmet cost of attendance (last-dollar)', typical:40000, amountMax:200000, closes:'2026-09-15', checked:true, month:9, effort:'heavy', kind:'scholarship', themes:['personal','adversity','leadership','career'], docs:['Transcript','2 recommendations','FAFSA / financial info'], rules:{ grades:['hs12'], minGpaW:3.3, pell:true, citizenship:['citizen','national','pr'] }, notes:'Open to all Pell-eligible seniors (the race requirement was removed in 2025). Pays whatever cost remains after other aid. Next round opens around July.' },
+  { id:'jkc', name:'Jack Kent Cooke College Scholarship', org:'Jack Kent Cooke Foundation', url:'https://www.jkcf.org/our-scholarships/college-scholarship-program/', amount:'Up to $55,000 / year', typical:80000, amountMax:220000, closes:'2026-11-11', checked:true, effort:'heavy', kind:'scholarship', themes:['personal','adversity','career','leadership'], docs:['Transcript','SAT, ACT, AP or IB score (no minimum)','Recommendations','Income documentation'], rules:{ grades:['hs12'], minGpa:3.75, testScore:true, maxIncome:95000, softIncome:true }, notes:'3.75 unweighted GPA minimum. You must submit at least one SAT, ACT, AP or IB score. Families earning up to $95,000 are considered.' },
+  { id:'jkct', name:'Jack Kent Cooke Undergraduate Transfer Scholarship', org:'Jack Kent Cooke Foundation', url:'https://www.jkcf.org/our-scholarships/undergraduate-transfer-scholarship/', amount:'Up to $55,000 / year', typical:60000, amountMax:165000, closes:'2026-12-09', effort:'heavy', kind:'scholarship', themes:['personal','adversity','career'], docs:['College transcript','Recommendations'], rules:{ grades:['cc'], minGpa:3.5, noPrior4yr:true, maxIncome:95000, softIncome:true }, notes:'For community college sophomores (or recent grads) transferring full-time to a 4-year college next fall, who have never attended a 4-year college.' },
+  { id:'quest', name:'QuestBridge National College Match', org:'QuestBridge', url:'https://www.questbridge.org/high-school-students/national-college-match', amount:'Full 4-year scholarship at a partner college', typical:100000, amountMax:250000, closes:'2026-09-30', checked:true, month:9, effort:'heavy', kind:'scholarship', themes:['personal','adversity','identity'], docs:['Transcript','2 teacher recommendations','Counselor recommendation'], rules:{ grades:['hs12'], maxIncome:65000, softIncome:true }, notes:'No strict GPA or income cutoff. Most finalists come from families earning under about $65,000. The 2026 round closed Sept 30; juniors can apply to the College Prep Scholars program in the spring.' },
+  { id:'dell', name:'Dell Scholars Program', org:'Michael & Susan Dell Foundation', url:'https://www.dellscholars.org/scholarship/', amount:'$20,000 + laptop', typical:20000, amountMax:20000, closes:'2027-02-15', checked:true, effort:'essay', kind:'scholarship', themes:['adversity','career','personal'], docs:['Transcript','Proof of program participation'], rules:{ grades:['hs12'], minGpa:2.4, pell:true, memberships:['dc'] }, notes:'Requires an approved college-readiness program (AVID, Upward Bound, TRIO and others). The application opens in the winter.' },
+  { id:'elksmvs', name:'Elks Most Valuable Student', org:'Elks National Foundation', url:'https://www.elks.org/scholars/scholarships/mvs.cfm', amount:'$4,000–$30,000 over 4 years', typical:4000, amountMax:30000, closes:'2026-11-12', checked:true, effort:'essay', kind:'scholarship', themes:['leadership','service','need'], docs:['Transcript','Recommendations','Parent tax info'], rules:{ grades:['hs12'], citizenship:['citizen'] }, notes:'500 awards; the top 20 get $30,000. No Elks connection needed. Judged on scholarship, leadership and financial need.' },
+  { id:'elkslegacy', name:'Elks Legacy Awards', org:'Elks National Foundation', url:'https://www.elks.org/scholars/scholarships/Legacy.cfm', amount:'$6,000 over 4 years', typical:6000, amountMax:6000, closes:'2027-02-01', effort:'short', kind:'scholarship', themes:['personal'], docs:['Elks member sponsor details'], rules:{ grades:['hs12'], memberships:['elks'] }, notes:'For children and grandchildren of Elks members in good standing.' },
+  { id:'bk', name:'Burger King Scholars', org:'Burger King Foundation', url:'https://burgerkingfoundation.org/programs/burger-king-scholars', amount:'$1,000–$60,000', typical:1000, amountMax:60000, opens:'2026-10-15', closes:'2026-12-15', effort:'short', kind:'scholarship', themes:['service','leadership'], docs:['Transcript'], rules:{ grades:['hs12'], minGpa:2.5 }, notes:'Closes Dec 15 or after 30,000 applications, whichever comes first. Apply as soon as it opens. Open to students in the U.S., Puerto Rico and Canada.' },
+  { id:'horatio', name:'Horatio Alger National Scholarship', org:'Horatio Alger Association', url:'https://scholars.horatioalger.org/scholarships/', amount:'$25,000', typical:25000, amountMax:25000, opens:'2026-12-01', closes:'2027-03-01', checked:true, effort:'essay', kind:'scholarship', themes:['adversity','service','need'], docs:['Transcript','Financial info','Counselor certification'], rules:{ grades:['hs11'], minGpa:2.0, maxIncome:65000, citizenship:['citizen'] }, notes:'For juniors only. Family adjusted gross income must be $65,000 or less. Seniors can apply for other Horatio Alger state awards (usually due Feb 15).' },
+  { id:'ronbrown', name:'Ron Brown Scholar Program', org:'Ron Brown Scholar Fund', url:'https://ronbrown.org/', amount:'$40,000', typical:40000, amountMax:40000, closes:'2026-12-01', checked:true, effort:'heavy', kind:'scholarship', themes:['personal','service','leadership'], docs:['Two ~500-word essays','Counselor letter (due Dec 15)','Transcript'], rules:{ grades:['hs12'], ethnicity:['black'], citizenship:['citizen','pr'] }, notes:'For Black/African American seniors with academic excellence, leadership, service and financial need. About 20 winners a year.' },
+  { id:'hsf', name:'Hispanic Scholarship Fund', org:'HSF', url:'https://www.hsf.net/scholarship', amount:'$500–$5,000 (when funding allows)', typical:2000, amountMax:5000, month:2, effort:'essay', kind:'scholarship', themes:['identity','career','personal'], docs:['Transcript','FAFSA or state Dream Act application'], rules:{ grades:['hs12'].concat(UG, ['grad']), minGpa:{ hs:3.0, other:2.5 }, ethnicity:['hispanic'], citizenship:['citizen','pr','daca'], fafsa:true }, notes:'3.0 GPA for seniors, 2.5 for college students. Must plan full-time enrollment at a 4-year college or grad school. Being named an HSF Scholar does not guarantee cash. Usually due mid-February.' },
+  { id:'apia', name:'APIA Scholars', org:'APIA Scholars', url:'https://apiascholars.org/scholarship/', amount:'$2,500–$20,000', typical:2500, amountMax:20000, opens:'2026-11-15', closes:'2027-01-15', checked:true, effort:'essay', kind:'scholarship', themes:['service','career','need'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'].concat(UG), citizenship:['citizen','national','pr'] }, notes:'Open to students of all backgrounds; prioritizes significant financial need. Citizens of the Marshall Islands, Micronesia and Palau may also apply.' },
+  { id:'aicf', name:'American Indian College Fund Scholarships', org:'American Indian College Fund', url:'https://collegefund.org/students/scholarships/', amount:'Usually $2,000–$3,000', typical:2500, amountMax:5000, month:5, effort:'essay', kind:'scholarship', themes:['identity','career','personal'], docs:['Proof of tribal enrollment or descent','Transcript'], rules:{ grades:['hs12'].concat(UG, ['grad']), minGpa:2.0, ethnicity:['aian'], tribal:true }, notes:'Full-time enrollment at an accredited nonprofit college required. May 31 is the priority deadline; some awards have other dates.' },
+  { id:'dreamus', name:'TheDream.US National Scholarship', org:'TheDream.US', url:'https://www.thedream.us/scholarships/', amount:'Up to $33,000 tuition + possible stipend', typical:20000, amountMax:33000, opens:'2026-11-01', month:2, effort:'essay', kind:'scholarship', themes:['personal','career','identity'], docs:['Transcript','Proof of immigration status'], rules:{ grades:['hs12','cc','c1'], minGpa:2.5, citizenship:['daca','undocumented'] }, notes:'For immigrant students with DACA or TPS, or who are undocumented, with unmet need and not eligible for Pell. Used at partner colleges; arrival-date rules apply.' },
+  { id:'goldendoor', name:'Golden Door Scholars', org:'Golden Door Scholars', url:'https://goldendoorscholars.org/eligibility', amount:'Varies (scholarship at a partner college)', typical:20000, amountMax:100000, month:10, effort:'heavy', kind:'scholarship', themes:['personal','adversity','career'], docs:['Transcript','Recommendations'], rules:{ grades:['hs12','adult'], minGpa:3.2, states:['NC','SC','GA'], citizenship:['daca','undocumented'] }, notes:'Regional: students living in North Carolina, South Carolina or Georgia (check the current list). DACA, TPS, U visa, pending asylum or undocumented. 3.2 unweighted GPA, high need, must relocate to a partner college.' },
+  { id:'point', name:'Point Foundation Flagship Scholarship', org:'Point Foundation', url:'https://pointfoundation.org/scholarships/flagship', amount:'Need-based, renewable', typical:10000, amountMax:15000, closes:'2026-11-19', effort:'heavy', kind:'scholarship', themes:['identity','leadership','career'], docs:['Transcript','Recommendations'], rules:{ grades:['hs12'].concat(UG, ['grad']), minGpa:3.3, lgbtqAlly:true }, notes:'For LGBTQ+ students and committed allies, from high school seniors up. Full-time enrollment required.' },
+  { id:'afe', name:'Amazon Future Engineer Scholarship', org:'Amazon', url:'https://www.amazonfutureengineer.com/scholarships', amount:'$40,000 + paid internship', typical:40000, amountMax:40000, month:1, effort:'essay', kind:'scholarship', themes:['major','career','need'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'], majorCats:['cs'] }, notes:'For seniors with financial need planning to study computer science or a related field. Check the current course and degree rules.' },
+  { id:'nhs', name:'NHS Scholarship', org:'National Honor Society (NASSP)', url:'https://www.nationalhonorsociety.org/the-nhs-scholarship/', amount:'$3,200–$25,000', typical:3200, amountMax:25000, closes:'2026-11-20', checked:true, effort:'essay', kind:'scholarship', themes:['leadership','service','personal'], docs:['NHS adviser verification','Recommendation'], rules:{ grades:['hs12'], memberships:['nhs'] }, notes:'600 awards. Any senior who is an active NHS member in good standing can apply.' },
+  { id:'coolidge', name:'Coolidge Scholarship', org:'Calvin Coolidge Presidential Foundation', url:'https://coolidgescholars.org/', amount:'Full tuition, room, board & expenses', typical:150000, amountMax:250000, closes:'2026-12-01', checked:true, effort:'heavy', kind:'scholarship', themes:['personal','leadership'], docs:['3 essays + short answers','Transcript','Resume','2 recommendations'], rules:{ grades:['hs11'], citizenship:['citizen','pr'] }, notes:'For juniors. Merit-based, any major, any accredited U.S. college.' },
+  { id:'cameron', name:'Cameron Impact Scholarship', org:'Bryan Cameron Education Foundation', url:'https://www.bryancameroneducationfoundation.org/', amount:'Full tuition', typical:150000, amountMax:200000, opens:'2027-02-01', closes:'2027-05-01', checked:true, effort:'heavy', kind:'scholarship', themes:['service','leadership','personal'], docs:['Transcript','Recommendations'], rules:{ grades:['hs11'], minGpa:3.7, citizenship:['citizen','pr'] }, notes:'Now for juniors. Closes May 1 or after 3,000 completed applications. Looks for strong community service.' },
+  { id:'gereagan', name:'GE-Reagan Foundation Scholarship', org:'Ronald Reagan Presidential Foundation', url:'https://www.reaganfoundation.org/education/scholarship-programs/ge-reagan-foundation-scholarship-program/', amount:'$10,000 / year (renewable)', typical:40000, amountMax:40000, month:1, effort:'essay', kind:'scholarship', themes:['leadership','service','need'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'], minGpa:3.0, citizenship:['citizen'] }, notes:'Leadership, drive, integrity and citizenship; financial need considered. Must enroll full-time at a 4-year college.' },
+  { id:'stophunger', name:'Stephen J. Brady STOP Hunger Scholarship', org:'Sodexo Stop Hunger Foundation', url:'https://us.stop-hunger.org/grants/youth-scholarships', amount:'$10,000 + $5,000 grant to your charity', typical:10000, amountMax:10000, opens:'2026-08-20', closes:'2026-10-20', checked:true, effort:'essay', kind:'scholarship', themes:['service'], docs:['Description of hunger-relief work','Recommendation from the organization'], rules:{ ageMin:5, ageMax:25 }, notes:'You must have done unpaid hunger-relief volunteer work in the past 12 months.' },
+  { id:'rotc', name:'Army ROTC Scholarship', org:'U.S. Army', url:'https://www.goarmy.com/', amount:'Full tuition + stipend', typical:100000, amountMax:160000, rounds:['2026-10-12','2027-01-18','2027-03-08'], effort:'essay', kind:'scholarship', themes:['leadership','career'], docs:['Transcript','SAT/ACT','Interview','Fitness test'], rules:{ grades:['hs12','c1','c2'], minGpa:2.5, citizenship:['citizen'], ageMin:17 }, notes:'Comes with a service commitment after graduation. Must be under 31 in the year you commission. Navy and Air Force ROTC have similar programs.' },
+  { id:'smc', name:'Scholarships for Military Children', org:'Fisher House Foundation', url:'https://militaryscholar.org/', amount:'$2,000', typical:2000, amountMax:2000, opens:'2026-12-01', month:2, effort:'short', kind:'scholarship', themes:['personal'], docs:['Military ID / DEERS','Transcript'], rules:{ grades:['hs12'].concat(UG), minGpa:{ hs:3.0, other:2.5 }, military:['parent','marine'], ageMax:22 }, notes:'For unmarried children under 23 of service members, retirees and fallen service members, with a valid military ID.' },
+  { id:'mcsf', name:'Marine Corps Scholarship Foundation', org:'MCSF', url:'https://www.mcsf.org/', amount:'Varies', typical:3000, amountMax:10000, opens:'2027-01-01', closes:'2027-03-01', checked:true, effort:'short', kind:'scholarship', themes:['personal'], docs:['Proof of parent\'s service','Transcript','Family income info'], rules:{ grades:['hs12'].concat(UG), minGpa:2.0, military:['marine'] }, notes:'Every eligible applicant with a complete application gets an award. Family income limit applies (about $130,000; check the current figure).' },
+  { id:'tillman', name:'Tillman Scholars', org:'Pat Tillman Foundation', url:'https://pattillmanfoundation.org/', amount:'Varies with need', typical:8000, amountMax:15000, month:2, effort:'heavy', kind:'scholarship', themes:['leadership','service','career'], docs:['Transcript','Recommendations'], rules:{ grades:UG.concat(['grad']), military:['self','spouse'] }, notes:'For veterans, service members and military spouses. Confirm this year\'s dates.' },
+  { id:'nms', name:'National Merit Scholarship Program', org:'National Merit Scholarship Corporation', url:'https://www.nationalmerit.org/', amount:'$2,500 + corporate & college awards', typical:2500, amountMax:2500, month:10, effort:'quick', kind:'scholarship', themes:['personal'], docs:['Take the PSAT/NMSQT in October of 11th grade'], rules:{ grades:['hs10','hs11'] }, notes:'Entry is the PSAT/NMSQT taken in October of junior year (Oct 2026 = class of 2028). Sophomores: plan for next fall. Sign up through your school.' },
+  { id:'scholastic', name:'Scholastic Art & Writing Awards', org:'Alliance for Young Artists & Writers', url:'https://www.artandwriting.org/', amount:'Recognition + scholarships (top senior portfolios up to $12,500)', typical:1000, amountMax:12500, month:12, effort:'essay', kind:'contest', themes:['personal'], docs:['Art or writing samples / portfolio'], rules:{ grades:['ms'].concat(HS), ageMin:13, portfolio:true }, notes:'Grades 7–12, age 13+. Regional deadlines run from December to early January.' },
+  { id:'sts', name:'Regeneron Science Talent Search', org:'Society for Science', url:'https://www.societyforscience.org/regeneron-sts/', amount:'Up to $250,000', typical:2000, amountMax:250000, closes:'2026-11-05', effort:'heavy', kind:'contest', themes:['innovation','major','personal'], docs:['Research report','Transcript','Recommendations'], rules:{ grades:['hs12'], research:true }, notes:'For seniors with original, independent research. Team projects don\'t qualify.' },
+  { id:'davidson', name:'Davidson Fellows Scholarship', org:'Davidson Institute', url:'https://www.davidsongifted.org/gifted-programs/fellows-scholarship/', amount:'$25,000–$100,000', typical:25000, amountMax:100000, month:2, effort:'heavy', kind:'contest', themes:['innovation','personal'], docs:['Project portfolio','Nominator forms','Video'], rules:{ ageMax:18, citizenship:['citizen','pr'], research:true }, notes:'Age 18 or under at the deadline. For a significant piece of work in STEM, literature, music, philosophy or "outside the box".' },
+  { id:'vod', name:'VFW Voice of Democracy', org:'Veterans of Foreign Wars', url:'https://www.vfw.org/community/youth-and-education/youth-scholarships', amount:'Up to $35,000', typical:1000, amountMax:35000, closes:'2026-10-31', effort:'short', kind:'contest', video:true, themes:['personal'], docs:['Recorded audio essay (3–5 min)'], rules:{ grades:HS, citizenship:['citizen','pr'] }, notes:'Audio essay on a patriotic theme, entered through your local VFW post.' },
+  { id:'ppen', name:"VFW Patriot's Pen", org:'Veterans of Foreign Wars', url:'https://www.vfw.org/community/youth-and-education/youth-scholarships', amount:'Up to $5,000', typical:500, amountMax:5000, closes:'2026-10-31', effort:'short', kind:'contest', themes:['personal'], docs:['300–400 word essay'], rules:{ grades:['ms'] }, notes:'Essay contest for grades 6–8 through a local VFW post.' },
+  { id:'legion', name:'American Legion Oratorical Contest', org:'The American Legion', url:'https://www.legion.org/', amount:'Up to $25,000', typical:1000, amountMax:25000, month:12, effort:'essay', kind:'contest', themes:['personal'], docs:['Prepared speech on the Constitution'], rules:{ grades:HS, ageMax:19, citizenship:['citizen','pr'] }, notes:'Speech contest. Must be under 20 at the national contest. Starts at local posts; deadlines vary by state.' },
+  { id:'tacobell', name:'Live Más Scholarship', org:'Taco Bell Foundation', url:'https://www.tacobellfoundation.org/live-mas-scholarship/', amount:'$5,000–$25,000', typical:5000, amountMax:25000, month:1, effort:'short', kind:'scholarship', video:true, themes:['video','career'], docs:['2-minute video'], rules:{ ageMin:16, ageMax:26, grades:HS.concat(UG, ['grad','adult']) }, notes:'No GPA or essay. A 2-minute video about your passion. Must be a legal U.S. resident enrolled in (or headed to) college or trade school.' },
+  { id:'ffa', name:'FFA Scholarships', org:'National FFA Organization', url:'https://www.ffa.org/participate/scholarships/', amount:'$1,000–$10,000', typical:1500, amountMax:10000, month:1, effort:'essay', kind:'scholarship', themes:['career','leadership'], docs:['Transcript','FFA advisor signature'], rules:{ grades:['hs12'].concat(UG), memberships:['ffa'] }, notes:'For senior FFA members and FFA alumni in college. One application covers hundreds of sponsor scholarships.' },
+  { id:'nesa', name:'NESA Eagle Scout Scholarships', org:'National Eagle Scout Association', url:'https://nesa.org/', amount:'Up to $50,000', typical:2500, amountMax:50000, opens:'2026-12-01', closes:'2027-02-01', effort:'essay', kind:'scholarship', themes:['leadership','service'], docs:['Eagle Scout board of review date','Transcript'], rules:{ grades:['hs12'].concat(UG), memberships:['eagle'] }, notes:'For Eagle Scouts. Girl Scout councils offer similar awards for Gold Award recipients.' },
+  { id:'goldwater', name:'Barry Goldwater Scholarship', org:'Goldwater Foundation', url:'https://goldwaterscholarship.gov/', amount:'Up to $7,500 / year', typical:7500, amountMax:15000, month:1, effort:'heavy', kind:'scholarship', themes:['innovation','career'], docs:['Campus nomination','Research essay','3 recommendations'], rules:{ grades:['c2','c3'], majorCats:['sci','eng','cs'], research:true }, notes:'For sophomores and juniors headed for research careers. Your college must nominate you, and campus deadlines are earlier.' },
+  { id:'truman', name:'Truman Scholarship', org:'Truman Foundation', url:'https://www.truman.gov/', amount:'Up to $30,000 for graduate school', typical:30000, amountMax:30000, month:2, effort:'heavy', kind:'scholarship', themes:['leadership','service','career'], docs:['Campus nomination','Policy proposal','Recommendations'], rules:{ grades:['c3'], citizenship:['citizen','national'] }, notes:'For juniors planning public-service careers. Your college must nominate you.' },
+  { id:'udall', name:'Udall Undergraduate Scholarship', org:'Udall Foundation', url:'https://www.udall.gov/', amount:'Up to $7,500', typical:7500, amountMax:7500, month:3, effort:'heavy', kind:'scholarship', themes:['career','service','identity'], docs:['Campus nomination','Essay','Recommendations'], rules:{ grades:['c2','c3'] }, notes:'For sophomores and juniors committed to the environment, or Native American/Alaska Native students in tribal policy or health care. Campus nomination required.' },
+  { id:'hacer', name:'McDonald\'s HACER National Scholarship', org:'McDonald\'s / HACER', url:'https://www.mcdonalds.com/us/en-us/community/hacer.html', amount:'Varies (up to $100,000 for top winners)', typical:5000, amountMax:100000, month:2, effort:'essay', kind:'scholarship', themes:['identity','service','career'], docs:['Transcript','Financial info'], rules:{ grades:['hs12'], minGpa:2.8, ageMax:20, ethnicity:['hispanic'], citizenship:['citizen','pr','daca'] }, notes:'For seniors with at least one parent of Hispanic/Latino heritage, under 21, planning full-time college. Watch for the next round to open.' },
+  { id:'dreamaward', name:'Scholarship America Dream Award', org:'Scholarship America', url:'https://scholarshipamerica.org/students/browse-scholarships/', amount:'Up to $10,000 / year (renewable)', typical:5000, amountMax:20000, month:1, effort:'essay', kind:'scholarship', themes:['adversity','career','need'], docs:['College transcript','Financial info'], rules:{ grades:['c2','c3','c4'], minGpa:3.0, citizenship:['citizen','pr','daca'] }, notes:'For college students who have finished at least one full-time year, working on a first degree, with financial need. Watch for the next round to open.' },
+  { id:'pell', name:'Federal Pell Grant', org:'U.S. Department of Education', url:'https://studentaid.gov/understand-aid/types/grants/pell', amount:'Up to $7,395 / year', typical:5000, amountMax:29580, effort:'quick', kind:'grant', themes:[], docs:['FAFSA'], rules:{ grades:['hs12'].concat(UG, ['adult']), citizenship:['citizen','national','pr','refugee'], fafsa:true }, notes:'Free money you do not repay. The FAFSA is the only application and decides whether you qualify. File as early as possible: state and college aid deadlines come first.' },
+  /* Directories: many awards with their own rules. Shown as places to search, never in the apply queue. */
+  { id:'state', portal:true, name:"Your state's grant programs", org:'State higher-education agency', url:'https://studentaid.gov/', amount:'Varies by state', effort:'quick', kind:'grant', rules:{}, notes:'Most states award grants from your FAFSA. Some deadlines are as early as February. Search your state\'s higher-education agency.' },
+  { id:'uncf', portal:true, name:'UNCF Scholarships', org:'UNCF', url:'https://uncf.org/scholarships', amount:'Varies', kind:'scholarship', rules:{}, notes:'Hundreds of awards, each with its own GPA, school and deadline rules.' },
+  { id:'tmcf', portal:true, name:'Thurgood Marshall College Fund', org:'TMCF', url:'https://www.tmcf.org/', amount:'Varies', kind:'scholarship', rules:{}, notes:'Awards for students at HBCUs and other member schools. Rules vary by opportunity.' },
+  { id:'swe', portal:true, name:'Society of Women Engineers Scholarships', org:'SWE', url:'https://swe.org/scholarships/', amount:'$1,000–$15,000', kind:'scholarship', rules:{}, notes:'Separate tracks for first-year students (usually due in March) and college/grad students (usually February).' },
+  { id:'bigfuture', portal:true, name:'BigFuture Scholarships (drawings)', org:'College Board', url:'https://bigfuture.collegeboard.org/pay-for-college/bigfuture-scholarships', amount:'$500 or $40,000 drawings', kind:'sweepstakes', rules:{}, notes:'Complete college-planning steps for entries. No essay. Labeled a drawing.' },
+  { id:'bold', portal:true, name:'Bold.org scholarships', org:'Bold.org', url:'https://bold.org/scholarships/', amount:'Varies', kind:'sweepstakes', rules:{}, notes:'A changing directory of donor scholarships, many no-essay. Low odds; check each listing.' },
+  { id:'niche', portal:true, name:'Niche no-essay drawings', org:'Niche', url:'https://www.niche.com/colleges/scholarships/', amount:'Varies', kind:'sweepstakes', rules:{}, notes:'Monthly drawings. Takes two minutes; expect marketing emails.' }
 ];
 
 const LOCAL_SOURCES = [
@@ -327,7 +342,8 @@ const STEPS = [
     { k:'state', label:'State', type:'select', opts:STATES, ac:'address-level1' },
     { k:'zip', label:'ZIP code', type:'text', ac:'postal-code' },
     { k:'county', label:'County', type:'text', help:'Local foundation scholarships are often county-only.' },
-    { k:'country', label:'Country', type:'text', ph:'United States', ac:'country-name' }
+    { k:'country', label:'Country', type:'text', ph:'United States', ac:'country-name' },
+    { k:'mailingSame', label:'Is your mailing address the same as this one?', type:'yesno', opts:[['yes','Yes'],['no','No']], wide:true, help:'If not, autofill leaves mailing-address fields for you.' }
   ]},
   { id:'background', title:'Background', intro:'These answers unlock scholarships for specific groups. Skip anything you prefer not to share; skipped answers never count against you.', fields:[
     { k:'citizenship', label:'Citizenship or immigration status', type:'select', opts:CITIZEN, wide:true },
@@ -339,7 +355,7 @@ const STEPS = [
     { k:'fosterCare', label:'Have you been in foster care?', type:'yesno', opts:YESNO_PRIVATE },
     { k:'singleParent', label:'Do you live in a single-parent household?', type:'yesno', opts:YESNO_PRIVATE },
     { k:'parentStudent', label:'Are you a parent yourself?', type:'yesno', opts:YESNO_PRIVATE },
-    { k:'lgbtq', label:'Do you identify as LGBTQ+?', type:'yesno', opts:YESNO_PRIVATE, optional:true },
+    { k:'lgbtq', label:'Do you identify as LGBTQ+?', type:'yesno', opts:[['yes','Yes'],['ally','No, but I\'m an active ally'],['no','No'],['skip','Prefer not to say']], optional:true, wide:true },
     { k:'disability', label:'Do you have a disability or chronic illness?', type:'yesno', opts:YESNO_PRIVATE, optional:true },
     { k:'religion', label:'Faith community', type:'text', optional:true, ph:'Optional' }
   ]},
@@ -348,12 +364,14 @@ const STEPS = [
     { k:'highSchool', label:'High school name', type:'text' },
     { k:'hsCity', label:'High school city and state', type:'text', ph:'Austin, TX' },
     { k:'hsGradYear', label:'High school graduation year', type:'number', ph:'2027' },
-    { k:'gpaScale', label:'GPA scale your school uses', type:'select', opts:[['4.0','4.0 scale'],['5.0','5.0 scale'],['100','100-point scale']] },
+    { k:'gpaScale', label:'GPA scale your school uses', type:'select', opts:[['4.0','4.0 scale'],['5.0','5.0 scale'],['100','100-point scale']], help:'If your school uses 100 points, ask your counselor for the 4.0 equivalent on your transcript. ScholarPilot won\'t guess it.' },
     { k:'gpaUnweighted', label:'Unweighted GPA', type:'number', step:'0.01', ph:'3.60', help:'Copy it from your transcript. If you only know weighted, leave this blank.' },
     { k:'gpaWeighted', label:'Weighted GPA', type:'number', step:'0.01', ph:'4.10' },
     { k:'classRank', label:'Class rank', type:'number', optional:true, ph:'25' },
     { k:'classSize', label:'Class size', type:'number', optional:true, ph:'410' },
     { k:'college', label:'College you attend now', type:'text', showIf:isCollege },
+    { k:'collegeGpa', label:'College GPA (4.0 scale)', type:'number', step:'0.01', showIf:isCollege },
+    { k:'prior4yr', label:'Have you ever attended a 4-year college or earned a degree?', type:'yesno', opts:[['yes','Yes'],['no','No']], wide:true, showIf:p => isCollege(p) || p.gradeLevel === 'adult' },
     { k:'collegeTargets', label:'Colleges you are applying to or considering', type:'list', showIf:p => !isCollege(p), help:'One per line. Many colleges have their own scholarships.' },
     { k:'collegeType', label:'Type of school you plan to attend', type:'select', opts:[['4yr','4-year college or university'],['2yr','2-year community college'],['trade','Trade or technical school'],['undecided','Undecided']] },
     { k:'enrollment', label:'Full-time or part-time?', type:'select', opts:[['Full-time','Full-time'],['Part-time','Part-time']] }
@@ -378,7 +396,7 @@ const STEPS = [
     { k:'income', label:'Household income (before taxes)', type:'select', opts:INCOME.map(x => [x[0], x[1]]), wide:true },
     { k:'householdSize', label:'People in your household', type:'number' },
     { k:'inCollege', label:'How many will be in college next year?', type:'number', optional:true },
-    { k:'pell', label:'Are you Pell Grant eligible?', type:'yesno', wide:true, help:'Your FAFSA results tell you. Families earning under about $60,000 often qualify, but the FAFSA decides.' },
+    { k:'pell', label:'Are you Pell Grant eligible?', type:'yesno', wide:true, help:'Answer Yes or No only from your FAFSA Submission Summary. Until then, choose Not sure. Income alone can\'t tell you.' },
     { k:'fafsa', label:'FAFSA status', type:'select', opts:[['done','Submitted'],['planning','Planning to file'],['no','Not filing']] },
     { k:'sai', label:'Student Aid Index (SAI) from the FAFSA', type:'number', optional:true },
     { k:'works', label:'Do you have a job?', type:'yesno' },
@@ -481,19 +499,29 @@ function download(name, text, type) {
   a.download = name; document.body.appendChild(a); a.click();
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
 }
-function age(dob) {
+function age(dob, asOf) {
   if (!dob) return null; const d = new Date(dob + 'T00:00:00'); if (isNaN(d)) return null;
-  const n = new Date(); let a = n.getFullYear() - d.getFullYear();
+  const n = asOf ? new Date(asOf + 'T00:00:00') : new Date(); let a = n.getFullYear() - d.getFullYear();
   if (n.getMonth() < d.getMonth() || (n.getMonth() === d.getMonth() && n.getDate() < d.getDate())) a--;
   return a;
 }
-function gpa(p, weighted) {
-  let g = weighted ? (num(p.gpaWeighted) ?? num(p.gpaUnweighted)) : (num(p.gpaUnweighted) ?? num(p.gpaWeighted));
-  if (g == null) return null;
-  if (p.gpaScale === '100' || g > 5.5) g = Math.max(0, (g - 60) / 10); // 90 → 3.0 is a common rough conversion
-  else if (p.gpaScale === '5.0' && !weighted && num(p.gpaUnweighted) == null) g = g * 0.8;
-  return Math.round(g * 100) / 100;
+/* Returns only the GPA the student actually entered, never a converted or substituted one. */
+function gpaOf(p, kind) {
+  if (isCollege(p) && has(p.collegeGpa)) return num(p.collegeGpa);
+  if (p.gpaScale === '100') return null;
+  return num(kind === 'w' ? p.gpaWeighted : p.gpaUnweighted);
 }
+const todayISO = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+/* Where the current round stands: open, upcoming, closed or undated (no posted date). */
+function roundOf(s) {
+  const today = todayISO(), dates = s.rounds || (s.closes ? [s.closes] : []);
+  const next = dates.find(d => d >= today);
+  if (dates.length && !next) return { state: 'closed', closes: dates[dates.length - 1] };
+  if (next) return s.opens && s.opens > today ? { state: 'upcoming', opens: s.opens, closes: next } : { state: 'open', closes: next };
+  return s.opens && s.opens > today ? { state: 'upcoming', opens: s.opens } : { state: 'undated' };
+}
+const fmtDate = iso => { const [y, m, d] = iso.split('-'); return MONTHS[+m - 1] + ' ' + (+d) + ', ' + y; };
+const daysUntil = iso => Math.ceil((new Date(iso + 'T23:59:00') - new Date()) / 864e5);
 const visible = (f, p) => !f.showIf || f.showIf(p);
 function stepProgress(i, p) {
   const fs = STEPS[i].fields.filter(f => visible(f, p) && !f.optional);
@@ -520,10 +548,12 @@ function evaluate(s, p) {
     const w = r.minGpaW != null;
     let min = w ? r.minGpaW : r.minGpa;
     if (typeof min === 'object') min = isHS(p) ? min.hs : min.other;
-    const g = gpa(p, w);
-    if (g == null) add('unknown', 'Needs a ' + min.toFixed(1) + '+ ' + (w ? 'weighted ' : '') + 'GPA. Add yours', 'gpaUnweighted');
-    else if (g >= min) add('pass', (w ? 'Weighted ' : '') + 'GPA ' + g.toFixed(2) + ' meets ' + min.toFixed(1));
-    else add('fail', 'Needs ' + (w ? 'weighted ' : '') + 'GPA ' + min.toFixed(1) + '+ (yours: ' + g.toFixed(2) + ')');
+    const kind = w ? 'weighted' : 'unweighted', m = min.toFixed(min * 100 % 10 ? 2 : 1);
+    const g = gpaOf(p, w ? 'w' : 'u');
+    if (g != null) add(g >= min ? 'pass' : 'fail', g >= min ? 'GPA ' + g.toFixed(2) + ' meets ' + m : 'Needs ' + kind + ' GPA ' + m + '+ (yours: ' + g.toFixed(2) + ')');
+    else if (p.gpaScale === '100') add('unknown', 'Needs a ' + m + '+ GPA on a 4.0 scale. Get the equivalent from your transcript', 'gpaScale');
+    else if (w && gpaOf(p, 'u') != null && gpaOf(p, 'u') >= min) add('pass', 'Your unweighted ' + gpaOf(p, 'u').toFixed(2) + ' already meets the ' + m + ' weighted minimum');
+    else add('unknown', 'Needs ' + kind + ' GPA ' + m + '+. Add your ' + kind + ' GPA', w ? 'gpaWeighted' : 'gpaUnweighted');
   }
   if (r.citizenship) {
     if (!has(p.citizenship)) add('unknown', 'Citizenship status needed', 'citizenship');
@@ -550,9 +580,7 @@ function evaluate(s, p) {
   if (r.pell) {
     if (p.pell === 'yes') add('pass', 'Pell Grant eligible');
     else if (p.pell === 'no') add('fail', 'Requires Pell Grant eligibility');
-    else if (inc && inc[3] != null && inc[3] <= 50000) add('pass', 'Likely Pell eligible from your income (confirm on the FAFSA)');
-    else if (inc && inc[2] != null && inc[2] >= 95000) add('fail', 'Requires Pell eligibility (unlikely at your income)');
-    else add('unknown', 'Requires Pell eligibility. File the FAFSA to find out', 'pell');
+    else add('unknown', 'Requires Pell eligibility. Your FAFSA Submission Summary will say', 'pell');
   }
   if (r.maxIncome) {
     const cap = money(r.maxIncome);
@@ -567,9 +595,10 @@ function evaluate(s, p) {
     else add('fail', 'For ' + r.majorCats.map(m => lab(MAJORCATS, m)).join(' or ') + ' majors');
   }
   if (r.ageMin != null || r.ageMax != null) {
-    const a = age(p.dob), lo = r.ageMin ?? 0, hi = r.ageMax ?? 200;
+    const rd = roundOf(s), a = age(p.dob, rd.closes || null), lo = r.ageMin ?? 0, hi = r.ageMax ?? 200;
     const rng = r.ageMin != null && r.ageMax != null ? 'ages ' + lo + '–' + hi : r.ageMax != null ? 'age ' + hi + ' or under' : 'age ' + lo + '+';
     if (a == null) add('unknown', 'Age limit (' + rng + ')', 'dob');
+    else if (rd.closes) a >= lo && a <= hi ? add('pass', 'Age ' + a + ' on the deadline fits ' + rng) : add('fail', 'For ' + rng + ' (you will be ' + a + ' on the deadline)');
     else if (a >= lo && a <= hi) add('pass', 'Age ' + a + ' fits ' + rng);
     else add('fail', 'For ' + rng + ' (you are ' + a + ')');
   }
@@ -581,17 +610,36 @@ function evaluate(s, p) {
   }
   if (r.military) {
     const m = p.military || [];
+    const need = r.military.map(x => lab(MILITARY, x).toLowerCase()).join(' / ');
     if (r.military.some(x => m.includes(x))) add('pass', 'Military connection');
-    else add('fail', 'Requires a military connection (' + r.military.map(x => lab(MILITARY, x).toLowerCase()).join(' / ') + ')');
+    else if (!m.length) add('unknown', 'Requires a military connection (' + need + ')', 'military');
+    else add('fail', 'Requires a military connection (' + need + ')');
   }
   if (r.memberships) {
     const m = p.memberships || [];
+    const need = r.memberships.map(x => lab(MEMBERSHIPS, x)).join(' or ');
     if (r.memberships.some(x => m.includes(x))) add('pass', 'Membership: ' + r.memberships.filter(x => m.includes(x)).map(x => lab(MEMBERSHIPS, x)).join(', '));
-    else add('fail', 'Requires: ' + r.memberships.map(x => lab(MEMBERSHIPS, x)).join(' or '));
+    else if (!m.length) add('unknown', 'Requires: ' + need, 'memberships');
+    else add('fail', 'Requires: ' + need);
   }
-  if (r.lgbtq) {
-    if (p.lgbtq === 'yes') add('pass', 'LGBTQ+ students');
-    else add('fail', 'For LGBTQ+ students');
+  if (r.lgbtqAlly) {
+    if (p.lgbtq === 'yes' || p.lgbtq === 'ally') add('pass', p.lgbtq === 'yes' ? 'LGBTQ+ students' : 'Open to committed allies');
+    else if (p.lgbtq === 'no') add('fail', 'For LGBTQ+ students and allies');
+    else add('unknown', 'For LGBTQ+ students and allies', 'lgbtq');
+  }
+  if (r.states) {
+    if (!has(p.state)) add('unknown', 'Only for residents of ' + r.states.join(', '), 'state');
+    else if (r.states.includes(p.state)) add('pass', 'Open to ' + lab(STATES, p.state) + ' residents');
+    else add('fail', 'Only for residents of ' + r.states.map(x => lab(STATES, x)).join(', '));
+  }
+  if (r.testScore) {
+    if (has(p.sat) || has(p.act) || num(p.apCount) > 0 || p.ibDiploma === 'yes') add('pass', 'You have a test score to submit');
+    else add('unknown', 'Requires an SAT, ACT, AP or IB score (any score)', 'sat');
+  }
+  if (r.noPrior4yr) {
+    if (p.prior4yr === 'no') add('pass', 'No prior 4-year college');
+    else if (p.prior4yr === 'yes') add('fail', 'Not open if you attended a 4-year college or hold a degree');
+    else add('unknown', 'Not open if you attended a 4-year college before', 'prior4yr');
   }
   if (r.research) {
     if (p.research === 'yes') add('pass', 'You have a research project');
@@ -611,7 +659,7 @@ function evaluate(s, p) {
   }
   if (r.fafsa) {
     if (p.fafsa === 'done') add('pass', 'FAFSA submitted');
-    else add('todo', 'File the FAFSA before applying');
+    else add('todo', 'Application task: file the FAFSA (or your state Dream Act form)');
   }
   const fail = out.some(c => c.state === 'fail');
   const unknown = out.some(c => c.state === 'unknown');
@@ -626,33 +674,31 @@ function hiddenBy(s, p) {
   if (s.video && p.videoOk === 'no') return 'Requires a video';
   return null;
 }
-function monthsAway(m) { if (!m) return null; const now = new Date().getMonth() + 1; return (m - now + 12) % 12; }
 const EFFORT_LABEL = { quick:'Quick', short:'Short essay', essay:'Essays', heavy:'Big application' };
 const EFFORT_COST = { quick:{ quick:0, short:0, any:0 }, short:{ quick:10, short:2, any:1 }, essay:{ quick:18, short:9, any:2 }, heavy:{ quick:26, short:15, any:4 } };
-function score(s, p) {
+/* Ranks by a realistic award (not the headline maximum), the work involved, and how close a real posted deadline is. */
+function score(s, p, rd) {
   const tol = p.essayTolerance || 'short';
-  let sc = Math.log10(Math.max(s.amountMax || 500, 100)) * 10 - EFFORT_COST[s.effort || 'essay'][tol];
-  const m = monthsAway(s.month);
-  if (m != null) sc -= m * 1.2;
-  if (s.kind === 'sweepstakes') sc -= 12;
-  const t = S.tracker[s.id];
-  if (t && t.deadline) { const days = (new Date(t.deadline) - new Date()) / 864e5; if (days >= 0) sc += Math.max(0, 10 - days / 6); }
+  let sc = Math.log10(Math.max(s.typical || s.amountMax || 500, 100)) * 10 - EFFORT_COST[s.effort || 'essay'][tol];
+  const t = S.tracker[s.id], due = (t && t.deadline) || rd.closes;
+  if (due) { const days = daysUntil(due); if (days >= 0) sc += Math.max(0, (60 - days) / 6); }
+  else sc -= 6;
+  if (rd.state === 'upcoming') sc -= 2;
   return sc;
 }
 function results() {
   const p = P();
-  return ALL().map(s => Object.assign({ s, hidden: hiddenBy(s, p), score: score(s, p) }, evaluate(s, p)));
+  return ALL().filter(s => !s.portal).map(s => { const rd = roundOf(s); return Object.assign({ s, rd, hidden: hiddenBy(s, p), score: score(s, p, rd) }, evaluate(s, p)); });
 }
+const inQueue = r => r.status === 'eligible' && !r.hidden && r.rd.state !== 'closed' && r.s.kind !== 'sweepstakes';
 function deadlineText(s) {
   const t = S.tracker[s.id];
-  if (t && t.deadline) {
-    const days = Math.ceil((new Date(t.deadline + 'T23:59:00') - new Date()) / 864e5);
-    return days < 0 ? 'Deadline passed' : 'Due in ' + days + ' day' + (days === 1 ? '' : 's');
-  }
-  if (s.deadline) return 'Due ' + s.deadline;
-  if (!s.month) return 'Rolling / monthly';
-  const m = monthsAway(s.month);
-  return 'Usually due in ' + MONTHS[s.month - 1] + (m === 0 ? ' (this month)' : '');
+  if (t && t.deadline) { const d = daysUntil(t.deadline); return d < 0 ? 'Your deadline passed' : 'Due ' + fmtDate(t.deadline) + ' (' + d + ' day' + (d === 1 ? '' : 's') + ')'; }
+  const rd = roundOf(s), chk = s.checked ? ' · date checked Oct 2026' : '';
+  if (rd.state === 'closed') return 'Closed ' + fmtDate(rd.closes) + '. Next round expected next year';
+  if (rd.state === 'upcoming') return 'Opens ' + fmtDate(rd.opens) + (rd.closes ? ' · due ' + fmtDate(rd.closes) : '') + chk;
+  if (rd.state === 'open') { const d = daysUntil(rd.closes); return 'Due ' + fmtDate(rd.closes) + ' (' + d + ' day' + (d === 1 ? '' : 's') + ')' + chk; }
+  return s.month ? 'Date not posted yet · usually around ' + MONTHS[s.month - 1] : 'No fixed deadline. File as early as possible';
 }
 
 /* ------------------------------------------------------------------ *
@@ -661,18 +707,21 @@ function deadlineText(s) {
 function autofillData() {
   const p = P(), e = E(), d = {};
   const set = (k, v) => { if (has(v)) d[k] = String(v); };
-  set('firstName', p.firstName); set('middleName', p.middleName); set('lastName', p.lastName); set('preferredName', p.preferredName);
+  set('firstName', p.firstName); set('middleName', p.middleName); set('lastName', p.lastName); set('preferredName', p.preferredName); set('pronouns', p.pronouns);
   set('fullName', [p.firstName, p.middleName, p.lastName].filter(Boolean).join(' '));
   set('email', p.email); set('phone', p.phone);
-  if (p.dob) { const [y, m, dd] = p.dob.split('-'); set('dob', p.dob); set('dobUS', m + '/' + dd + '/' + y); set('dobMonth', String(+m)); set('dobDay', String(+dd)); set('dobYear', y); }
+  if (p.dob) { const [y, m, dd] = p.dob.split('-'); set('dob', p.dob); set('dobUS', m + '/' + dd + '/' + y); set('dobEU', dd + '/' + m + '/' + y); set('dobMonth', String(+m)); set('dobDay', String(+dd)); set('dobYear', y); }
   set('gender', p.gender); set('street', p.street); set('street2', p.street2); set('city', p.city);
-  set('state', p.state); set('stateName', lab(STATES, p.state)); set('zip', p.zip); set('county', p.county); set('country', p.country || 'United States');
+  set('state', p.state); set('stateName', p.state ? lab(STATES, p.state) : ''); set('zip', p.zip); set('county', p.county); set('country', p.country);
+  if (p.mailingSame === 'no') d.mailingDifferent = '1';
   if (p.citizenship) set('citizenship', lab(CITIZEN, p.citizenship));
-  if (p.ethnicity && p.ethnicity.length) set('ethnicity', lab(ETHNICITY, p.ethnicity[0]));
+  if (p.ethnicity && p.ethnicity.length === 1) set('ethnicity', lab(ETHNICITY, p.ethnicity[0]));
   set('highSchool', p.highSchool); set('hsCity', p.hsCity); set('hsGradYear', p.hsGradYear);
-  set('gpa', p.gpaUnweighted || p.gpaWeighted); set('gpaWeighted', p.gpaWeighted || p.gpaUnweighted);
+  // Each GPA only when the student entered that exact one. No substitutions.
+  if (p.gpaScale !== '100') { set('gpa', p.gpaUnweighted); set('gpaWeighted', p.gpaWeighted); }
+  set('collegeGpa', p.collegeGpa);
   set('classRank', p.classRank); set('classSize', p.classSize); set('sat', p.sat); set('act', p.act);
-  set('college', p.college || String(p.collegeTargets || '').split('\n')[0]);
+  set('college', p.college);
   set('major', p.major); set('minor', p.minor); set('careerGoal', p.careerGoal);
   if (p.gradeLevel) set('gradeLevel', lab(GRADES, p.gradeLevel));
   set('householdSize', p.householdSize);
@@ -680,76 +729,99 @@ function autofillData() {
   set('volunteerHours', p.volunteerHours);
   if (p.firstGen === 'yes' || p.firstGen === 'no') set('firstGen', p.firstGen === 'yes' ? 'Yes' : 'No');
   if (S.prefs.includeBio) set('bio', e.bio);
-  if (S.prefs.includeRefs) { set('rec1Name', p.rec1Name); set('rec1Email', p.rec1Email); set('counselorName', p.counselorName); set('counselorEmail', p.counselorEmail); }
+  if (S.prefs.includeRefs) {
+    set('rec1Name', p.rec1Name); set('rec1Email', p.rec1Email); set('rec1Title', p.rec1Title);
+    set('rec2Name', p.rec2Name); set('rec2Email', p.rec2Email); set('rec2Title', p.rec2Title);
+    set('counselorName', p.counselorName); set('counselorEmail', p.counselorEmail);
+  }
   return d;
 }
-/* This function runs on the scholarship website, not here. It must stay self-contained. */
+/* This function runs on the scholarship website, not here. It must stay self-contained.
+ * It fills only fields it can identify from that field's own label, name, id, placeholder or autocomplete hint,
+ * never clicks Submit, and never touches passwords, files, checkboxes or essay boxes. */
 function SP_AUTOFILL(D) {
+  var AC = { 'given-name': 'firstName', 'family-name': 'lastName', 'additional-name': 'middleName', 'name': 'fullName', 'nickname': 'preferredName', 'email': 'email', 'tel': 'phone', 'tel-national': 'phone', 'bday': 'dob', 'bday-day': 'dobDay', 'bday-month': 'dobMonth', 'bday-year': 'dobYear', 'street-address': 'street', 'address-line1': 'street', 'address-line2': 'street2', 'address-level2': 'city', 'address-level1': 'state', 'postal-code': 'zip', 'country-name': 'country', 'country': 'country', 'sex': 'gender' };
   var RULES = [
     ['firstGen', /first.?gen/],
     ['counselorEmail', /counsel/, /e-?mail/], ['counselorName', /counsel/, /name/],
+    ['rec2Email', /(recommend|reference|referee)\w*\s*(#\s*)?(2|two|second)|(second|2nd)\s+(recommend|reference|referee)/, /e-?mail/],
+    ['rec2Name', /(recommend|reference|referee)\w*\s*(#\s*)?(2|two|second)|(second|2nd)\s+(recommend|reference|referee)/, /name/],
+    ['rec2Title', /(recommend|reference|referee)\w*\s*(#\s*)?(2|two|second)|(second|2nd)\s+(recommend|reference|referee)/, /title|relationship|position/],
     ['rec1Email', /recommend|reference|referee/, /e-?mail/], ['rec1Name', /recommend|reference|referee/, /name/],
+    ['rec1Title', /recommend|reference|referee/, /title|relationship|position/],
     ['email', /e-?mail/],
     ['hsCity', /school/, /\bcity\b/],
+    ['collegeGpa', /college|university|undergrad/, /gpa|grade point/],
     ['gpaWeighted', /\bweighted/, /gpa|grade point/], ['gpa', /gpa|grade point/],
     ['classSize', /class.?size|students in (your )?class/], ['classRank', /class.?rank/],
     ['sat', /\bsat\b/], ['act', /\bact\b/],
+    ['dob', /birth|dob/, /mm.?dd.?yy|dd.?mm.?yy|yyyy.?mm.?dd/],
     ['dobMonth', /birth|dob/, /month|\bmm\b/], ['dobDay', /birth|dob/, /\bday\b|\bdd\b/], ['dobYear', /birth|dob/, /year|yyyy/],
     ['dob', /birth|\bdob\b|bday/],
-    ['middleName', /middle.?(name|initial)|(^|\|)\s*middle\s*(\||$)/], ['preferredName', /preferred|nick.?name/],
-    ['firstName', /first.?name|given.?name|fname|(^|\|)\s*first\s*(\||$)/],
-    ['lastName', /last.?name|surname|family.?name|lname|(^|\|)\s*last\s*(\||$)/],
+    ['pronouns', /pronoun/],
+    ['middleName', /middle.?(name|initial)|^\W*middle\W*$/], ['preferredName', /preferred|nick.?name/],
+    ['firstName', /first.?name|given.?name|fname|^\W*first\W*$/],
+    ['lastName', /last.?name|surname|family.?name|lname|^\W*last\W*$/],
     ['phone', /phone|mobile|\bcell\b|\btel\b/],
     ['citizenship', /citizen/],
     ['street2', /address.?(line)?.?2|apartment|\bapt\b|suite|\bunit\b/],
-    ['street', /street|address.?(line)?.?1|mailing address|home address|\baddress\b/],
+    ['street', /street|address.?(line)?.?1|home address|mailing address|^\W*address\W*$/],
     ['county', /county/], ['country', /country/],
     ['highSchool', /high.?school|secondary school/],
     ['city', /\bcity\b|\btown\b/], ['zip', /\bzip|postal/], ['state', /\bstate\b|province/],
     ['gender', /gender|\bsex\b/], ['ethnicity', /ethnic|\brace\b/],
-    ['hsGradYear', /grad(uation)?.?(year|date)|class of|expected graduation/],
+    ['hsGradYear', /(high school|hs).*(grad(uation)?.?(year|date))|grad(uation)?.?year|class of/],
     ['major', /major|field of study|area of study|intended study|program of study|course of study/], ['minor', /\bminor\b/],
-    ['college', /college|university|institution/],
+    ['college', /(current|attending).*(college|university)|(college|university).*(attend|enrolled)/],
     ['careerGoal', /career|profession/],
     ['gradeLevel', /grade level|current grade|year in school|class standing|classification/],
     ['householdSize', /household size|family size|(people|members) in (your )?(household|family)/],
     ['income', /income/],
     ['volunteerHours', /(volunteer|community service).*hours|hours.*(volunteer|community service)/],
     ['bio', /\bbio\b|biography|about yourself|introduce yourself/],
-    ['fullName', /full.?name|legal name|student name|applicant name|your name|(^|\|)\s*name\s*\*?\s*(\||$)/]
+    ['fullName', /full.?name|legal name|student name|applicant name|your name|^\W*name\W*$/]
   ];
-  var SKIP = /parent|guardian|mother|father|emergency|spouse|sibling|password|captcha|coupon|promo|search|signature|initials/;
+  var SKIP = /parent|guardian|mother|father|emergency|spouse|sibling|password|captcha|coupon|promo|search|signature|initials|non-?citizen|eligible non|billing|shipping|employer|ssn|social security|routing|account number|card number|confirm/;
   var ALT = {
-    state: [D.state, D.stateName], citizenship: [D.citizenship, /citizen/i.test(D.citizenship || '') ? 'Yes' : null],
+    state: [D.state, D.stateName], citizenship: [D.citizenship, /^u\.?s\.? citizen/i.test(D.citizenship || '') ? 'Yes' : null],
     gender: [D.gender, D.gender === 'Nonbinary' ? 'Non-binary' : null, D.gender === 'Prefer not to say' ? 'Decline' : null],
-    country: [D.country, 'United States of America', 'USA', 'US'], dobMonth: [D.dobMonth, D.dobMonth && ('0' + D.dobMonth).slice(-2)], dobDay: [D.dobDay, D.dobDay && ('0' + D.dobDay).slice(-2)]
+    country: [D.country, D.country === 'United States' ? 'United States of America' : null, D.country === 'United States' ? 'USA' : null],
+    dobMonth: [D.dobMonth, D.dobMonth && ('0' + D.dobMonth).slice(-2)], dobDay: [D.dobDay, D.dobDay && ('0' + D.dobDay).slice(-2)]
   };
-  function norm(s) { return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+  function norm(s) { return String(s || '').toLowerCase().replace(/[_\-\[\]]+/g, ' ').replace(/\s+/g, ' ').trim(); }
   function text(el) { return el ? norm(el.textContent).slice(0, 160) : ''; }
-  function describe(el, doc) {
-    var parts = [el.getAttribute('autocomplete'), el.name, el.id, el.getAttribute('placeholder'), el.getAttribute('aria-label'), el.title];
+  function strongParts(el, doc) {
+    var parts = [];
     if (el.labels) for (var i = 0; i < el.labels.length; i++) parts.push(text(el.labels[i]));
     var lb = el.getAttribute('aria-labelledby');
     if (lb) lb.split(/\s+/).forEach(function (id) { parts.push(text(doc.getElementById(id))); });
-    if (!el.labels || !el.labels.length) {
-      var box = el.closest('label, [role=group], .field, .form-group, .question, li, td, p, div');
-      if (box) { var t = text(box); if (t.length < 140) parts.push(t); }
-    }
-    return parts.filter(Boolean).map(norm).join(' | ');
+    parts.push(norm(el.getAttribute('aria-label')), norm(el.getAttribute('placeholder')), norm(el.name), norm(el.id), norm(el.title));
+    return parts.filter(Boolean);
   }
-  function keyFor(desc) {
-    if (SKIP.test(desc)) return null;
+  function match(t) {
     for (var i = 0; i < RULES.length; i++) {
       var r = RULES[i], ok = true;
-      for (var j = 1; j < r.length; j++) if (!r[j].test(desc)) { ok = false; break; }
-      if (ok) return D[r[0]] != null || ALT[r[0]] ? r[0] : null;
+      for (var j = 1; j < r.length; j++) if (!r[j].test(t)) { ok = false; break; }
+      if (ok) return r[0];
     }
     return null;
   }
-  function value(key, el) {
-    if (key === 'dob' && el.type !== 'date' && !/yyyy-mm-dd/.test(norm(el.placeholder))) return D.dobUS;
-    if (key === 'state' && el.maxLength === 2) return D.state;
-    return D[key];
+  function usable(k) { return k && (D[k] != null || (ALT[k] && ALT[k].some(Boolean))); }
+  /* One source at a time, strongest first, so a word in one clue can't combine with a word in another. */
+  function fieldKey(el, doc) {
+    var ac = norm(el.getAttribute('autocomplete')).split(' ').pop();
+    if (/billing|shipping/.test(norm(el.getAttribute('autocomplete')))) return null;
+    var parts = strongParts(el, doc);
+    for (var i = 0; i < parts.length; i++) if (SKIP.test(parts[i])) return null;
+    if (/mailing/.test(parts.join(' ')) && D.mailingDifferent) return null;
+    if (AC[ac] && usable(AC[ac])) return AC[ac];
+    for (var j = 0; j < parts.length; j++) { var k = match(parts[j]); if (k) return usable(k) ? k : null; }
+    if (!el.labels || !el.labels.length) {
+      var box = el.closest('label, [role=group], .field, .form-group, .question, li, td');
+      var t = box ? text(box) : '';
+      if (t && t.length < 100 && !SKIP.test(t)) { var k2 = match(t); if (usable(k2)) return k2; }
+    }
+    return null;
   }
   function setVal(el, v) {
     var proto = el.tagName === 'SELECT' ? HTMLSelectElement.prototype : el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
@@ -768,15 +840,15 @@ function SP_AUTOFILL(D) {
         var o = options[i], t = norm(o.label || o.text), ov = norm(o.value), s = 0;
         if (!t && !ov) continue;
         if (t === v || ov === v) s = 3;
-        else if (v.length > 2 && (t.indexOf(v) === 0 || v.indexOf(t) === 0) && t.length > 1) s = 2;
-        else if (v.length > 3 && t.indexOf(v) > -1) s = 1;
+        else if (v.length > 2 && t.length > 1 && (t.indexOf(v) === 0 || v.indexOf(t) === 0)) s = 2;
         s -= ci * 0.1;
         if (s > bestScore) { bestScore = s; best = o; }
       }
     });
     return best;
   }
-  var filled = 0, docs = [document];
+  function labelOf(el, doc, fallback) { var p = strongParts(el, doc)[0] || fallback; return p.length > 32 ? p.slice(0, 30) + '…' : p; }
+  var filled = [], left = 0, docs = [document];
   document.querySelectorAll('iframe').forEach(function (f) { try { if (f.contentDocument) docs.push(f.contentDocument); } catch (e) {} });
   docs.forEach(function (doc) {
     var radiosDone = {};
@@ -789,35 +861,54 @@ function SP_AUTOFILL(D) {
         if (radiosDone[el.name]) return; radiosDone[el.name] = 1;
         var group = Array.prototype.slice.call(doc.querySelectorAll('input[type=radio]')).filter(function (r) { return r.name === el.name && r.form === el.form; });
         if (group.some(function (r) { return r.checked; })) return;
-        var fs = el.closest('fieldset'), gdesc = norm([el.name, fs && fs.querySelector('legend') ? text(fs.querySelector('legend')) : '', el.closest('[role=radiogroup]') ? (el.closest('[role=radiogroup]').getAttribute('aria-label') || '') : ''].join(' | '));
-        var gk = keyFor(gdesc); if (!gk) return;
+        var fs = el.closest('fieldset'), rg = el.closest('[role=radiogroup]');
+        var q = norm(fs && fs.querySelector('legend') ? fs.querySelector('legend').textContent : rg ? rg.getAttribute('aria-label') : '');
+        if (!q || SKIP.test(q)) { left++; return; }
+        var gk = match(q);
+        if (!usable(gk) || gk === 'income' && /adjusted gross|\bagi\b|exact/.test(q)) { left++; return; }
         var opts = group.map(function (r) { return { el: r, label: r.labels && r.labels[0] ? r.labels[0].textContent : r.value, value: r.value }; });
         var pick = bestOption(opts, ALT[gk] || [D[gk]]);
-        if (pick) { pick.el.click(); mark(pick.el.parentElement || pick.el); filled++; }
+        if (pick) { pick.el.click(); mark(pick.el.parentElement || pick.el); filled.push(q.length > 32 ? q.slice(0, 30) + '…' : q); } else left++;
         return;
       }
-      var key = keyFor(describe(el, doc));
-      if (!key) return;
-      if (type === 'date' && key !== 'dob') return;
+      if (el.tagName === 'TEXTAREA' && !/bio|biography|about yourself|introduce/.test(strongParts(el, doc).join(' '))) { left++; return; }
+      var key = fieldKey(el, doc);
+      if (!key) { if (!(el.value && el.value.trim())) left++; return; }
+      if (type === 'date' && key !== 'dob') { left++; return; }
       if (el.tagName === 'SELECT') {
         if (el.selectedIndex > 0 && el.value) return;
         var o = bestOption(Array.prototype.slice.call(el.options), ALT[key] || [D[key]]);
-        if (o) { setVal(el, o.value); mark(el); filled++; }
+        if (o) { setVal(el, o.value); mark(el); filled.push(labelOf(el, doc, key)); } else left++;
         return;
       }
       if (el.value && el.value.trim()) return;
-      var v = value(key, el); if (v == null || v === '') return;
-      if (type === 'number' && isNaN(parseFloat(v))) return;
-      if (type === 'email' && v.indexOf('@') < 0) return;
-      setVal(el, v); mark(el); filled++;
+      if (key === 'income') { left++; return; } // ranges only go into dropdowns, never into an exact-amount box
+      var v = D[key], hint = strongParts(el, doc).join(' ');
+      if (key === 'dob' && type !== 'date') {
+        v = /yyyy.?mm.?dd/.test(hint) ? D.dob : /mm.?dd.?yy/.test(hint) ? D.dobUS : /dd.?mm.?yy/.test(hint) ? D.dobEU : null;
+        if (!v) { left++; return; } // no stated format: don't guess between US and international order
+      }
+      if (key === 'state' && el.maxLength === 2) v = D.state;
+      if (v == null || v === '') { left++; return; }
+      if (type === 'number' && isNaN(parseFloat(v))) { left++; return; }
+      if (type === 'email' && v.indexOf('@') < 0) { left++; return; }
+      setVal(el, v); mark(el); filled.push(labelOf(el, doc, key));
     });
   });
   var box = document.createElement('div');
-  box.textContent = 'ScholarPilot filled ' + filled + ' field' + (filled === 1 ? '' : 's') + '. Check every green box, write the essays yourself, then submit.';
-  box.setAttribute('style', 'position:fixed;z-index:2147483647;left:50%;top:16px;transform:translateX(-50%);max-width:92vw;background:#132238;color:#fff;font:600 14px/1.4 system-ui,sans-serif;padding:12px 16px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.3)');
+  box.setAttribute('style', 'position:fixed;z-index:2147483647;right:16px;top:16px;width:min(360px,calc(100vw - 32px));max-height:70vh;overflow:auto;background:#132238;color:#fff;font:14px/1.45 system-ui,sans-serif;padding:14px 16px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.35)');
+  var h = document.createElement('div'); h.style.fontWeight = '700';
+  h.textContent = 'ScholarPilot filled ' + filled.length + ' field' + (filled.length === 1 ? '' : 's') + (left ? ' · left ' + left + ' for you' : '');
+  var ul = document.createElement('ul'); ul.setAttribute('style', 'margin:8px 0;padding-left:18px');
+  filled.forEach(function (f) { var li = document.createElement('li'); li.textContent = f; ul.appendChild(li); });
+  var note = document.createElement('div'); note.style.opacity = '.85';
+  note.textContent = 'Check every green field. Essays, checkboxes, and anything it wasn\'t sure about are left for you. You submit.';
+  var x = document.createElement('button'); x.textContent = 'Close';
+  x.setAttribute('style', 'margin-top:10px;background:#fff;color:#132238;border:0;border-radius:6px;padding:6px 12px;font-weight:700;cursor:pointer');
+  x.onclick = function () { box.remove(); };
+  box.appendChild(h); box.appendChild(ul); box.appendChild(note); box.appendChild(x);
   document.body.appendChild(box);
-  setTimeout(function () { box.remove(); }, 7000);
-  return filled;
+  return filled.length;
 }
 function bookmarkletHref() {
   return 'javascript:' + encodeURIComponent('(' + SP_AUTOFILL.toString() + ')(' + JSON.stringify(autofillData()) + ');void 0');
@@ -899,13 +990,13 @@ function cardHTML(r) {
   const s = r.s, t = S.tracker[s.id];
   return `<article class="card">
     <div class="head"><div><h3>${esc(s.name)}</h3><p class="muted small">${esc(s.org || '')}</p></div><div class="amt">${esc(s.amount || '')}</div></div>
-    <div class="row"><span class="pill ${r.status}">${STATUS_LABEL[r.status]}</span><span class="pill">${EFFORT_LABEL[s.effort] || 'Essays'}</span>${s.video ? '<span class="pill">Video</span>' : ''}${s.kind !== 'scholarship' ? `<span class="pill">${esc(s.kind)}</span>` : ''}<span class="small muted">${esc(deadlineText(s))}</span></div>
+    <div class="row"><span class="pill ${r.status}">${STATUS_LABEL[r.status]}</span><span class="pill">${EFFORT_LABEL[s.effort] || 'Essays'}</span>${s.video ? '<span class="pill">Video</span>' : ''}${s.kind !== 'scholarship' ? `<span class="pill">${esc(s.kind)}</span>` : ''}${r.rd.state === 'closed' ? '<span class="pill no">Closed this cycle</span>' : r.rd.state === 'upcoming' ? '<span class="pill maybe">Opens soon</span>' : ''}<span class="small muted">${esc(deadlineText(s))}</span></div>
     ${r.checks.length ? checksHTML(r.checks) : '<p class="small muted">No listed eligibility rules. Read the official page.</p>'}
     ${s.notes ? `<p class="small">${esc(s.notes)}</p>` : ''}
     ${r.hidden ? `<p class="small muted">Hidden from your queue: ${esc(r.hidden)}.</p>` : ''}
     <div class="foot"><span class="verify">${s.custom ? 'Added by you' : 'Rules change yearly. Verify on the official site.'}</span><div class="row">
       ${s.url ? `<a class="btn" href="${esc(s.url)}" target="_blank" rel="noopener">Official site</a>` : ''}
-      ${t ? `<span class="pill eligible">Tracking</span>` : `<button class="primary" data-track="${s.id}"${r.status === 'no' ? ' disabled' : ''}>Add to queue</button>`}
+      ${t ? `<span class="pill eligible">Tracking</span>` : `<button class="primary" data-track="${s.id}"${r.status === 'no' || r.rd.state === 'closed' ? ' disabled' : ''}>Add to queue</button>`}
     </div></div>
   </article>`;
 }
@@ -913,20 +1004,23 @@ function viewMatches() {
   const p = P(), R = results();
   const vis = R.filter(r => showHidden || !r.hidden);
   const counts = { eligible: vis.filter(r => r.status === 'eligible').length, maybe: vis.filter(r => r.status === 'maybe').length, no: vis.filter(r => r.status === 'no').length };
-  const potential = vis.filter(r => r.status === 'eligible').reduce((a, r) => a + (r.s.amountMax || 0), 0);
+  const openElig = vis.filter(r => r.status === 'eligible' && r.rd.state !== 'closed');
+  const closedElig = vis.filter(r => r.status === 'eligible' && r.rd.state === 'closed').length;
+  const potential = openElig.filter(r => r.s.kind !== 'sweepstakes').reduce((a, r) => a + (r.s.typical || r.s.amountMax || 0), 0);
+  const portals = ALL().filter(s => s.portal && !(s.kind === 'sweepstakes' && p.includeSweeps === 'no'));
   const hiddenCount = R.filter(r => r.hidden && r.status !== 'no').length;
   const missing = {};
   R.filter(r => r.status === 'maybe').forEach(r => r.checks.forEach(c => { if (c.state === 'unknown' && c.field) missing[c.field] = (missing[c.field] || 0) + 1; }));
   const unlock = Object.entries(missing).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const q = matchQuery.toLowerCase();
   const list = vis.filter(r => (matchFilter === 'all' || r.status === matchFilter) && (!q || (r.s.name + ' ' + r.s.org + ' ' + (r.s.notes || '')).toLowerCase().includes(q)))
-    .sort((a, b) => ({ eligible:0, maybe:1, no:2 }[a.status] - { eligible:0, maybe:1, no:2 }[b.status]) || b.score - a.score);
+    .sort((a, b) => ({ eligible:0, maybe:1, no:2 }[a.status] - { eligible:0, maybe:1, no:2 }[b.status]) || ((a.rd.state === 'closed') - (b.rd.state === 'closed')) || b.score - a.score);
   return `<div class="stack" style="gap:18px">
-    <div><h2>Your matches</h2><p class="muted">Checked ${R.length} national scholarships and grants against your profile${usingSample() ? ' (sample student)' : ''}.</p></div>
+    <div><h2>Your matches</h2><p class="muted">Checked ${R.length} national scholarships and grants against your profile${usingSample() ? ' (sample student)' : ''}. Award details were reviewed in October 2026; always confirm on the official site.</p></div>
     <div class="tiles">
-      <div class="tile"><b>${counts.eligible}</b><span>Eligible</span></div>
+      <div class="tile"><b>${openElig.length}</b><span>Eligible and still open${closedElig ? ` (+${closedElig} closed this cycle)` : ''}</span></div>
       <div class="tile"><b>${counts.maybe}</b><span>Maybe: answer a question</span></div>
-      <div class="tile"><b>${money(potential)}</b><span>Combined max awards you qualify for</span></div>
+      <div class="tile"><b>${money(potential)}</b><span>Typical value of the open awards you qualify for</span></div>
       <div class="tile"><b>${overallProgress(p).pct}%</b><span>Profile complete</span></div>
     </div>
     ${unlock.length ? `<div class="unlock stack" style="gap:8px"><b>Answer these to check ${Object.values(missing).reduce((a, b) => a + b, 0)} more possible matches</b><div class="row">${unlock.map(([k, n]) => `<button data-goto="${k}">${esc(FIELD[k] ? FIELD[k].label : k)} <span class="muted mono small">+${n}</span></button>`).join('')}</div></div>` : ''}
@@ -936,12 +1030,13 @@ function viewMatches() {
     </div>
     ${hiddenCount ? `<label class="small row" style="gap:6px"><input type="checkbox" id="showHidden" style="width:auto" ${showHidden ? 'checked' : ''}> Show ${hiddenCount} hidden by your preferences</label>` : ''}
     ${list.length ? `<div class="cards">${list.map(cardHTML).join('')}</div>` : `<div class="empty">Nothing in this list yet. ${matchFilter === 'eligible' ? 'Answer more profile questions or check the Maybe tab.' : ''}</div>`}
+    ${portals.length ? `<div class="panel"><h3>Directories to search</h3><p class="muted">Each of these holds many awards with their own rules and dates, so ScholarPilot can't match them for you. Search them, then add the specific awards you find on the Tracker tab.</p><div class="stack" style="gap:8px">${portals.map(s => `<div class="spread" style="border-top:1px solid var(--line);padding-top:8px"><div style="min-width:0;flex:1 1 260px"><b>${esc(s.name)}</b>${s.kind === 'sweepstakes' ? ' <span class="pill">drawing</span>' : ''}<p class="small muted">${esc(s.notes)}</p></div><a class="btn" href="${esc(s.url)}" target="_blank" rel="noopener">Search</a></div>`).join('')}</div></div>` : ''}
     <div class="panel"><h3>Where the easiest money is: local scholarships</h3><p class="muted">National awards get thousands of applicants. Local ones often get a handful. Check each of these, then add what you find on the Tracker tab.</p><ul style="margin:0;padding-left:20px">${LOCAL_SOURCES.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
   </div>`;
 }
 
 /* Apply queue */
-const FACT_KEYS = [['fullName','Full name'],['email','Email'],['phone','Phone'],['dobUS','Birthday'],['street','Street'],['city','City'],['state','State'],['zip','ZIP'],['highSchool','High school'],['hsGradYear','Grad year'],['gpa','GPA (unweighted)'],['gpaWeighted','GPA (weighted)'],['sat','SAT'],['act','ACT'],['college','College'],['major','Major'],['careerGoal','Career goal'],['volunteerHours','Volunteer hours']];
+const FACT_KEYS = [['fullName','Full name'],['email','Email'],['phone','Phone'],['dobUS','Birthday'],['collegeGpa','College GPA'],['street','Street'],['city','City'],['state','State'],['zip','ZIP'],['highSchool','High school'],['hsGradYear','Grad year'],['gpa','GPA (unweighted)'],['gpaWeighted','GPA (weighted)'],['sat','SAT'],['act','ACT'],['college','College'],['major','Major'],['careerGoal','Career goal'],['volunteerHours','Volunteer hours']];
 function factsHTML() {
   const d = autofillData();
   const rows = FACT_KEYS.filter(([k]) => d[k]).map(([k, l]) => `<div class="fact"><span><em>${l}</em>${esc(d[k])}</span><button data-copy="${esc(d[k])}" data-what="${l}">Copy</button></div>`);
@@ -965,17 +1060,17 @@ function kitHTML(r) {
   const todo = r.checks.filter(c => c.state === 'todo').map(c => `<li>${esc(c.text)}</li>`).join('');
   return `<div class="kitbody">
     <div class="kitstep"><span class="n">1</span><div><b>Open the application</b><p class="small muted">${esc(s.notes || '')}</p><div class="row">${s.url ? `<a class="btn primary" href="${esc(s.url)}" target="_blank" rel="noopener">Open official site</a>` : ''}<label class="small row" style="gap:6px">Exact deadline <input type="date" data-deadline="${s.id}" value="${esc(t.deadline || '')}" style="width:auto"></label></div></div></div>
-    <div class="kitstep"><span class="n">2</span><div><b>Autofill the form</b><p class="small muted">Click your ScholarPilot bookmark on the application page. Anything it misses, copy from here.</p>${factsHTML()}</div></div>
+    <div class="kitstep"><span class="n">2</span><div><b>Autofill the form</b><p class="small muted">Click your ScholarPilot bookmark on the application page. It fills the basic fields it's sure about and lists them. Copy anything else from here.</p>${factsHTML()}</div></div>
     <div class="kitstep"><span class="n">3</span><div><b>Essays</b>${essayRows}</div></div>
     <div class="kitstep"><span class="n">4</span><div><b>Documents</b><ul style="margin:0;padding-left:20px" class="small">${(s.docs || ['Check the official page']).map(d => `<li>${esc(d)}</li>`).join('')}${todo}</ul></div></div>
     <div class="kitstep"><span class="n">5</span><div><b>Review and submit it yourself</b><div class="row"><button class="primary" data-status="${s.id}|submitted">I submitted it</button><button data-status="${s.id}|progress">Mark in progress</button><button class="ghost" data-status="${s.id}|skip">Skip this one</button></div></div></div>
   </div>`;
 }
 function viewApply() {
-  const R = results().filter(r => r.status === 'eligible' && !r.hidden && !['submitted', 'won', 'lost', 'skip'].includes((S.tracker[r.s.id] || {}).status)).sort((a, b) => b.score - a.score);
+  const R = results().filter(r => inQueue(r) && !['submitted', 'won', 'lost', 'skip'].includes((S.tracker[r.s.id] || {}).status)).sort((a, b) => b.score - a.score);
   const p = P(), hrs = num(p.hoursPerWeek);
   return `<div class="stack" style="gap:18px">
-    <div><h2>Apply queue</h2><p class="muted" style="max-width:68ch">Ranked by award size, how much writing it takes (based on your preferences) and how soon it is due. Open one, follow the five steps, and mark it submitted.${hrs ? ` At ${hrs} hours a week, aim for ${Math.max(1, Math.round(hrs * 1.5))} applications a week.` : ''}</p></div>
+    <div><h2>Apply queue</h2><p class="muted" style="max-width:68ch">Only awards you qualify for that are still open or opening soon. Ranked by realistic award size, how much writing it takes (based on your preferences) and how soon the posted deadline is. Open one, follow the five steps, and mark it submitted.${hrs ? ` At ${hrs} hours a week, aim for ${Math.max(1, Math.round(hrs * 1.5))} applications a week.` : ''}</p></div>
     ${R.length ? R.map((r, i) => `<details class="kit"${i === 0 ? ' open' : ''}><summary><span class="rank">${i + 1}</span><span style="min-width:0"><b>${esc(r.s.name)}</b><br><span class="small muted">${EFFORT_LABEL[r.s.effort] || ''} · ${esc(deadlineText(r.s))}${S.tracker[r.s.id] ? ' · ' + esc(TRACK_STATUS[S.tracker[r.s.id].status] || '') : ''}</span></span><span class="amt">${esc(r.s.amount)}</span></summary>${kitHTML(r)}</details>`).join('') : `<div class="empty">Your queue is empty. Fill in more of your profile, or check the Maybe list on Matches.</div>`}
   </div>`;
 }
@@ -998,14 +1093,14 @@ function viewEssays() {
 function viewAutofill() {
   const d = autofillData(), n = Object.keys(d).length;
   return `<div class="stack" style="gap:18px">
-    <div><h2>One-click autofill</h2><p class="muted" style="max-width:70ch">A bookmark button that fills scholarship forms on any website with your profile, the way job-application autofill tools work. It never presses Submit, and it never touches passwords or file uploads.</p></div>
+    <div><h2>One-click autofill</h2><p class="muted" style="max-width:70ch">A bookmark button that fills the basic fields on most standard scholarship forms (name, contact, address, school, GPA, scores, major), the way job-application autofill tools work. It only fills fields it can clearly identify, lists what it filled, and leaves the rest to you. It never presses Submit, and never touches passwords, file uploads, checkboxes or essays.</p></div>
     <div class="cols">
       <div class="panel">
         <h3>Set it up (laptop or desktop)</h3>
         <ol class="how">
           <li>Show your bookmarks bar (Ctrl+Shift+B on Windows, Cmd+Shift+B on Mac).</li>
           <li>Drag this button onto the bar: <div style="margin:10px 0"><a class="bm" id="bookmarklet" href="${esc(bookmarkletHref())}" draggable="true" title="Drag me to your bookmarks bar">ScholarPilot Fill</a></div></li>
-          <li>On a scholarship application, click <b>ScholarPilot Fill</b>. Filled fields turn green.</li>
+          <li>On a scholarship application, click <b>ScholarPilot Fill</b>. Filled fields turn green and a box lists what it filled.</li>
           <li>Check every field, paste your essays, then submit yourself.</li>
         </ol>
         <p class="small muted">If dragging doesn't work: create any bookmark, edit it, and paste this as its URL.</p>
@@ -1015,7 +1110,7 @@ function viewAutofill() {
       <div class="panel">
         <h3>What it fills <span class="muted small mono">${n} fields</span></h3>
         <label class="small row" style="gap:6px"><input type="checkbox" id="incBio" style="width:auto" ${S.prefs.includeBio ? 'checked' : ''}> Include my short bio</label>
-        <label class="small row" style="gap:6px"><input type="checkbox" id="incRefs" style="width:auto" ${S.prefs.includeRefs ? 'checked' : ''}> Include recommender and counselor contacts</label>
+        <label class="small row" style="gap:6px"><input type="checkbox" id="incRefs" style="width:auto" ${S.prefs.includeRefs ? 'checked' : ''}> Include recommender and counselor names, titles and emails</label>
         <div class="facts" style="grid-template-columns:minmax(0,1fr)">${Object.entries(d).map(([k, v]) => `<div class="fact"><span><em>${esc(k)}</em>${esc(v)}</span></div>`).join('')}</div>
         <p class="small muted">On a phone, bookmarks are awkward. Use the copy buttons in each application's kit on the Apply queue instead.</p>
       </div>
@@ -1094,7 +1189,8 @@ function gotoField(k) {
   if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('flash'); const inp = el.querySelector('input, select, textarea'); if (inp && !inp.disabled) inp.focus({ preventScroll: true }); }
 }
 function track(id, status) {
-  S.tracker[id] = Object.assign({ status: 'todo' }, S.tracker[id] || {}, status ? { status } : {}); save();
+  const s = ALL().find(x => x.id === id), rd = s ? roundOf(s) : {};
+  S.tracker[id] = Object.assign({ status: 'todo', deadline: rd.state === 'closed' ? '' : (rd.closes || '') }, S.tracker[id] || {}, status ? { status } : {}); save();
 }
 function icsText() {
   const byId = {}; ALL().forEach(s => { byId[s.id] = s; });
@@ -1162,8 +1258,8 @@ function onProfileInput(t) {
   const k = t.dataset.k; const p = S.profile;
   if (t.dataset.multi) {
     const vals = Array.from(document.querySelectorAll(`input[data-k="${k}"]:checked`)).map(x => x.value);
-    if (k === 'military' && t.value === 'none' && t.checked) vals.splice(0, vals.length, 'none');
-    else if (k === 'military') { const i = vals.indexOf('none'); if (i > -1) vals.splice(i, 1); }
+    if (t.value === 'none' && t.checked) vals.splice(0, vals.length, 'none');
+    else { const i = vals.indexOf('none'); if (i > -1) vals.splice(i, 1); }
     p[k] = vals;
     document.querySelectorAll(`input[data-k="${k}"]`).forEach(x => { x.checked = vals.includes(x.value); });
   } else p[k] = t.value;

@@ -51,6 +51,18 @@
       <label><input type="radio" name="citizen" value="Y"> Yes</label>
       <label><input type="radio" name="citizen" value="N"> No</label>
     </fieldset>
+    <fieldset><legend>Are you an eligible non-citizen?</legend>
+      <label><input type="radio" name="noncit" value="Y"> Yes</label>
+      <label><input type="radio" name="noncit" value="N"> No</label>
+    </fieldset>
+    <div class="two">
+      <div><label for="dob2">Birth date (MM/DD/YYYY)</label><input id="dob2" name="birth_text"></div>
+      <div><label for="agi">Exact household adjusted gross income ($)</label><input id="agi" name="agi" type="number"></div>
+    </div>
+    <div class="two">
+      <div><label for="hsgpaw">Weighted GPA</label><input id="hsgpaw" name="weighted_gpa"></div>
+      <div><label for="r2">Recommender #2 email</label><input id="r2" type="email" name="ref2_email"></div>
+    </div>
     <div><label for="fg">Are you a first-generation college student?</label><select id="fg" name="first_gen"><option value="">--</option><option>Yes</option><option>No</option></select></div>
     <div class="two">
       <div><label for="hs">High School Name</label><input id="hs" name="high_school"></div>
