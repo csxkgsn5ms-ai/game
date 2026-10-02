@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice Scholarship Form</title>
+<style>
+  :root { --bg: #f4f5f7; --card: #fff; --ink: #1d2433; --muted: #5d6677; --line: #d5dae2; color-scheme: light; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #11151c; --card: #1a202b; --ink: #e5e9f0; --muted: #9aa3b2; --line: #2c3442; color-scheme: dark; } }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 24px 16px 60px; }
+  form { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 520px) { .two { grid-template-columns: 1fr; } }
+  label { display: block; font-weight: 600; margin-bottom: 4px; }
+  input, select, textarea { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; font: inherit; background: var(--card); color: var(--ink); }
+  fieldset { border: 1px solid var(--line); border-radius: 6px; }
+  fieldset label { display: inline-flex; gap: 6px; font-weight: 400; margin-right: 12px; }
+  fieldset input { width: auto; }
+  .note { color: var(--muted); }
+  #result { white-space: pre-wrap; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-top: 16px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Practice Scholarship Application</h1>
+  <p class="note">A fake form for testing the ScholarPilot Fill bookmark. Nothing is sent anywhere. Click your bookmark, check what turned green, then press Submit to see the values.</p>
+  <form id="app">
+    <div class="two">
+      <div><label for="fn">First Name *</label><input id="fn" name="applicant_first_name"></div>
+      <div><label for="ln">Last Name *</label><input id="ln" name="applicant_last_name"></div>
+    </div>
+    <div class="two">
+      <div><label for="em">Email Address *</label><input id="em" type="email" name="email"></div>
+      <div><label for="ph">Cell Phone</label><input id="ph" type="tel" name="phone"></div>
+    </div>
+    <div class="two">
+      <div><label for="pem">Parent/Guardian Email</label><input id="pem" type="email" name="parent_email"></div>
+      <div><label for="dob">Date of Birth</label><input id="dob" type="date" name="dob"></div>
+    </div>
+    <div><label for="addr">Street Address</label><input id="addr" name="address1"></div>
+    <div class="two">
+      <div><label for="city">City</label><input id="city" name="city"></div>
+      <div><label for="st">State</label><select id="st" name="state"><option value="">Select…</option><option>California</option><option>New York</option><option>Texas</option><option>Florida</option></select></div>
+    </div>
+    <div class="two">
+      <div><label for="zip">Zip Code</label><input id="zip" name="zip"></div>
+      <div><label for="gender">Gender</label><select id="gender" name="gender"><option value="">--</option><option>Male</option><option>Female</option><option>Non-binary</option><option>Decline to state</option></select></div>
+    </div>
+    <fieldset><legend>Are you a U.S. citizen?</legend>
+      <label><input type="radio" name="citizen" value="Y"> Yes</label>
+      <label><input type="radio" name="citizen" value="N"> No</label>
+    </fieldset>
+    <div><label for="fg">Are you a first-generation college student?</label><select id="fg" name="first_gen"><option value="">--</option><option>Yes</option><option>No</option></select></div>
+    <div class="two">
+      <div><label for="hs">High School Name</label><input id="hs" name="high_school"></div>
+      <div><label for="gy">Expected Graduation Year</label><input id="gy" name="grad_year"></div>
+    </div>
+    <div class="two">
+      <div><label for="gpa">Cumulative GPA (unweighted)</label><input id="gpa" name="gpa"></div>
+      <div><label for="sat">SAT Score</label><input id="sat" name="sat_score" type="number"></div>
+    </div>
+    <div class="two">
+      <div><label for="col">College or university you plan to attend</label><input id="col" name="college"></div>
+      <div><label for="maj">Intended Major</label><input id="maj" name="major"></div>
+    </div>
+    <div><label for="essay">Essay: Describe a challenge you overcame (500 words)</label><textarea id="essay" name="essay" rows="5"></textarea></div>
+    <div><label for="pw">Create a password</label><input id="pw" type="password" name="password"></div>
+    <label><input type="checkbox" name="certify" style="width:auto"> I certify this application is my own work.</label>
+    <button type="submit">Submit application</button>
+  </form>
+  <div id="result" hidden></div>
+</main>
+<script>
+document.getElementById('app').addEventListener('submit', function (e) {
+  e.preventDefault();
+  var out = [];
+  new FormData(e.target).forEach(function (v, k) { out.push(k + ': ' + v); });
+  var r = document.getElementById('result'); r.hidden = false; r.textContent = 'Practice only. Nothing was sent.\n\n' + out.join('\n');
+});
+</script>
+</body>
+</html>

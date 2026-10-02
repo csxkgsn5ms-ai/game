@@ -1,0 +1,1216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ScholarPilot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one working column under a sticky tab bar; profile uses a step rail + form, everything else is a ranked list of award cards. */
+:root {
+  --paper: #f3f6f9;
+  --surface: #ffffff;
+  --sunken: #e9eef4;
+  --ink: #132238;
+  --muted: #5a667a;
+  --line: #d6dde7;
+  --accent: #17654f;
+  --accent-soft: #dcefe8;
+  --on-accent: #ffffff;
+  --gold: #8a5d0f;
+  --gold-soft: #f6ebd3;
+  --good: #1c7a4b;
+  --good-soft: #def2e6;
+  --warn: #93600a;
+  --warn-soft: #fbefd6;
+  --bad: #a83a30;
+  --bad-soft: #f8e0dd;
+  --focus: #2f7cf6;
+  --font-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --r: 10px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d131d; --surface: #141c29; --sunken: #1b2534; --ink: #e6ecf4; --muted: #9aa6b9; --line: #273346;
+    --accent: #52c3a0; --accent-soft: #173a31; --on-accent: #06231b; --gold: #e3b45c; --gold-soft: #3a2e17;
+    --good: #63cf95; --good-soft: #163526; --warn: #e6b350; --warn-soft: #3a2d12; --bad: #f0857a; --bad-soft: #3d1d1a; --focus: #7aa8ff;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d131d; --surface: #141c29; --sunken: #1b2534; --ink: #e6ecf4; --muted: #9aa6b9; --line: #273346;
+  --accent: #52c3a0; --accent-soft: #173a31; --on-accent: #06231b; --gold: #e3b45c; --gold-soft: #3a2e17;
+  --good: #63cf95; --good-soft: #163526; --warn: #e6b350; --warn-soft: #3a2d12; --bad: #f0857a; --bad-soft: #3d1d1a; --focus: #7aa8ff;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.55 var(--font-body); }
+a { color: var(--accent); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.2; text-wrap: balance; margin: 0; }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.15rem; }
+p { margin: 0; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: 16px; }
+.muted { color: var(--muted); }
+.small { font-size: 0.86rem; }
+.mono { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.spread { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* header */
+header.top { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; }
+.brand { display: flex; align-items: baseline; gap: 10px; padding-block: 14px 6px; }
+.brand h1 { font-size: 1.5rem; }
+.brand .tag { font-size: 0.85rem; color: var(--muted); }
+nav.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+nav.tabs::-webkit-scrollbar { display: none; }
+nav.tabs button { flex: none; border: 0; background: none; color: var(--muted); font: 600 0.92rem var(--font-body); padding: 10px 12px; border-bottom: 3px solid transparent; cursor: pointer; }
+nav.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+nav.tabs .count { font: 500 0.75rem var(--font-data); background: var(--sunken); border-radius: 99px; padding: 1px 7px; margin-left: 4px; }
+
+main { padding-block: 22px 60px; }
+.banner { background: var(--gold-soft); color: var(--ink); border: 1px solid color-mix(in srgb, var(--gold) 35%, transparent); border-radius: var(--r); padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+.banner p { flex: 1 1 280px; min-width: 0; }
+
+/* controls */
+button, .btn { font: 600 0.9rem var(--font-body); border-radius: 8px; padding: 8px 14px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+button:hover, .btn:hover { border-color: var(--muted); }
+.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.primary:hover { filter: brightness(1.07); border-color: var(--accent); }
+.ghost { background: none; border-color: transparent; color: var(--accent); padding-inline: 6px; }
+.danger { color: var(--bad); }
+button:disabled { opacity: .5; cursor: not-allowed; }
+input, select, textarea { font: 400 0.95rem var(--font-body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; width: 100%; min-width: 0; }
+textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--focus); outline-offset: 0; border-color: transparent; }
+label.q { display: block; font-weight: 600; margin-bottom: 6px; }
+.help { color: var(--muted); font-size: 0.84rem; margin-top: 5px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 6px 12px; cursor: pointer; font-size: 0.9rem; user-select: none; }
+.chips input { width: auto; accent-color: var(--accent); margin: 0; }
+.chips label:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); }
+.field { min-width: 0; }
+.field.flash { animation: flash 1.4s ease; border-radius: 8px; }
+@keyframes flash { 0%, 40% { box-shadow: 0 0 0 4px var(--gold-soft); } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+/* profile wizard */
+.wizard { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 28px; align-items: start; }
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 120px; }
+.steps button { width: 100%; justify-content: space-between; border: 0; background: none; padding: 8px 10px; font-weight: 500; color: var(--muted); }
+.steps button[aria-current="step"] { background: var(--surface); color: var(--ink); font-weight: 600; box-shadow: inset 0 0 0 1px var(--line); }
+.steps .pct { font: 500 0.75rem var(--font-data); }
+.steps .pct.done { color: var(--good); }
+.progress { height: 6px; background: var(--sunken); border-radius: 99px; overflow: hidden; }
+.progress > i { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .3s; }
+.formcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 20px; }
+.grid2 .wide { grid-column: 1 / -1; }
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+
+/* summary + cards */
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; }
+.tile b { display: block; font: 500 1.5rem var(--font-data); font-variant-numeric: tabular-nums; }
+.tile span { color: var(--muted); font-size: 0.84rem; }
+.unlock { background: var(--surface); border: 1px dashed var(--accent); border-radius: var(--r); padding: 14px 16px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--surface); flex-wrap: wrap; }
+.seg button { border: 0; border-radius: 0; padding: 7px 12px; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.card .head { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; }
+.card .head > div { min-width: 0; }
+.amt { font: 500 0.95rem var(--font-data); color: var(--gold); white-space: nowrap; text-align: right; }
+.pill { display: inline-flex; align-items: center; gap: 5px; font: 600 0.74rem var(--font-body); letter-spacing: .04em; text-transform: uppercase; border-radius: 99px; padding: 3px 9px; background: var(--sunken); color: var(--muted); }
+.pill.eligible { background: var(--good-soft); color: var(--good); }
+.pill.maybe { background: var(--warn-soft); color: var(--warn); }
+.pill.no { background: var(--bad-soft); color: var(--bad); }
+.checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; font-size: 0.88rem; }
+.checks li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 4px; }
+.checks .m { font-family: var(--font-data); font-weight: 600; }
+.checks .pass .m { color: var(--good); }
+.checks .fail .m { color: var(--bad); }
+.checks .unknown .m, .checks .todo .m { color: var(--warn); }
+.card .foot { margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.verify { font-size: 0.78rem; color: var(--muted); }
+
+/* queue / kit */
+details.kit { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+details.kit > summary { list-style: none; cursor: pointer; padding: 14px 16px; display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 12px; align-items: center; }
+details.kit > summary::-webkit-details-marker { display: none; }
+details.kit[open] > summary { border-bottom: 1px solid var(--line); }
+.rank { font: 500 0.9rem var(--font-data); color: var(--muted); text-align: center; }
+.kitbody { padding: 16px; display: flex; flex-direction: column; gap: 18px; }
+.kitstep { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; }
+.kitstep .n { width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font: 600 0.82rem var(--font-data); display: grid; place-items: center; }
+.kitstep > div { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 6px; }
+.fact { display: flex; justify-content: space-between; gap: 8px; align-items: center; background: var(--sunken); border-radius: 8px; padding: 6px 6px 6px 10px; font-size: 0.86rem; min-width: 0; }
+.fact span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fact em { font-style: normal; color: var(--muted); margin-right: 6px; }
+.fact button { padding: 3px 8px; font-size: 0.78rem; flex: none; }
+.essaymatch { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+
+/* essays */
+.essay { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.essay textarea { min-height: 150px; }
+
+/* autofill */
+.bm { display: inline-flex; align-items: center; gap: 8px; font: 600 1rem var(--font-body); padding: 12px 18px; border-radius: 10px; background: var(--accent); color: var(--on-accent); text-decoration: none; border: 2px dashed color-mix(in srgb, var(--on-accent) 50%, transparent); cursor: grab; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.cols { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+ol.how { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+
+/* tracker */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 720px; font-size: 0.9rem; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font: 600 0.74rem var(--font-body); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); background: var(--sunken); }
+tr:last-child td { border-bottom: 0; }
+td select, td input { padding: 6px 8px; font-size: 0.86rem; }
+.warnbox { background: var(--bad-soft); color: var(--bad); border-radius: 8px; padding: 10px 12px; font-weight: 600; }
+.okbox { background: var(--good-soft); color: var(--good); border-radius: 8px; padding: 10px 12px; font-weight: 600; }
+.toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 10px; font-weight: 600; z-index: 50; max-width: calc(100% - 32px); }
+.empty { border: 1px dashed var(--line); border-radius: var(--r); padding: 26px; text-align: center; color: var(--muted); }
+hr.sep { border: 0; border-top: 1px solid var(--line); margin: 6px 0; }
+
+@media (max-width: 820px) {
+  .wizard { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .steps { position: static; flex-direction: row; overflow-x: auto; padding-bottom: 4px; }
+  .steps li { flex: none; }
+  .steps button { white-space: nowrap; gap: 8px; }
+  .cards, .cols { grid-template-columns: minmax(0, 1fr); }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .grid2 { grid-template-columns: minmax(0, 1fr); }
+  .formcard { padding: 16px; }
+  h2 { font-size: 1.35rem; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><h1>ScholarPilot</h1><span class="tag">Fill it in once. Apply everywhere.</span></div>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Sections"></nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<div id="toast" class="toast" hidden></div>
+
+<script>
+/* ------------------------------------------------------------------ *
+ * Reference data
+ * ------------------------------------------------------------------ */
+const GRADES = [
+  ['ms', 'Middle school (grades 6–8)'], ['hs9', 'High school freshman'], ['hs10', 'High school sophomore'],
+  ['hs11', 'High school junior'], ['hs12', 'High school senior'], ['cc', 'Community college student'],
+  ['c1', 'College freshman'], ['c2', 'College sophomore'], ['c3', 'College junior'], ['c4', 'College senior / 5th year'],
+  ['grad', 'Graduate or professional student'], ['adult', 'Not in school / returning adult']
+];
+const HS = ['hs9', 'hs10', 'hs11', 'hs12'];
+const UG = ['cc', 'c1', 'c2', 'c3', 'c4'];
+const STATES = [['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],['CO','Colorado'],['CT','Connecticut'],['DE','Delaware'],['DC','District of Columbia'],['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],['ME','Maine'],['MD','Maryland'],['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],['NV','Nevada'],['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],['NC','North Carolina'],['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],['PA','Pennsylvania'],['PR','Puerto Rico'],['RI','Rhode Island'],['SC','South Carolina'],['SD','South Dakota'],['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming'],['GU','Guam'],['VI','U.S. Virgin Islands'],['XX','Outside the U.S.']];
+const CITIZEN = [['citizen','U.S. citizen'],['national','U.S. national'],['pr','Permanent resident (green card)'],['refugee','Refugee or asylee'],['daca','DACA recipient'],['undocumented','Undocumented'],['intl','International student (visa)']];
+const ETHNICITY = [['black','Black or African American'],['hispanic','Hispanic or Latino/a'],['asian','Asian American'],['nhpi','Native Hawaiian or Pacific Islander'],['aian','American Indian or Alaska Native'],['mena','Middle Eastern or North African'],['white','White'],['other','Another identity']];
+const MILITARY = [['self','I serve or served'],['parent','A parent serves or served'],['spouse','My spouse serves or served'],['none','None']];
+const MEMBERSHIPS = [['dc','College-readiness program (AVID, Upward Bound, TRIO, GEAR UP…)'],['nhs','National Honor Society'],['ffa','FFA'],['4h','4-H'],['eagle','Eagle Scout'],['gold','Girl Scout Gold Award'],['jrotc','JROTC'],['elks','Parent/grandparent is an Elk'],['deca','DECA / FBLA'],['skills','SkillsUSA / HOSA'],['bgc','Boys & Girls Club'],['key','Key Club / Interact'],['faith','Church or faith youth group']];
+const MAJORCATS = [['eng','Engineering'],['cs','Computer science / IT'],['sci','Science or math'],['health','Health, nursing, medicine'],['biz','Business, finance, accounting'],['edu','Education / teaching'],['arts','Arts, music, design, film'],['hum','Humanities or social sciences'],['ag','Agriculture / environment'],['trades','Skilled trades / technical'],['law','Law, government, public service'],['undecided','Undecided']];
+const INCOME = [['lt30','Under $30,000',0,30000],['30_50','$30,000–$50,000',30000,50000],['50_65','$50,000–$65,000',50000,65000],['65_95','$65,000–$95,000',65000,95000],['95_125','$95,000–$125,000',95000,125000],['125_200','$125,000–$200,000',125000,200000],['gt200','Over $200,000',200000,1e12],['unsure','Not sure',null,null]];
+const YESNO = [['yes','Yes'],['no','No'],['unsure','Not sure']];
+const YESNO_PRIVATE = [['yes','Yes'],['no','No'],['skip','Prefer not to say']];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+const THEMES = [
+  ['personal', 'Personal statement', 'Who are you, and what do you care about? Most prompts that say "tell us about yourself" fit here.'],
+  ['leadership', 'Leadership', 'A time you led people, organized something, or stepped up when no one else would.'],
+  ['adversity', 'Overcoming a challenge', 'A hardship you faced, what you did about it, and what changed in you.'],
+  ['service', 'Community service', 'Who you helped, how often, and the impact you can measure (hours, people, dollars).'],
+  ['career', 'Career goals', 'What you want to do after school and the concrete steps you are taking toward it.'],
+  ['major', 'Why this major', 'The moment you got interested, what you have done since, and where it leads.'],
+  ['need', 'Financial need', 'Your family situation and how this award changes what you can do. Facts, not pity.'],
+  ['identity', 'Background & identity', 'Your culture, heritage, or community and how it shapes your goals.'],
+  ['innovation', 'A problem you solved', 'A project, research, invention, or fix. What was broken, what you built, what happened.'],
+  ['rolemodel', 'Someone who influenced you', 'A person who changed your direction and what you learned from them.'],
+  ['bio', 'Short bio (about 100 words)', 'Third-person or first-person summary. Used for "brief description" boxes.'],
+  ['video', 'Video script (60–120 sec)', 'Talking points for video applications. Speak naturally; this is a guide, not a script to read.']
+];
+
+/* Effort: quick = form or under 250 words, short = one essay under 500 words, essay = 1–2 longer essays, heavy = several essays + recs + transcript. */
+const SCHOLARSHIPS = [
+  { id:'coke', name:'Coca-Cola Scholars Program', org:'Coca-Cola Scholars Foundation', url:'https://www.coca-colascholarsfoundation.org/apply/', amount:'$20,000', amountMax:20000, month:9, effort:'short', kind:'scholarship', themes:['leadership','service'], docs:['Activity list','Transcript (if a semifinalist)'], rules:{ grades:['hs12'], minGpa:3.0, citizenship:['citizen','national','pr','refugee'] }, notes:'First round is a short online application about activities and leadership.' },
+  { id:'gates', name:'The Gates Scholarship', org:'The Gates Scholarship', url:'https://www.thegatesscholarship.org/scholarship', amount:'Full cost of attendance', amountMax:200000, month:9, effort:'heavy', kind:'scholarship', themes:['personal','adversity','leadership','identity','career'], docs:['Transcript','2 recommendations','FAFSA / financial info'], rules:{ grades:['hs12'], minGpaW:3.3, pell:true, ethnicity:['black','hispanic','asian','nhpi','aian'], citizenship:['citizen','national','pr'] }, notes:'For Pell-eligible minority high school seniors. Very competitive.' },
+  { id:'jkc', name:'Jack Kent Cooke College Scholarship', org:'Jack Kent Cooke Foundation', url:'https://www.jkcf.org/our-scholarships/college-scholarship-program/', amount:'Up to $55,000 / year', amountMax:220000, month:11, effort:'heavy', kind:'scholarship', themes:['personal','adversity','career','leadership'], docs:['Transcript','Recommendations','Income documentation'], rules:{ grades:['hs12'], minGpa:3.5, maxIncome:95000 }, notes:'Unmet financial need is required. The income limit has been about $95,000 recently.' },
+  { id:'jkct', name:'Jack Kent Cooke Undergraduate Transfer Scholarship', org:'Jack Kent Cooke Foundation', url:'https://www.jkcf.org/our-scholarships/undergraduate-transfer-scholarship/', amount:'Up to $55,000 / year', amountMax:165000, month:11, effort:'heavy', kind:'scholarship', themes:['personal','adversity','career'], docs:['College transcript','Recommendations'], rules:{ grades:['cc'], minGpa:3.5, maxIncome:95000 }, notes:'For community college students transferring to a 4-year college.' },
+  { id:'quest', name:'QuestBridge National College Match', org:'QuestBridge', url:'https://www.questbridge.org/high-school-students/national-college-match', amount:'Full 4-year scholarship', amountMax:250000, month:9, effort:'heavy', kind:'scholarship', themes:['personal','adversity','identity'], docs:['Transcript','2 teacher recommendations','Counselor recommendation'], rules:{ grades:['hs12'], minGpa:3.5, maxIncome:65000, softIncome:true }, notes:'No strict income cutoff, but most finalists come from families earning under about $65,000.' },
+  { id:'dell', name:'Dell Scholars Program', org:'Michael & Susan Dell Foundation', url:'https://www.dellscholars.org/scholarship/', amount:'$20,000 + laptop', amountMax:20000, month:12, effort:'essay', kind:'scholarship', themes:['adversity','career','personal'], docs:['Transcript','Proof of program participation'], rules:{ grades:['hs12'], minGpa:2.4, pell:true, memberships:['dc'] }, notes:'Requires participation in an approved college-readiness program (AVID, Upward Bound, TRIO and others).' },
+  { id:'elksmvs', name:'Elks Most Valuable Student', org:'Elks National Foundation', url:'https://www.elks.org/scholars/scholarships/mvs.cfm', amount:'Up to $50,000', amountMax:50000, month:11, effort:'essay', kind:'scholarship', themes:['leadership','service','need'], docs:['Transcript','Test scores','Recommendations','Parent tax info'], rules:{ grades:['hs12'], citizenship:['citizen'] }, notes:'You do not need an Elks connection. Judged on scholarship, leadership and financial need.' },
+  { id:'elkslegacy', name:'Elks Legacy Awards', org:'Elks National Foundation', url:'https://www.elks.org/scholars/scholarships/Legacy.cfm', amount:'$4,000', amountMax:4000, month:2, effort:'short', kind:'scholarship', themes:['personal'], docs:['Elks member sponsor'], rules:{ grades:['hs12'], memberships:['elks'] }, notes:'For children and grandchildren of Elks members.' },
+  { id:'bk', name:'Burger King Scholars', org:'Burger King Foundation', url:'https://burgerkingfoundation.org/programs/burger-king-scholars', amount:'$1,000–$60,000', amountMax:60000, month:12, effort:'short', kind:'scholarship', themes:['service','leadership'], docs:['Transcript'], rules:{ grades:['hs12'], minGpa:2.5 }, notes:'Open to students in the U.S., Puerto Rico and Canada. Larger awards for community leaders.' },
+  { id:'horatio', name:'Horatio Alger National Scholarship', org:'Horatio Alger Association', url:'https://scholars.horatioalger.org/scholarships/', amount:'$25,000', amountMax:25000, month:10, effort:'essay', kind:'scholarship', themes:['adversity','service','need'], docs:['Transcript','Financial info','Counselor certification'], rules:{ grades:['hs11','hs12'], minGpa:2.0, maxIncome:65000, citizenship:['citizen'] }, notes:'For students who have overcome adversity and have critical financial need. Check which grade the current cycle accepts.' },
+  { id:'ronbrown', name:'Ron Brown Scholar Program', org:'Ron Brown Scholar Fund', url:'https://ronbrown.org/', amount:'$40,000', amountMax:40000, month:1, effort:'heavy', kind:'scholarship', themes:['personal','service','leadership'], docs:['Transcript','2 recommendations','Test scores'], rules:{ grades:['hs12'], ethnicity:['black'], citizenship:['citizen','pr'] }, notes:'For Black/African American high school seniors with academic excellence and community commitment.' },
+  { id:'hsf', name:'Hispanic Scholarship Fund', org:'HSF', url:'https://www.hsf.net/scholarship', amount:'$500–$5,000', amountMax:5000, month:2, effort:'essay', kind:'scholarship', themes:['identity','career','personal'], docs:['Transcript','FAFSA or state Dream Act application'], rules:{ grades:['hs12'].concat(UG, ['grad']), minGpa:{ hs:3.0, other:2.5 }, ethnicity:['hispanic'], citizenship:['citizen','national','pr','daca'], fafsa:true }, notes:'3.0 GPA for high school seniors, 2.5 for college students. Must plan to enroll full-time.' },
+  { id:'apia', name:'APIA Scholars', org:'Asian & Pacific Islander American Scholarship Fund', url:'https://apiascholars.org/', amount:'$2,500–$20,000', amountMax:20000, month:1, effort:'essay', kind:'scholarship', themes:['identity','service','career'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'].concat(UG), ethnicity:['asian','nhpi'], citizenship:['citizen','national','pr','daca','undocumented','refugee'], fafsa:true }, notes:'Open to many immigration statuses. Several scholarships through one application.' },
+  { id:'aicf', name:'American Indian College Fund Scholarships', org:'American Indian College Fund', url:'https://collegefund.org/students/scholarships/', amount:'Varies', amountMax:5000, month:5, effort:'essay', kind:'scholarship', themes:['identity','career','personal'], docs:['Proof of tribal enrollment or descent','Transcript'], rules:{ grades:['hs12'].concat(UG, ['grad']), ethnicity:['aian'], tribal:true }, notes:'One application covers many scholarships, including tribal college awards.' },
+  { id:'dreamus', name:'TheDream.US National Scholarship', org:'TheDream.US', url:'https://www.thedream.us/scholarships/', amount:'Up to $33,000', amountMax:33000, month:2, effort:'essay', kind:'scholarship', themes:['personal','career','identity'], docs:['Transcript','Proof of immigration status'], rules:{ grades:['hs12','cc','c1'], citizenship:['daca','undocumented'] }, notes:'For immigrant students with DACA or TPS, or who are undocumented. Used at partner colleges.' },
+  { id:'goldendoor', name:'Golden Door Scholars', org:'Golden Door Scholars', url:'https://www.goldendoorscholars.org/', amount:'Full tuition, room & board', amountMax:200000, month:10, effort:'heavy', kind:'scholarship', themes:['personal','adversity','career'], docs:['Transcript','Recommendations'], rules:{ grades:['hs12'], citizenship:['daca','undocumented'] }, notes:'For undocumented and DACA students. Strong interest in STEM or business helps.' },
+  { id:'point', name:'Point Foundation Scholarship', org:'Point Foundation', url:'https://pointfoundation.org/point-apply/', amount:'Varies (often $5,000+ / year)', amountMax:20000, month:1, effort:'heavy', kind:'scholarship', themes:['identity','leadership','career'], docs:['Transcript','Recommendations'], rules:{ grades:UG.concat(['grad']), lgbtq:true }, notes:'For LGBTQ+ college and graduate students with leadership and community involvement.' },
+  { id:'afe', name:'Amazon Future Engineer Scholarship', org:'Amazon', url:'https://www.amazonfutureengineer.com/scholarships', amount:'$40,000 + paid internship', amountMax:40000, month:12, effort:'essay', kind:'scholarship', themes:['major','career','need'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'], majorCats:['cs','eng'], maxIncome:125000, softIncome:true }, notes:'For high school seniors with financial need planning to study computer science.' },
+  { id:'sts', name:'Regeneron Science Talent Search', org:'Society for Science', url:'https://www.societyforscience.org/regeneron-sts/', amount:'Up to $250,000', amountMax:250000, month:11, effort:'heavy', kind:'contest', themes:['innovation','major','personal'], docs:['Research report','Transcript','Recommendations'], rules:{ grades:['hs12'], research:true }, notes:'For seniors with an original research project.' },
+  { id:'davidson', name:'Davidson Fellows Scholarship', org:'Davidson Institute', url:'https://www.davidsongifted.org/gifted-programs/fellows-scholarship/', amount:'$25,000–$50,000', amountMax:50000, month:2, effort:'heavy', kind:'contest', themes:['innovation','personal'], docs:['Project portfolio','Nominator forms','Video'], rules:{ ageMax:18, citizenship:['citizen','pr'], research:true }, notes:'For a significant piece of work in STEM, literature, music, philosophy or "outside the box".' },
+  { id:'vod', name:'VFW Voice of Democracy', org:'Veterans of Foreign Wars', url:'https://www.vfw.org/community/youth-and-education/youth-scholarships', amount:'Up to $35,000', amountMax:35000, month:10, effort:'short', kind:'contest', video:true, themes:['personal'], docs:['Recorded audio essay (3–5 min)'], rules:{ grades:HS, citizenship:['citizen','pr'] }, notes:'Audio essay on a patriotic theme. Enter through your local VFW post, usually due Oct 31.' },
+  { id:'ppen', name:"VFW Patriot's Pen", org:'Veterans of Foreign Wars', url:'https://www.vfw.org/community/youth-and-education/youth-scholarships', amount:'Up to $5,000', amountMax:5000, month:10, effort:'short', kind:'contest', themes:['personal'], docs:['300–400 word essay'], rules:{ grades:['ms'] }, notes:'Essay contest for grades 6–8 through a local VFW post.' },
+  { id:'legion', name:'American Legion Oratorical Contest', org:'The American Legion', url:'https://www.legion.org/', amount:'Up to $25,000', amountMax:25000, month:12, effort:'essay', kind:'contest', themes:['personal'], docs:['Prepared speech on the Constitution'], rules:{ grades:HS, ageMax:19, citizenship:['citizen','pr'] }, notes:'Speech contest. Starts at local posts; dates vary by state.' },
+  { id:'tacobell', name:'Live Más Scholarship', org:'Taco Bell Foundation', url:'https://www.tacobellfoundation.org/live-mas-scholarship/', amount:'$5,000–$25,000', amountMax:25000, month:1, effort:'short', kind:'scholarship', video:true, themes:['video','career'], docs:['2-minute video'], rules:{ ageMin:16, ageMax:26, grades:HS.concat(UG, ['grad','adult']) }, notes:'No GPA or essay. A 2-minute video about your passion.' },
+  { id:'cameron', name:'Cameron Impact Scholarship', org:'Bryan Cameron Education Foundation', url:'https://www.bryancameroneducationfoundation.org/', amount:'Full tuition', amountMax:200000, month:9, effort:'heavy', kind:'scholarship', themes:['service','leadership','personal'], docs:['Transcript','Recommendations'], rules:{ grades:['hs12'], minGpa:3.7, citizenship:['citizen','pr'], volunteerMin:50 }, notes:'For seniors with strong community service and leadership.' },
+  { id:'gereagan', name:'GE-Reagan Foundation Scholarship', org:'Ronald Reagan Presidential Foundation', url:'https://www.reaganfoundation.org/education/scholarship-programs/ge-reagan-foundation-scholarship-program/', amount:'$10,000 / year (renewable)', amountMax:40000, month:1, effort:'essay', kind:'scholarship', themes:['leadership','service','need'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'], minGpa:3.0, citizenship:['citizen'] }, notes:'Leadership, drive, integrity and citizenship. Financial need considered.' },
+  { id:'stophunger', name:'Stephen J. Brady STOP Hunger Scholarship', org:'Sodexo Stop Hunger Foundation', url:'https://www.sodexofoundation.org/', amount:'$5,000 + $5,000 grant to your charity', amountMax:5000, month:12, effort:'essay', kind:'scholarship', themes:['service'], docs:['Description of hunger-relief work','Recommendation'], rules:{ ageMin:5, ageMax:25, volunteerMin:1 }, notes:'For students who have fought hunger in their community.' },
+  { id:'rotc', name:'Army ROTC Scholarship', org:'U.S. Army', url:'https://www.goarmy.com/', amount:'Full tuition + stipend', amountMax:160000, month:2, effort:'essay', kind:'scholarship', themes:['leadership','career'], docs:['Transcript','Test scores','Interview','Fitness test'], rules:{ grades:['hs12','c1','c2'], minGpa:2.5, citizenship:['citizen'], ageMin:17, ageMax:26 }, notes:'Comes with a service commitment after graduation. Navy and Air Force ROTC have similar programs.' },
+  { id:'smc', name:'Scholarships for Military Children', org:'Fisher House Foundation', url:'https://militaryscholar.org/', amount:'$2,000+', amountMax:2000, month:2, effort:'short', kind:'scholarship', themes:['personal'], docs:['Military ID / DEERS','Transcript'], rules:{ grades:['hs12'].concat(UG), minGpa:3.0, military:['parent'], ageMax:22 }, notes:'For children of service members, retirees and fallen service members.' },
+  { id:'tillman', name:'Tillman Scholars', org:'Pat Tillman Foundation', url:'https://pattillmanfoundation.org/', amount:'Varies (about $10,000)', amountMax:10000, month:2, effort:'heavy', kind:'scholarship', themes:['leadership','service','career'], docs:['Transcript','Recommendations'], rules:{ grades:UG.concat(['grad']), military:['self','spouse'] }, notes:'For veterans, service members and military spouses.' },
+  { id:'swe', name:'Society of Women Engineers Scholarships', org:'SWE', url:'https://swe.org/scholarships/', amount:'$1,000–$15,000', amountMax:15000, month:2, effort:'essay', kind:'scholarship', themes:['major','career','leadership'], docs:['Transcript','Recommendation'], rules:{ grades:['hs12'].concat(UG, ['grad']), gender:['Female'], majorCats:['eng','cs'] }, notes:'For women studying engineering, engineering technology or computer science.' },
+  { id:'nms', name:'National Merit Scholarship Program', org:'National Merit Scholarship Corporation', url:'https://www.nationalmerit.org/', amount:'$2,500 + corporate & college awards', amountMax:2500, month:10, effort:'quick', kind:'scholarship', themes:['personal'], docs:['Take the PSAT/NMSQT in 11th grade'], rules:{ grades:['hs10','hs11'], citizenship:['citizen','pr'] }, notes:'You enter by taking the PSAT/NMSQT in October of junior year. Sign up through your school.' },
+  { id:'scholastic', name:'Scholastic Art & Writing Awards', org:'Alliance for Young Artists & Writers', url:'https://www.artandwriting.org/', amount:'Up to $12,500', amountMax:12500, month:12, effort:'essay', kind:'contest', themes:['personal'], docs:['Art or writing samples / portfolio'], rules:{ grades:['ms'].concat(HS), ageMin:13, portfolio:true }, notes:'For student artists and writers in grades 7–12.' },
+  { id:'ffa', name:'FFA Scholarships', org:'National FFA Organization', url:'https://www.ffa.org/participate/scholarships/', amount:'$1,000–$10,000', amountMax:10000, month:1, effort:'essay', kind:'scholarship', themes:['career','leadership'], docs:['Transcript','FFA advisor signature'], rules:{ grades:['hs12'].concat(UG), memberships:['ffa'] }, notes:'One application covers hundreds of sponsor scholarships.' },
+  { id:'nesa', name:'NESA Eagle Scout Scholarships', org:'National Eagle Scout Association', url:'https://nesa.org/', amount:'Up to $50,000', amountMax:50000, month:12, effort:'essay', kind:'scholarship', themes:['leadership','service'], docs:['Eagle Scout certificate','Transcript'], rules:{ grades:['hs12'].concat(UG), memberships:['eagle'] }, notes:'For Eagle Scouts. Girl Scout councils offer similar awards for Gold Award recipients.' },
+  { id:'pell', name:'Federal Pell Grant', org:'U.S. Department of Education', url:'https://studentaid.gov/understand-aid/types/grants/pell', amount:'Up to about $7,400 / year', amountMax:29600, month:6, effort:'quick', kind:'grant', themes:[], docs:['FAFSA'], rules:{ grades:['hs12'].concat(UG, ['adult']), pell:true, citizenship:['citizen','national','pr','refugee'], fafsa:true }, notes:'Free money you do not repay. The FAFSA is the only application. File it as early as possible.' },
+  { id:'state', name:"Your state's grant programs", org:'State higher-education agency', url:'https://studentaid.gov/', amount:'Varies by state', amountMax:5000, month:3, effort:'quick', kind:'grant', themes:[], docs:['FAFSA (or your state Dream Act form)'], rules:{ grades:['hs12'].concat(UG), fafsa:true }, notes:'Most states award grants from your FAFSA. Some deadlines are as early as February.' },
+  { id:'uncf', name:'UNCF Scholarships', org:'United Negro College Fund', url:'https://uncf.org/scholarships', amount:'Varies', amountMax:5000, month:3, effort:'essay', kind:'scholarship', themes:['personal','career','need'], docs:['Transcript','FAFSA'], rules:{ grades:['hs12'].concat(UG), minGpa:2.5, fafsa:true }, notes:'Hundreds of scholarships, many for HBCU students. Most are for students of color; check each listing.' },
+  { id:'tmcf', name:'Thurgood Marshall College Fund', org:'TMCF', url:'https://www.tmcf.org/', amount:'Varies', amountMax:5000, month:3, effort:'essay', kind:'scholarship', themes:['career','leadership'], docs:['Transcript'], rules:{ grades:['hs12'].concat(UG), minGpa:3.0 }, notes:'For students at public HBCUs and predominantly Black institutions.' },
+  { id:'bold', name:'Bold.org no-essay scholarships', org:'Bold.org', url:'https://bold.org/scholarships/', amount:'Usually $500–$25,000', amountMax:25000, month:0, effort:'quick', kind:'sweepstakes', themes:['bio'], docs:['Free Bold.org profile'], rules:{ ageMin:13 }, notes:'Quick entries with low odds of winning. Good for spare minutes, never instead of real applications.' },
+  { id:'niche', name:'Niche $25,000 No Essay Scholarship', org:'Niche', url:'https://www.niche.com/colleges/scholarships/no-essay-scholarship/', amount:'$25,000 (one winner)', amountMax:25000, month:0, effort:'quick', kind:'sweepstakes', themes:[], docs:['Free Niche account'], rules:{ ageMin:13 }, notes:'A drawing. Takes two minutes. Expect marketing emails from Niche.' }
+];
+
+const LOCAL_SOURCES = [
+  'Your school counselor\'s scholarship list (ask for it, it is often the best source)',
+  'Your community foundation (search "[your county] community foundation scholarships")',
+  'Parents\' and guardians\' employers and unions',
+  'Your bank or credit union',
+  'Rotary, Lions, Kiwanis, Elks and Optimist clubs in your town',
+  'Your church, mosque, synagogue or temple',
+  'The financial aid office of every college you apply to',
+  'Local businesses: car dealers, utilities, hospitals, grocery chains',
+  'Your state\'s higher-education agency website'
+];
+
+/* ------------------------------------------------------------------ *
+ * Profile questions (10 steps)
+ * ------------------------------------------------------------------ */
+const isHS = p => HS.includes(p.gradeLevel);
+const isCollege = p => UG.includes(p.gradeLevel) || p.gradeLevel === 'grad';
+const STEPS = [
+  { id:'you', title:'About you', intro:'The basics every application asks for. Use your legal name exactly as it appears on school records.', fields:[
+    { k:'firstName', label:'Legal first name', type:'text', ac:'given-name' },
+    { k:'lastName', label:'Legal last name', type:'text', ac:'family-name' },
+    { k:'middleName', label:'Middle name', type:'text', optional:true, ac:'additional-name' },
+    { k:'preferredName', label:'Preferred name', type:'text', optional:true },
+    { k:'email', label:'Personal email', type:'email', help:'Use one you will still have after graduation, not a school address.', ac:'email' },
+    { k:'phone', label:'Mobile phone', type:'tel', ac:'tel' },
+    { k:'dob', label:'Date of birth', type:'date', help:'Some awards have age limits.', ac:'bday' },
+    { k:'gender', label:'Gender', type:'select', opts:[['Female','Female'],['Male','Male'],['Nonbinary','Nonbinary'],['Prefer not to say','Prefer not to say']] },
+    { k:'pronouns', label:'Pronouns', type:'text', optional:true, ph:'e.g. she/her' }
+  ]},
+  { id:'address', title:'Address', intro:'Many scholarships are limited to one state, county or city, so this matters more than it looks.', fields:[
+    { k:'street', label:'Street address', type:'text', wide:true, ac:'address-line1' },
+    { k:'street2', label:'Apt, suite, unit', type:'text', optional:true, ac:'address-line2' },
+    { k:'city', label:'City', type:'text', ac:'address-level2' },
+    { k:'state', label:'State', type:'select', opts:STATES, ac:'address-level1' },
+    { k:'zip', label:'ZIP code', type:'text', ac:'postal-code' },
+    { k:'county', label:'County', type:'text', help:'Local foundation scholarships are often county-only.' },
+    { k:'country', label:'Country', type:'text', ph:'United States', ac:'country-name' }
+  ]},
+  { id:'background', title:'Background', intro:'These answers unlock scholarships for specific groups. Skip anything you prefer not to share; skipped answers never count against you.', fields:[
+    { k:'citizenship', label:'Citizenship or immigration status', type:'select', opts:CITIZEN, wide:true },
+    { k:'ethnicity', label:'Race / ethnicity (choose all that apply)', type:'multi', opts:ETHNICITY, wide:true },
+    { k:'tribal', label:'Are you an enrolled member or descendant of a tribe?', type:'yesno', showIf:p => (p.ethnicity || []).includes('aian'), wide:true },
+    { k:'firstGen', label:'Will you be the first in your family to earn a 4-year degree?', type:'yesno', wide:true },
+    { k:'languages', label:'Languages you speak', type:'text', ph:'English, Spanish' },
+    { k:'military', label:'Military connection', type:'multi', opts:MILITARY, wide:true },
+    { k:'fosterCare', label:'Have you been in foster care?', type:'yesno', opts:YESNO_PRIVATE },
+    { k:'singleParent', label:'Do you live in a single-parent household?', type:'yesno', opts:YESNO_PRIVATE },
+    { k:'parentStudent', label:'Are you a parent yourself?', type:'yesno', opts:YESNO_PRIVATE },
+    { k:'lgbtq', label:'Do you identify as LGBTQ+?', type:'yesno', opts:YESNO_PRIVATE, optional:true },
+    { k:'disability', label:'Do you have a disability or chronic illness?', type:'yesno', opts:YESNO_PRIVATE, optional:true },
+    { k:'religion', label:'Faith community', type:'text', optional:true, ph:'Optional' }
+  ]},
+  { id:'school', title:'School', intro:'Your grade level and GPA decide more matches than anything else.', fields:[
+    { k:'gradeLevel', label:'Where are you right now?', type:'select', opts:GRADES, wide:true },
+    { k:'highSchool', label:'High school name', type:'text' },
+    { k:'hsCity', label:'High school city and state', type:'text', ph:'Austin, TX' },
+    { k:'hsGradYear', label:'High school graduation year', type:'number', ph:'2027' },
+    { k:'gpaScale', label:'GPA scale your school uses', type:'select', opts:[['4.0','4.0 scale'],['5.0','5.0 scale'],['100','100-point scale']] },
+    { k:'gpaUnweighted', label:'Unweighted GPA', type:'number', step:'0.01', ph:'3.60', help:'Copy it from your transcript. If you only know weighted, leave this blank.' },
+    { k:'gpaWeighted', label:'Weighted GPA', type:'number', step:'0.01', ph:'4.10' },
+    { k:'classRank', label:'Class rank', type:'number', optional:true, ph:'25' },
+    { k:'classSize', label:'Class size', type:'number', optional:true, ph:'410' },
+    { k:'college', label:'College you attend now', type:'text', showIf:isCollege },
+    { k:'collegeTargets', label:'Colleges you are applying to or considering', type:'list', showIf:p => !isCollege(p), help:'One per line. Many colleges have their own scholarships.' },
+    { k:'collegeType', label:'Type of school you plan to attend', type:'select', opts:[['4yr','4-year college or university'],['2yr','2-year community college'],['trade','Trade or technical school'],['undecided','Undecided']] },
+    { k:'enrollment', label:'Full-time or part-time?', type:'select', opts:[['Full-time','Full-time'],['Part-time','Part-time']] }
+  ]},
+  { id:'tests', title:'Tests & honors', intro:'Leave scores blank if you have not tested; many scholarships are test-optional.', fields:[
+    { k:'sat', label:'SAT total', type:'number', ph:'400–1600', optional:true },
+    { k:'act', label:'ACT composite', type:'number', ph:'1–36', optional:true },
+    { k:'psat', label:'PSAT/NMSQT score', type:'number', optional:true },
+    { k:'apCount', label:'AP, IB or dual-credit courses taken', type:'number', optional:true },
+    { k:'ibDiploma', label:'IB Diploma candidate?', type:'yesno', optional:true },
+    { k:'nationalMerit', label:'National Merit status', type:'select', optional:true, opts:[['na','Not applicable'],['commended','Commended'],['semi','Semifinalist'],['finalist','Finalist']] },
+    { k:'awards', label:'Honors and awards', type:'list', wide:true, help:'One per line, with the year. e.g. "AP Scholar with Distinction (2026)".' }
+  ]},
+  { id:'plans', title:'Plans', intro:'Field-of-study scholarships are some of the easiest to win because fewer people apply.', fields:[
+    { k:'majorCat', label:'Field you plan to study', type:'select', opts:MAJORCATS, wide:true },
+    { k:'major', label:'Intended major', type:'text', ph:'Computer Science' },
+    { k:'minor', label:'Minor or second interest', type:'text', optional:true },
+    { k:'degreeGoal', label:'Highest degree you plan to earn', type:'select', opts:[['cert','Certificate'],['assoc',"Associate's"],['bach',"Bachelor's"],['master',"Master's"],['doct','Doctorate, MD, JD']] },
+    { k:'careerGoal', label:'Career goal', type:'text', wide:true, ph:'Software engineer building tools for hospitals' }
+  ]},
+  { id:'money', title:'Money', intro:'Need-based awards are the biggest ones. These numbers stay on your device.', fields:[
+    { k:'income', label:'Household income (before taxes)', type:'select', opts:INCOME.map(x => [x[0], x[1]]), wide:true },
+    { k:'householdSize', label:'People in your household', type:'number' },
+    { k:'inCollege', label:'How many will be in college next year?', type:'number', optional:true },
+    { k:'pell', label:'Are you Pell Grant eligible?', type:'yesno', wide:true, help:'Your FAFSA results tell you. Families earning under about $60,000 often qualify, but the FAFSA decides.' },
+    { k:'fafsa', label:'FAFSA status', type:'select', opts:[['done','Submitted'],['planning','Planning to file'],['no','Not filing']] },
+    { k:'sai', label:'Student Aid Index (SAI) from the FAFSA', type:'number', optional:true },
+    { k:'works', label:'Do you have a job?', type:'yesno' },
+    { k:'workHours', label:'Hours worked per week', type:'number', showIf:p => p.works === 'yes' },
+    { k:'parentEmployers', label:"Parents' or guardians' employers", type:'text', wide:true, help:'Many companies give scholarships to employees\' kids. Ask HR.' },
+    { k:'union', label:'Union memberships in your family', type:'text', optional:true }
+  ]},
+  { id:'activities', title:'Activities', intro:'List everything. Babysitting siblings and working a part-time job count.', fields:[
+    { k:'activities', label:'Activities and clubs', type:'list', wide:true, help:'One per line: role, organization, years, hours/week. e.g. "Captain, Robotics Club, 2023–2026, 8 hrs/wk".' },
+    { k:'leadership', label:'Leadership roles', type:'list', wide:true },
+    { k:'volunteerHours', label:'Total volunteer hours', type:'number' },
+    { k:'volunteerCauses', label:'Causes you volunteer for', type:'text', ph:'Food bank, tutoring' },
+    { k:'athletics', label:'Sports', type:'text', optional:true },
+    { k:'arts', label:'Arts, music, writing', type:'text', optional:true },
+    { k:'research', label:'Have you done independent research or a major project?', type:'yesno', wide:true },
+    { k:'researchDesc', label:'Describe the project in one or two sentences', type:'textarea', wide:true, showIf:p => p.research === 'yes' },
+    { k:'portfolio', label:'Do you have an art, writing, music or coding portfolio?', type:'yesno', wide:true },
+    { k:'jobs', label:'Jobs and internships', type:'list', wide:true, optional:true },
+    { k:'memberships', label:'Memberships (choose all that apply)', type:'multi', opts:MEMBERSHIPS, wide:true }
+  ]},
+  { id:'references', title:'References', intro:'Ask two people now, before you need them. Give them at least three weeks.', fields:[
+    { k:'rec1Name', label:'Recommender 1 name', type:'text' },
+    { k:'rec1Title', label:'Relationship', type:'text', ph:'AP Biology teacher' },
+    { k:'rec1Email', label:'Recommender 1 email', type:'email', wide:true },
+    { k:'rec2Name', label:'Recommender 2 name', type:'text', optional:true },
+    { k:'rec2Title', label:'Relationship', type:'text', optional:true },
+    { k:'rec2Email', label:'Recommender 2 email', type:'email', optional:true, wide:true },
+    { k:'counselorName', label:'School counselor name', type:'text' },
+    { k:'counselorEmail', label:'Counselor email', type:'email' }
+  ]},
+  { id:'prefs', title:'Preferences', intro:'How you want ScholarPilot to rank your queue.', fields:[
+    { k:'essayTolerance', label:'How much writing are you up for?', type:'select', wide:true, opts:[['quick','Only quick, no-essay ones'],['short','Short essays are fine (under 500 words)'],['any','Any amount, if the money is worth it']] },
+    { k:'videoOk', label:'Willing to record a short video?', type:'yesno' },
+    { k:'includeContests', label:'Show competitions (speech, art, science)?', type:'yesno' },
+    { k:'includeSweeps', label:'Show no-essay drawings (low odds)?', type:'yesno' },
+    { k:'minAward', label:'Smallest award worth your time ($)', type:'number', ph:'500' },
+    { k:'hoursPerWeek', label:'Hours per week you can spend applying', type:'number', ph:'3' }
+  ]}
+];
+const FIELD = {};
+STEPS.forEach((s, i) => s.fields.forEach(f => { f.step = i; FIELD[f.k] = f; }));
+
+/* ------------------------------------------------------------------ *
+ * Sample student (shown until you start your own profile)
+ * ------------------------------------------------------------------ */
+const SAMPLE = {
+  profile: { firstName:'Jordan', lastName:'Rivera', preferredName:'Jordy', email:'jordan.rivera@example.com', phone:'(512) 555-0142', dob:'2008-05-14', gender:'Nonbinary', street:'1840 Pecan Grove Ln', city:'Austin', state:'TX', zip:'78745', county:'Travis', country:'United States',
+    citizenship:'citizen', ethnicity:['hispanic'], firstGen:'yes', languages:'English, Spanish', military:['none'],
+    gradeLevel:'hs12', highSchool:'Crockett Early College High School', hsCity:'Austin, TX', hsGradYear:'2027', gpaScale:'4.0', gpaUnweighted:'3.62', gpaWeighted:'4.08', classRank:'31', classSize:'402', collegeTargets:'UT Austin\nTexas A&M\nRice University', collegeType:'4yr', enrollment:'Full-time',
+    sat:'1290', apCount:'7', awards:'AP Scholar (2026)\nRegional robotics finalist (2025)',
+    majorCat:'cs', major:'Computer Science', degreeGoal:'bach', careerGoal:'Software engineer building tools for community clinics',
+    income:'30_50', householdSize:'5', pell:'unsure', fafsa:'planning', works:'yes', workHours:'12', parentEmployers:'H-E-B; Austin ISD',
+    activities:'Programming lead, Robotics Club, 2023–2027, 8 hrs/wk\nTutor, Austin Public Library homework help, 2024–2027, 3 hrs/wk\nCashier, H-E-B, 2025–2027, 12 hrs/wk', leadership:'Robotics programming lead\nAVID peer mentor', volunteerHours:'140', volunteerCauses:'Tutoring, food pantry', research:'no', portfolio:'yes', memberships:['dc','nhs'],
+    rec1Name:'Ms. Alicia Grant', rec1Title:'AP Computer Science teacher', rec1Email:'agrant@example.org', counselorName:'Mr. Tom Okafor', counselorEmail:'tokafor@example.org',
+    essayTolerance:'any', videoOk:'yes', includeContests:'yes', includeSweeps:'yes', minAward:'500', hoursPerWeek:'4' },
+  essays: {
+    personal: 'I learned to code on a library computer with a 45-minute time limit. Every session I copied my progress into a notebook so I could pick up where I left off the next day. That notebook became the habit I bring to everything: write it down, come back, finish it.',
+    bio: 'Jordan Rivera is a senior at Crockett Early College High School in Austin, Texas, where they lead programming for the robotics team and tutor younger students at the public library. A first-generation college student, Jordan plans to study computer science and build software for community health clinics.'
+  }
+};
+
+/* ------------------------------------------------------------------ *
+ * State
+ * ------------------------------------------------------------------ */
+const KEY = 'scholarpilot.v1';
+function load() { try { const raw = localStorage.getItem(KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; } }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* storage blocked: keep working in memory */ } }
+const S = Object.assign({ profile:null, essays:{}, tracker:{}, custom:[], prefs:{ includeBio:false, includeRefs:false }, tab:'matches', step:0 }, load() || {});
+const usingSample = () => !S.profile;
+const P = () => S.profile || SAMPLE.profile;
+const E = () => S.profile ? S.essays : SAMPLE.essays;
+const ALL = () => SCHOLARSHIPS.concat(S.custom || []);
+
+/* ------------------------------------------------------------------ *
+ * Helpers
+ * ------------------------------------------------------------------ */
+const $ = (sel, root = document) => root.querySelector(sel);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+const has = v => v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && !v.length);
+const lab = (list, code) => (list.find(x => x[0] === code) || [code, code])[1];
+const num = v => { const n = parseFloat(v); return isFinite(n) ? n : null; };
+const words = s => (String(s || '').trim().match(/\S+/g) || []).length;
+const money = n => '$' + Math.round(n).toLocaleString('en-US');
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => { t.hidden = true; }, 2600); }
+function copy(text, what) {
+  const done = () => toast((what || 'Text') + ' copied');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, () => fallbackCopy(text, done));
+  } else fallbackCopy(text, done);
+}
+function fallbackCopy(text, done) {
+  const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  let ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+  ta.remove(); ok ? done() : toast('Copy blocked here. Select the text and copy it manually.');
+}
+function download(name, text, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], { type: type || 'text/plain' }));
+  a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function age(dob) {
+  if (!dob) return null; const d = new Date(dob + 'T00:00:00'); if (isNaN(d)) return null;
+  const n = new Date(); let a = n.getFullYear() - d.getFullYear();
+  if (n.getMonth() < d.getMonth() || (n.getMonth() === d.getMonth() && n.getDate() < d.getDate())) a--;
+  return a;
+}
+function gpa(p, weighted) {
+  let g = weighted ? (num(p.gpaWeighted) ?? num(p.gpaUnweighted)) : (num(p.gpaUnweighted) ?? num(p.gpaWeighted));
+  if (g == null) return null;
+  if (p.gpaScale === '100' || g > 5.5) g = Math.max(0, (g - 60) / 10); // 90 → 3.0 is a common rough conversion
+  else if (p.gpaScale === '5.0' && !weighted && num(p.gpaUnweighted) == null) g = g * 0.8;
+  return Math.round(g * 100) / 100;
+}
+const visible = (f, p) => !f.showIf || f.showIf(p);
+function stepProgress(i, p) {
+  const fs = STEPS[i].fields.filter(f => visible(f, p) && !f.optional);
+  const done = fs.filter(f => has(p[f.k])).length;
+  return { done, total: fs.length };
+}
+function overallProgress(p) {
+  let d = 0, t = 0; STEPS.forEach((s, i) => { const r = stepProgress(i, p); d += r.done; t += r.total; });
+  return { done: d, total: t, pct: t ? Math.round(d / t * 100) : 0 };
+}
+
+/* ------------------------------------------------------------------ *
+ * Matcher: every rule returns pass / fail / unknown / todo with a reason
+ * ------------------------------------------------------------------ */
+function evaluate(s, p) {
+  const r = s.rules || {}, out = [];
+  const add = (state, text, field) => out.push({ state, text, field });
+  if (r.grades) {
+    if (!has(p.gradeLevel)) add('unknown', 'Grade level needed', 'gradeLevel');
+    else if (r.grades.includes(p.gradeLevel)) add('pass', 'Open to ' + lab(GRADES, p.gradeLevel).toLowerCase() + 's');
+    else add('fail', 'For ' + r.grades.map(g => lab(GRADES, g)).join(', ').toLowerCase());
+  }
+  if (r.minGpa != null || r.minGpaW != null) {
+    const w = r.minGpaW != null;
+    let min = w ? r.minGpaW : r.minGpa;
+    if (typeof min === 'object') min = isHS(p) ? min.hs : min.other;
+    const g = gpa(p, w);
+    if (g == null) add('unknown', 'Needs a ' + min.toFixed(1) + '+ ' + (w ? 'weighted ' : '') + 'GPA. Add yours', 'gpaUnweighted');
+    else if (g >= min) add('pass', (w ? 'Weighted ' : '') + 'GPA ' + g.toFixed(2) + ' meets ' + min.toFixed(1));
+    else add('fail', 'Needs ' + (w ? 'weighted ' : '') + 'GPA ' + min.toFixed(1) + '+ (yours: ' + g.toFixed(2) + ')');
+  }
+  if (r.citizenship) {
+    if (!has(p.citizenship)) add('unknown', 'Citizenship status needed', 'citizenship');
+    else if (r.citizenship.includes(p.citizenship)) add('pass', lab(CITIZEN, p.citizenship) + ' accepted');
+    else add('fail', 'Open to: ' + r.citizenship.map(c => lab(CITIZEN, c)).join(', '));
+  }
+  if (r.ethnicity) {
+    const mine = p.ethnicity || [];
+    if (!mine.length) add('unknown', 'For specific backgrounds. Add yours to check', 'ethnicity');
+    else if (r.ethnicity.some(e => mine.includes(e))) add('pass', 'Matches your background');
+    else add('fail', 'For ' + r.ethnicity.map(e => lab(ETHNICITY, e)).join(', ') + ' students');
+  }
+  if (r.tribal) {
+    if (p.tribal === 'yes') add('pass', 'Tribal enrollment or descent');
+    else if (p.tribal === 'no') add('fail', 'Requires tribal enrollment or descent');
+    else add('unknown', 'Requires tribal enrollment or descent', 'tribal');
+  }
+  if (r.firstGen) {
+    if (p.firstGen === 'yes') add('pass', 'First-generation student');
+    else if (p.firstGen === 'no') add('fail', 'For first-generation students');
+    else add('unknown', 'For first-generation students', 'firstGen');
+  }
+  const inc = INCOME.find(x => x[0] === p.income);
+  if (r.pell) {
+    if (p.pell === 'yes') add('pass', 'Pell Grant eligible');
+    else if (p.pell === 'no') add('fail', 'Requires Pell Grant eligibility');
+    else if (inc && inc[3] != null && inc[3] <= 50000) add('pass', 'Likely Pell eligible from your income (confirm on the FAFSA)');
+    else if (inc && inc[2] != null && inc[2] >= 95000) add('fail', 'Requires Pell eligibility (unlikely at your income)');
+    else add('unknown', 'Requires Pell eligibility. File the FAFSA to find out', 'pell');
+  }
+  if (r.maxIncome) {
+    const cap = money(r.maxIncome);
+    if (!inc || inc[2] == null) add('unknown', 'Income limit around ' + cap, 'income');
+    else if (inc[3] <= r.maxIncome) add('pass', 'Income under ' + cap);
+    else if (inc[2] >= r.maxIncome) r.softIncome ? add('unknown', 'Most winners earn under ' + cap + '; you can still apply') : add('fail', 'Income limit ' + cap);
+    else add('unknown', 'Your income range straddles the ' + cap + ' limit. Check exact figures', 'income');
+  }
+  if (r.majorCats) {
+    if (!has(p.majorCat) || p.majorCat === 'undecided') add('unknown', 'For ' + r.majorCats.map(m => lab(MAJORCATS, m)).join(' or ') + ' majors', 'majorCat');
+    else if (r.majorCats.includes(p.majorCat)) add('pass', 'Your field: ' + lab(MAJORCATS, p.majorCat));
+    else add('fail', 'For ' + r.majorCats.map(m => lab(MAJORCATS, m)).join(' or ') + ' majors');
+  }
+  if (r.ageMin != null || r.ageMax != null) {
+    const a = age(p.dob), lo = r.ageMin ?? 0, hi = r.ageMax ?? 200;
+    const rng = r.ageMin != null && r.ageMax != null ? 'ages ' + lo + '–' + hi : r.ageMax != null ? 'age ' + hi + ' or under' : 'age ' + lo + '+';
+    if (a == null) add('unknown', 'Age limit (' + rng + ')', 'dob');
+    else if (a >= lo && a <= hi) add('pass', 'Age ' + a + ' fits ' + rng);
+    else add('fail', 'For ' + rng + ' (you are ' + a + ')');
+  }
+  if (r.gender) {
+    if (!has(p.gender)) add('unknown', 'For ' + r.gender.join('/').toLowerCase() + ' students', 'gender');
+    else if (r.gender.includes(p.gender)) add('pass', 'Gender matches');
+    else if (p.gender === 'Male') add('fail', 'For ' + r.gender.join('/').toLowerCase() + ' students');
+    else add('unknown', 'Mainly for women. Check whether you are included');
+  }
+  if (r.military) {
+    const m = p.military || [];
+    if (r.military.some(x => m.includes(x))) add('pass', 'Military connection');
+    else add('fail', 'Requires a military connection (' + r.military.map(x => lab(MILITARY, x).toLowerCase()).join(' / ') + ')');
+  }
+  if (r.memberships) {
+    const m = p.memberships || [];
+    if (r.memberships.some(x => m.includes(x))) add('pass', 'Membership: ' + r.memberships.filter(x => m.includes(x)).map(x => lab(MEMBERSHIPS, x)).join(', '));
+    else add('fail', 'Requires: ' + r.memberships.map(x => lab(MEMBERSHIPS, x)).join(' or '));
+  }
+  if (r.lgbtq) {
+    if (p.lgbtq === 'yes') add('pass', 'LGBTQ+ students');
+    else add('fail', 'For LGBTQ+ students');
+  }
+  if (r.research) {
+    if (p.research === 'yes') add('pass', 'You have a research project');
+    else if (p.research === 'no') add('fail', 'Requires an original research project or major work');
+    else add('unknown', 'Requires an original project', 'research');
+  }
+  if (r.portfolio) {
+    if (p.portfolio === 'yes') add('pass', 'You have a portfolio');
+    else if (p.portfolio === 'no') add('fail', 'Requires art or writing samples');
+    else add('unknown', 'Requires art or writing samples', 'portfolio');
+  }
+  if (r.volunteerMin) {
+    const h = num(p.volunteerHours);
+    if (h == null) add('unknown', 'Looks for community service', 'volunteerHours');
+    else if (h >= r.volunteerMin) add('pass', h + ' volunteer hours');
+    else add('unknown', 'Looks for strong community service (you have ' + h + ' hrs)');
+  }
+  if (r.fafsa) {
+    if (p.fafsa === 'done') add('pass', 'FAFSA submitted');
+    else add('todo', 'File the FAFSA before applying');
+  }
+  const fail = out.some(c => c.state === 'fail');
+  const unknown = out.some(c => c.state === 'unknown');
+  return { status: fail ? 'no' : unknown ? 'maybe' : 'eligible', checks: out };
+}
+function hiddenBy(s, p) {
+  if (s.kind === 'contest' && p.includeContests === 'no') return 'You turned off competitions';
+  if (s.kind === 'sweepstakes' && p.includeSweeps === 'no') return 'You turned off no-essay drawings';
+  const min = num(p.minAward);
+  if (min && s.amountMax < min) return 'Below your minimum award';
+  if (p.essayTolerance === 'quick' && (s.effort === 'essay' || s.effort === 'heavy')) return 'Needs more writing than you chose';
+  if (s.video && p.videoOk === 'no') return 'Requires a video';
+  return null;
+}
+function monthsAway(m) { if (!m) return null; const now = new Date().getMonth() + 1; return (m - now + 12) % 12; }
+const EFFORT_LABEL = { quick:'Quick', short:'Short essay', essay:'Essays', heavy:'Big application' };
+const EFFORT_COST = { quick:{ quick:0, short:0, any:0 }, short:{ quick:10, short:2, any:1 }, essay:{ quick:18, short:9, any:2 }, heavy:{ quick:26, short:15, any:4 } };
+function score(s, p) {
+  const tol = p.essayTolerance || 'short';
+  let sc = Math.log10(Math.max(s.amountMax || 500, 100)) * 10 - EFFORT_COST[s.effort || 'essay'][tol];
+  const m = monthsAway(s.month);
+  if (m != null) sc -= m * 1.2;
+  if (s.kind === 'sweepstakes') sc -= 12;
+  const t = S.tracker[s.id];
+  if (t && t.deadline) { const days = (new Date(t.deadline) - new Date()) / 864e5; if (days >= 0) sc += Math.max(0, 10 - days / 6); }
+  return sc;
+}
+function results() {
+  const p = P();
+  return ALL().map(s => Object.assign({ s, hidden: hiddenBy(s, p), score: score(s, p) }, evaluate(s, p)));
+}
+function deadlineText(s) {
+  const t = S.tracker[s.id];
+  if (t && t.deadline) {
+    const days = Math.ceil((new Date(t.deadline + 'T23:59:00') - new Date()) / 864e5);
+    return days < 0 ? 'Deadline passed' : 'Due in ' + days + ' day' + (days === 1 ? '' : 's');
+  }
+  if (s.deadline) return 'Due ' + s.deadline;
+  if (!s.month) return 'Rolling / monthly';
+  const m = monthsAway(s.month);
+  return 'Usually due in ' + MONTHS[s.month - 1] + (m === 0 ? ' (this month)' : '');
+}
+
+/* ------------------------------------------------------------------ *
+ * Autofill data + bookmarklet
+ * ------------------------------------------------------------------ */
+function autofillData() {
+  const p = P(), e = E(), d = {};
+  const set = (k, v) => { if (has(v)) d[k] = String(v); };
+  set('firstName', p.firstName); set('middleName', p.middleName); set('lastName', p.lastName); set('preferredName', p.preferredName);
+  set('fullName', [p.firstName, p.middleName, p.lastName].filter(Boolean).join(' '));
+  set('email', p.email); set('phone', p.phone);
+  if (p.dob) { const [y, m, dd] = p.dob.split('-'); set('dob', p.dob); set('dobUS', m + '/' + dd + '/' + y); set('dobMonth', String(+m)); set('dobDay', String(+dd)); set('dobYear', y); }
+  set('gender', p.gender); set('street', p.street); set('street2', p.street2); set('city', p.city);
+  set('state', p.state); set('stateName', lab(STATES, p.state)); set('zip', p.zip); set('county', p.county); set('country', p.country || 'United States');
+  if (p.citizenship) set('citizenship', lab(CITIZEN, p.citizenship));
+  if (p.ethnicity && p.ethnicity.length) set('ethnicity', lab(ETHNICITY, p.ethnicity[0]));
+  set('highSchool', p.highSchool); set('hsCity', p.hsCity); set('hsGradYear', p.hsGradYear);
+  set('gpa', p.gpaUnweighted || p.gpaWeighted); set('gpaWeighted', p.gpaWeighted || p.gpaUnweighted);
+  set('classRank', p.classRank); set('classSize', p.classSize); set('sat', p.sat); set('act', p.act);
+  set('college', p.college || String(p.collegeTargets || '').split('\n')[0]);
+  set('major', p.major); set('minor', p.minor); set('careerGoal', p.careerGoal);
+  if (p.gradeLevel) set('gradeLevel', lab(GRADES, p.gradeLevel));
+  set('householdSize', p.householdSize);
+  if (p.income && p.income !== 'unsure') set('income', lab(INCOME.map(x => [x[0], x[1]]), p.income));
+  set('volunteerHours', p.volunteerHours);
+  if (p.firstGen === 'yes' || p.firstGen === 'no') set('firstGen', p.firstGen === 'yes' ? 'Yes' : 'No');
+  if (S.prefs.includeBio) set('bio', e.bio);
+  if (S.prefs.includeRefs) { set('rec1Name', p.rec1Name); set('rec1Email', p.rec1Email); set('counselorName', p.counselorName); set('counselorEmail', p.counselorEmail); }
+  return d;
+}
+/* This function runs on the scholarship website, not here. It must stay self-contained. */
+function SP_AUTOFILL(D) {
+  var RULES = [
+    ['firstGen', /first.?gen/],
+    ['counselorEmail', /counsel/, /e-?mail/], ['counselorName', /counsel/, /name/],
+    ['rec1Email', /recommend|reference|referee/, /e-?mail/], ['rec1Name', /recommend|reference|referee/, /name/],
+    ['email', /e-?mail/],
+    ['hsCity', /school/, /\bcity\b/],
+    ['gpaWeighted', /\bweighted/, /gpa|grade point/], ['gpa', /gpa|grade point/],
+    ['classSize', /class.?size|students in (your )?class/], ['classRank', /class.?rank/],
+    ['sat', /\bsat\b/], ['act', /\bact\b/],
+    ['dobMonth', /birth|dob/, /month|\bmm\b/], ['dobDay', /birth|dob/, /\bday\b|\bdd\b/], ['dobYear', /birth|dob/, /year|yyyy/],
+    ['dob', /birth|\bdob\b|bday/],
+    ['middleName', /middle.?(name|initial)|(^|\|)\s*middle\s*(\||$)/], ['preferredName', /preferred|nick.?name/],
+    ['firstName', /first.?name|given.?name|fname|(^|\|)\s*first\s*(\||$)/],
+    ['lastName', /last.?name|surname|family.?name|lname|(^|\|)\s*last\s*(\||$)/],
+    ['phone', /phone|mobile|\bcell\b|\btel\b/],
+    ['citizenship', /citizen/],
+    ['street2', /address.?(line)?.?2|apartment|\bapt\b|suite|\bunit\b/],
+    ['street', /street|address.?(line)?.?1|mailing address|home address|\baddress\b/],
+    ['county', /county/], ['country', /country/],
+    ['highSchool', /high.?school|secondary school/],
+    ['city', /\bcity\b|\btown\b/], ['zip', /\bzip|postal/], ['state', /\bstate\b|province/],
+    ['gender', /gender|\bsex\b/], ['ethnicity', /ethnic|\brace\b/],
+    ['hsGradYear', /grad(uation)?.?(year|date)|class of|expected graduation/],
+    ['major', /major|field of study|area of study|intended study|program of study|course of study/], ['minor', /\bminor\b/],
+    ['college', /college|university|institution/],
+    ['careerGoal', /career|profession/],
+    ['gradeLevel', /grade level|current grade|year in school|class standing|classification/],
+    ['householdSize', /household size|family size|(people|members) in (your )?(household|family)/],
+    ['income', /income/],
+    ['volunteerHours', /(volunteer|community service).*hours|hours.*(volunteer|community service)/],
+    ['bio', /\bbio\b|biography|about yourself|introduce yourself/],
+    ['fullName', /full.?name|legal name|student name|applicant name|your name|(^|\|)\s*name\s*\*?\s*(\||$)/]
+  ];
+  var SKIP = /parent|guardian|mother|father|emergency|spouse|sibling|password|captcha|coupon|promo|search|signature|initials/;
+  var ALT = {
+    state: [D.state, D.stateName], citizenship: [D.citizenship, /citizen/i.test(D.citizenship || '') ? 'Yes' : null],
+    gender: [D.gender, D.gender === 'Nonbinary' ? 'Non-binary' : null, D.gender === 'Prefer not to say' ? 'Decline' : null],
+    country: [D.country, 'United States of America', 'USA', 'US'], dobMonth: [D.dobMonth, D.dobMonth && ('0' + D.dobMonth).slice(-2)], dobDay: [D.dobDay, D.dobDay && ('0' + D.dobDay).slice(-2)]
+  };
+  function norm(s) { return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+  function text(el) { return el ? norm(el.textContent).slice(0, 160) : ''; }
+  function describe(el, doc) {
+    var parts = [el.getAttribute('autocomplete'), el.name, el.id, el.getAttribute('placeholder'), el.getAttribute('aria-label'), el.title];
+    if (el.labels) for (var i = 0; i < el.labels.length; i++) parts.push(text(el.labels[i]));
+    var lb = el.getAttribute('aria-labelledby');
+    if (lb) lb.split(/\s+/).forEach(function (id) { parts.push(text(doc.getElementById(id))); });
+    if (!el.labels || !el.labels.length) {
+      var box = el.closest('label, [role=group], .field, .form-group, .question, li, td, p, div');
+      if (box) { var t = text(box); if (t.length < 140) parts.push(t); }
+    }
+    return parts.filter(Boolean).map(norm).join(' | ');
+  }
+  function keyFor(desc) {
+    if (SKIP.test(desc)) return null;
+    for (var i = 0; i < RULES.length; i++) {
+      var r = RULES[i], ok = true;
+      for (var j = 1; j < r.length; j++) if (!r[j].test(desc)) { ok = false; break; }
+      if (ok) return D[r[0]] != null || ALT[r[0]] ? r[0] : null;
+    }
+    return null;
+  }
+  function value(key, el) {
+    if (key === 'dob' && el.type !== 'date' && !/yyyy-mm-dd/.test(norm(el.placeholder))) return D.dobUS;
+    if (key === 'state' && el.maxLength === 2) return D.state;
+    return D[key];
+  }
+  function setVal(el, v) {
+    var proto = el.tagName === 'SELECT' ? HTMLSelectElement.prototype : el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype : HTMLInputElement.prototype;
+    var desc = Object.getOwnPropertyDescriptor(proto, 'value');
+    if (desc && desc.set) desc.set.call(el, v); else el.value = v;
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+    el.dispatchEvent(new Event('blur', { bubbles: true }));
+  }
+  function mark(el) { el.style.outline = '3px solid #23a26d'; el.style.outlineOffset = '1px'; }
+  function bestOption(options, cands) {
+    var best = null, bestScore = 0;
+    cands.filter(Boolean).forEach(function (c, ci) {
+      var v = norm(c);
+      for (var i = 0; i < options.length; i++) {
+        var o = options[i], t = norm(o.label || o.text), ov = norm(o.value), s = 0;
+        if (!t && !ov) continue;
+        if (t === v || ov === v) s = 3;
+        else if (v.length > 2 && (t.indexOf(v) === 0 || v.indexOf(t) === 0) && t.length > 1) s = 2;
+        else if (v.length > 3 && t.indexOf(v) > -1) s = 1;
+        s -= ci * 0.1;
+        if (s > bestScore) { bestScore = s; best = o; }
+      }
+    });
+    return best;
+  }
+  var filled = 0, docs = [document];
+  document.querySelectorAll('iframe').forEach(function (f) { try { if (f.contentDocument) docs.push(f.contentDocument); } catch (e) {} });
+  docs.forEach(function (doc) {
+    var radiosDone = {};
+    doc.querySelectorAll('input, select, textarea').forEach(function (el) {
+      var type = (el.type || '').toLowerCase();
+      if (el.disabled || el.readOnly) return;
+      if (/^(hidden|password|file|submit|button|image|reset|checkbox|search|color|range)$/.test(type)) return;
+      if (!el.offsetParent && el.getClientRects().length === 0) return;
+      if (type === 'radio') {
+        if (radiosDone[el.name]) return; radiosDone[el.name] = 1;
+        var group = Array.prototype.slice.call(doc.querySelectorAll('input[type=radio]')).filter(function (r) { return r.name === el.name && r.form === el.form; });
+        if (group.some(function (r) { return r.checked; })) return;
+        var fs = el.closest('fieldset'), gdesc = norm([el.name, fs && fs.querySelector('legend') ? text(fs.querySelector('legend')) : '', el.closest('[role=radiogroup]') ? (el.closest('[role=radiogroup]').getAttribute('aria-label') || '') : ''].join(' | '));
+        var gk = keyFor(gdesc); if (!gk) return;
+        var opts = group.map(function (r) { return { el: r, label: r.labels && r.labels[0] ? r.labels[0].textContent : r.value, value: r.value }; });
+        var pick = bestOption(opts, ALT[gk] || [D[gk]]);
+        if (pick) { pick.el.click(); mark(pick.el.parentElement || pick.el); filled++; }
+        return;
+      }
+      var key = keyFor(describe(el, doc));
+      if (!key) return;
+      if (type === 'date' && key !== 'dob') return;
+      if (el.tagName === 'SELECT') {
+        if (el.selectedIndex > 0 && el.value) return;
+        var o = bestOption(Array.prototype.slice.call(el.options), ALT[key] || [D[key]]);
+        if (o) { setVal(el, o.value); mark(el); filled++; }
+        return;
+      }
+      if (el.value && el.value.trim()) return;
+      var v = value(key, el); if (v == null || v === '') return;
+      if (type === 'number' && isNaN(parseFloat(v))) return;
+      if (type === 'email' && v.indexOf('@') < 0) return;
+      setVal(el, v); mark(el); filled++;
+    });
+  });
+  var box = document.createElement('div');
+  box.textContent = 'ScholarPilot filled ' + filled + ' field' + (filled === 1 ? '' : 's') + '. Check every green box, write the essays yourself, then submit.';
+  box.setAttribute('style', 'position:fixed;z-index:2147483647;left:50%;top:16px;transform:translateX(-50%);max-width:92vw;background:#132238;color:#fff;font:600 14px/1.4 system-ui,sans-serif;padding:12px 16px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.3)');
+  document.body.appendChild(box);
+  setTimeout(function () { box.remove(); }, 7000);
+  return filled;
+}
+function bookmarkletHref() {
+  return 'javascript:' + encodeURIComponent('(' + SP_AUTOFILL.toString() + ')(' + JSON.stringify(autofillData()) + ');void 0');
+}
+
+/* ------------------------------------------------------------------ *
+ * Rendering
+ * ------------------------------------------------------------------ */
+const TABS = [['profile', 'Profile'], ['matches', 'Matches'], ['apply', 'Apply queue'], ['essays', 'Essays'], ['autofill', 'Autofill'], ['tracker', 'Tracker']];
+function renderTabs() {
+  const R = results(), elig = R.filter(r => r.status === 'eligible' && !r.hidden).length;
+  const tracked = Object.keys(S.tracker).length;
+  $('#tabs').innerHTML = TABS.map(([id, name]) => {
+    const c = id === 'matches' ? elig : id === 'tracker' ? tracked : id === 'profile' ? overallProgress(P()).pct + '%' : '';
+    return `<button role="tab" id="tab-${id}" aria-selected="${S.tab === id}" data-tab="${id}">${name}${c !== '' ? `<span class="count">${c}</span>` : ''}</button>`;
+  }).join('');
+}
+function sampleBanner() {
+  if (!usingSample()) return '';
+  return `<div class="banner"><p><b>You are looking at a sample student, Jordan Rivera.</b> Everything here is example data. Start your own profile to see your real matches.</p><button class="primary" data-act="start">Start my profile</button></div>`;
+}
+function render() {
+  renderTabs();
+  const view = { profile: viewProfile, matches: viewMatches, apply: viewApply, essays: viewEssays, autofill: viewAutofill, tracker: viewTracker }[S.tab] || viewMatches;
+  $('#app').innerHTML = sampleBanner() + view();
+}
+
+/* Profile */
+function fieldHTML(f, p, locked) {
+  const v = p[f.k], id = 'f-' + f.k;
+  const opt = f.optional ? ' <span class="muted small">(optional)</span>' : '';
+  const help = f.help ? `<div class="help">${esc(f.help)}</div>` : '';
+  let ctl = '';
+  if (f.type === 'select') {
+    ctl = `<select id="${id}" data-k="${f.k}"${f.ac ? ` autocomplete="${f.ac}"` : ''}><option value="">Choose…</option>${f.opts.map(o => `<option value="${esc(o[0])}"${v === o[0] ? ' selected' : ''}>${esc(o[1])}</option>`).join('')}</select>`;
+  } else if (f.type === 'yesno') {
+    ctl = `<div class="chips" role="radiogroup" id="${id}" aria-label="${esc(f.label)}">${(f.opts || YESNO).map(o => `<label><input type="radio" name="${id}" data-k="${f.k}" value="${o[0]}"${v === o[0] ? ' checked' : ''}>${o[1]}</label>`).join('')}</div>`;
+  } else if (f.type === 'multi') {
+    const arr = v || [];
+    ctl = `<div class="chips" id="${id}" role="group" aria-label="${esc(f.label)}">${f.opts.map(o => `<label><input type="checkbox" data-k="${f.k}" data-multi="1" value="${o[0]}"${arr.includes(o[0]) ? ' checked' : ''}>${esc(o[1])}</label>`).join('')}</div>`;
+  } else if (f.type === 'textarea' || f.type === 'list') {
+    ctl = `<textarea id="${id}" data-k="${f.k}" rows="${f.type === 'list' ? 4 : 3}" placeholder="${esc(f.ph || (f.type === 'list' ? 'One per line' : ''))}">${esc(v || '')}</textarea>`;
+  } else {
+    ctl = `<input id="${id}" data-k="${f.k}" type="${f.type}"${f.step ? ` step="${f.step}"` : ''}${f.ac ? ` autocomplete="${f.ac}"` : ''} value="${esc(v || '')}" placeholder="${esc(f.ph || '')}">`;
+  }
+  const lbl = f.type === 'yesno' || f.type === 'multi' ? `<div class="q" style="font-weight:600;margin-bottom:6px">${esc(f.label)}${opt}</div>` : `<label class="q" for="${id}">${esc(f.label)}${opt}</label>`;
+  return `<div class="field${f.wide ? ' wide' : ''}" data-field="${f.k}">${lbl}${ctl}${help}</div>`;
+}
+function viewProfile() {
+  const p = P(), step = Math.min(S.step || 0, STEPS.length - 1), st = STEPS[step], prog = overallProgress(p);
+  const rail = STEPS.map((s, i) => {
+    const r = stepProgress(i, p), done = r.total && r.done === r.total;
+    return `<li><button data-step="${i}"${i === step ? ' aria-current="step"' : ''}>${esc(s.title)}<span class="pct${done ? ' done' : ''}">${done ? '✓' : r.done + '/' + r.total}</span></button></li>`;
+  }).join('');
+  return `<div class="stack" style="gap:18px">
+    <div class="spread"><div><h2>Your profile</h2><p class="muted">${prog.done} of ${prog.total} core questions answered. Saved automatically on this device.</p></div><div style="flex:1 1 200px;max-width:320px"><div class="progress" aria-label="Profile progress"><i style="width:${prog.pct}%"></i></div></div></div>
+    <div class="wizard">
+      <ol class="steps" aria-label="Profile steps">${rail}</ol>
+      <form class="formcard stack" id="profileForm" style="gap:18px" autocomplete="on">
+        <div><p class="muted small mono">STEP ${step + 1} OF ${STEPS.length}</p><h3 style="font-size:1.4rem;margin-top:2px">${esc(st.title)}</h3><p class="muted" style="margin-top:6px;max-width:62ch">${esc(st.intro)}</p></div>
+        <fieldset ${usingSample() ? 'disabled' : ''}><div class="grid2">${st.fields.filter(f => visible(f, p)).map(f => fieldHTML(f, p)).join('')}</div></fieldset>
+        <div class="spread" style="border-top:1px solid var(--line);padding-top:14px">
+          <button type="button" data-act="prev" ${step === 0 ? 'disabled' : ''}>Back</button>
+          ${step < STEPS.length - 1 ? `<button type="button" class="primary" data-act="next">Next: ${esc(STEPS[step + 1].title)}</button>` : `<button type="button" class="primary" data-act="finish">See my matches</button>`}
+        </div>
+      </form>
+    </div>
+  </div>`;
+}
+
+/* Matches */
+let matchFilter = 'eligible', showHidden = false, matchQuery = '';
+function checksHTML(checks) {
+  const mark = { pass:'✓', fail:'✗', unknown:'?', todo:'!' };
+  return `<ul class="checks">${checks.map(c => `<li class="${c.state}"><span class="m">${mark[c.state]}</span><span>${esc(c.text)}${c.field ? ` <button class="ghost small" data-goto="${c.field}">Answer</button>` : ''}</span></li>`).join('')}</ul>`;
+}
+const STATUS_LABEL = { eligible:'Eligible', maybe:'Maybe', no:'Not eligible' };
+function cardHTML(r) {
+  const s = r.s, t = S.tracker[s.id];
+  return `<article class="card">
+    <div class="head"><div><h3>${esc(s.name)}</h3><p class="muted small">${esc(s.org || '')}</p></div><div class="amt">${esc(s.amount || '')}</div></div>
+    <div class="row"><span class="pill ${r.status}">${STATUS_LABEL[r.status]}</span><span class="pill">${EFFORT_LABEL[s.effort] || 'Essays'}</span>${s.video ? '<span class="pill">Video</span>' : ''}${s.kind !== 'scholarship' ? `<span class="pill">${esc(s.kind)}</span>` : ''}<span class="small muted">${esc(deadlineText(s))}</span></div>
+    ${r.checks.length ? checksHTML(r.checks) : '<p class="small muted">No listed eligibility rules. Read the official page.</p>'}
+    ${s.notes ? `<p class="small">${esc(s.notes)}</p>` : ''}
+    ${r.hidden ? `<p class="small muted">Hidden from your queue: ${esc(r.hidden)}.</p>` : ''}
+    <div class="foot"><span class="verify">${s.custom ? 'Added by you' : 'Rules change yearly. Verify on the official site.'}</span><div class="row">
+      ${s.url ? `<a class="btn" href="${esc(s.url)}" target="_blank" rel="noopener">Official site</a>` : ''}
+      ${t ? `<span class="pill eligible">Tracking</span>` : `<button class="primary" data-track="${s.id}"${r.status === 'no' ? ' disabled' : ''}>Add to queue</button>`}
+    </div></div>
+  </article>`;
+}
+function viewMatches() {
+  const p = P(), R = results();
+  const vis = R.filter(r => showHidden || !r.hidden);
+  const counts = { eligible: vis.filter(r => r.status === 'eligible').length, maybe: vis.filter(r => r.status === 'maybe').length, no: vis.filter(r => r.status === 'no').length };
+  const potential = vis.filter(r => r.status === 'eligible').reduce((a, r) => a + (r.s.amountMax || 0), 0);
+  const hiddenCount = R.filter(r => r.hidden && r.status !== 'no').length;
+  const missing = {};
+  R.filter(r => r.status === 'maybe').forEach(r => r.checks.forEach(c => { if (c.state === 'unknown' && c.field) missing[c.field] = (missing[c.field] || 0) + 1; }));
+  const unlock = Object.entries(missing).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const q = matchQuery.toLowerCase();
+  const list = vis.filter(r => (matchFilter === 'all' || r.status === matchFilter) && (!q || (r.s.name + ' ' + r.s.org + ' ' + (r.s.notes || '')).toLowerCase().includes(q)))
+    .sort((a, b) => ({ eligible:0, maybe:1, no:2 }[a.status] - { eligible:0, maybe:1, no:2 }[b.status]) || b.score - a.score);
+  return `<div class="stack" style="gap:18px">
+    <div><h2>Your matches</h2><p class="muted">Checked ${R.length} national scholarships and grants against your profile${usingSample() ? ' (sample student)' : ''}.</p></div>
+    <div class="tiles">
+      <div class="tile"><b>${counts.eligible}</b><span>Eligible</span></div>
+      <div class="tile"><b>${counts.maybe}</b><span>Maybe: answer a question</span></div>
+      <div class="tile"><b>${money(potential)}</b><span>Combined max awards you qualify for</span></div>
+      <div class="tile"><b>${overallProgress(p).pct}%</b><span>Profile complete</span></div>
+    </div>
+    ${unlock.length ? `<div class="unlock stack" style="gap:8px"><b>Answer these to check ${Object.values(missing).reduce((a, b) => a + b, 0)} more possible matches</b><div class="row">${unlock.map(([k, n]) => `<button data-goto="${k}">${esc(FIELD[k] ? FIELD[k].label : k)} <span class="muted mono small">+${n}</span></button>`).join('')}</div></div>` : ''}
+    <div class="spread">
+      <div class="seg" role="group" aria-label="Filter">${[['eligible', 'Eligible'], ['maybe', 'Maybe'], ['no', 'Not eligible'], ['all', 'All']].map(([k, l]) => `<button data-filter="${k}" aria-pressed="${matchFilter === k}">${l}${k !== 'all' ? ` <span class="mono">${counts[k]}</span>` : ''}</button>`).join('')}</div>
+      <div class="row" style="flex:1 1 240px;justify-content:flex-end"><input id="matchSearch" type="search" placeholder="Search scholarships" value="${esc(matchQuery)}" style="max-width:260px"></div>
+    </div>
+    ${hiddenCount ? `<label class="small row" style="gap:6px"><input type="checkbox" id="showHidden" style="width:auto" ${showHidden ? 'checked' : ''}> Show ${hiddenCount} hidden by your preferences</label>` : ''}
+    ${list.length ? `<div class="cards">${list.map(cardHTML).join('')}</div>` : `<div class="empty">Nothing in this list yet. ${matchFilter === 'eligible' ? 'Answer more profile questions or check the Maybe tab.' : ''}</div>`}
+    <div class="panel"><h3>Where the easiest money is: local scholarships</h3><p class="muted">National awards get thousands of applicants. Local ones often get a handful. Check each of these, then add what you find on the Tracker tab.</p><ul style="margin:0;padding-left:20px">${LOCAL_SOURCES.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
+  </div>`;
+}
+
+/* Apply queue */
+const FACT_KEYS = [['fullName','Full name'],['email','Email'],['phone','Phone'],['dobUS','Birthday'],['street','Street'],['city','City'],['state','State'],['zip','ZIP'],['highSchool','High school'],['hsGradYear','Grad year'],['gpa','GPA (unweighted)'],['gpaWeighted','GPA (weighted)'],['sat','SAT'],['act','ACT'],['college','College'],['major','Major'],['careerGoal','Career goal'],['volunteerHours','Volunteer hours']];
+function factsHTML() {
+  const d = autofillData();
+  const rows = FACT_KEYS.filter(([k]) => d[k]).map(([k, l]) => `<div class="fact"><span><em>${l}</em>${esc(d[k])}</span><button data-copy="${esc(d[k])}" data-what="${l}">Copy</button></div>`);
+  const p = P();
+  if (p.activities) rows.push(`<div class="fact"><span><em>Activities</em>${esc(String(p.activities).split('\n')[0])}…</span><button data-copy="${esc(p.activities)}" data-what="Activities">Copy</button></div>`);
+  if (p.awards) rows.push(`<div class="fact"><span><em>Awards</em>${esc(String(p.awards).split('\n')[0])}…</span><button data-copy="${esc(p.awards)}" data-what="Awards">Copy</button></div>`);
+  return `<div class="facts">${rows.join('')}</div>`;
+}
+function tailorPrompt(s, theme, essay) {
+  return `I'm applying for the ${s.name} (${s.org}). Below is an essay I already wrote about "${lab(THEMES, theme)}".\n\nPaste the exact prompt and word limit here: [PROMPT] [WORD LIMIT]\n\nPlease suggest how to adapt MY essay to this prompt. Keep my voice and only use facts that are in my essay or that I give you. Do not invent experiences, awards or numbers. Point out anything that doesn't answer the prompt, then show a revised version within the word limit.\n\nMy essay:\n"""\n${essay}\n"""`;
+}
+function kitHTML(r) {
+  const s = r.s, e = E(), t = S.tracker[s.id] || {};
+  const themes = (s.themes || []);
+  const essayRows = themes.length ? themes.map(th => {
+    const txt = e[th] || '', wc = words(txt);
+    return `<div class="essaymatch"><div class="spread"><b>${esc(lab(THEMES, th))}</b><span class="small mono ${txt ? '' : 'muted'}">${txt ? wc + ' words' : 'not written yet'}</span></div>
+      ${txt ? `<p class="small muted">${esc(txt.slice(0, 160))}${txt.length > 160 ? '…' : ''}</p><div class="row"><button data-copy-essay="${th}">Copy essay</button><button data-tailor="${s.id}|${th}">Copy tailoring prompt</button></div>` : `<div><button data-gotab="essays" data-theme="${th}">Write it once in the Essay bank</button></div>`}
+    </div>`;
+  }).join('') : '<p class="small muted">No essay expected. Use the facts below.</p>';
+  const todo = r.checks.filter(c => c.state === 'todo').map(c => `<li>${esc(c.text)}</li>`).join('');
+  return `<div class="kitbody">
+    <div class="kitstep"><span class="n">1</span><div><b>Open the application</b><p class="small muted">${esc(s.notes || '')}</p><div class="row">${s.url ? `<a class="btn primary" href="${esc(s.url)}" target="_blank" rel="noopener">Open official site</a>` : ''}<label class="small row" style="gap:6px">Exact deadline <input type="date" data-deadline="${s.id}" value="${esc(t.deadline || '')}" style="width:auto"></label></div></div></div>
+    <div class="kitstep"><span class="n">2</span><div><b>Autofill the form</b><p class="small muted">Click your ScholarPilot bookmark on the application page. Anything it misses, copy from here.</p>${factsHTML()}</div></div>
+    <div class="kitstep"><span class="n">3</span><div><b>Essays</b>${essayRows}</div></div>
+    <div class="kitstep"><span class="n">4</span><div><b>Documents</b><ul style="margin:0;padding-left:20px" class="small">${(s.docs || ['Check the official page']).map(d => `<li>${esc(d)}</li>`).join('')}${todo}</ul></div></div>
+    <div class="kitstep"><span class="n">5</span><div><b>Review and submit it yourself</b><div class="row"><button class="primary" data-status="${s.id}|submitted">I submitted it</button><button data-status="${s.id}|progress">Mark in progress</button><button class="ghost" data-status="${s.id}|skip">Skip this one</button></div></div></div>
+  </div>`;
+}
+function viewApply() {
+  const R = results().filter(r => r.status === 'eligible' && !r.hidden && !['submitted', 'won', 'lost', 'skip'].includes((S.tracker[r.s.id] || {}).status)).sort((a, b) => b.score - a.score);
+  const p = P(), hrs = num(p.hoursPerWeek);
+  return `<div class="stack" style="gap:18px">
+    <div><h2>Apply queue</h2><p class="muted" style="max-width:68ch">Ranked by award size, how much writing it takes (based on your preferences) and how soon it is due. Open one, follow the five steps, and mark it submitted.${hrs ? ` At ${hrs} hours a week, aim for ${Math.max(1, Math.round(hrs * 1.5))} applications a week.` : ''}</p></div>
+    ${R.length ? R.map((r, i) => `<details class="kit"${i === 0 ? ' open' : ''}><summary><span class="rank">${i + 1}</span><span style="min-width:0"><b>${esc(r.s.name)}</b><br><span class="small muted">${EFFORT_LABEL[r.s.effort] || ''} · ${esc(deadlineText(r.s))}${S.tracker[r.s.id] ? ' · ' + esc(TRACK_STATUS[S.tracker[r.s.id].status] || '') : ''}</span></span><span class="amt">${esc(r.s.amount)}</span></summary>${kitHTML(r)}</details>`).join('') : `<div class="empty">Your queue is empty. Fill in more of your profile, or check the Maybe list on Matches.</div>`}
+  </div>`;
+}
+
+/* Essays */
+function viewEssays() {
+  const e = E(), R = results().filter(r => r.status !== 'no' && !r.hidden);
+  const demand = {}; R.forEach(r => (r.s.themes || []).forEach(t => { demand[t] = (demand[t] || 0) + 1; }));
+  const order = THEMES.slice().sort((a, b) => (demand[b[0]] || 0) - (demand[a[0]] || 0));
+  return `<div class="stack" style="gap:18px">
+    <div><h2>Essay bank</h2><p class="muted" style="max-width:68ch">Most scholarship prompts are variations of the same dozen questions. Write each one once, in your own words, then adapt it per application. Sorted by how many of your matches ask for it.</p></div>
+    ${order.map(([k, l, hint]) => {
+      const txt = e[k] || '';
+      return `<div class="essay" id="essay-${k}"><div class="spread"><h3>${esc(l)}</h3><span class="small muted mono">${demand[k] ? demand[k] + ' matches use this · ' : ''}<span data-wc="${k}">${words(txt)}</span> words</span></div><p class="small muted">${esc(hint)}</p><textarea data-essay="${k}" ${usingSample() ? 'disabled' : ''} placeholder="Write a first draft. 250–650 words is the most common range.">${esc(txt)}</textarea></div>`;
+    }).join('')}
+  </div>`;
+}
+
+/* Autofill */
+function viewAutofill() {
+  const d = autofillData(), n = Object.keys(d).length;
+  return `<div class="stack" style="gap:18px">
+    <div><h2>One-click autofill</h2><p class="muted" style="max-width:70ch">A bookmark button that fills scholarship forms on any website with your profile, the way job-application autofill tools work. It never presses Submit, and it never touches passwords or file uploads.</p></div>
+    <div class="cols">
+      <div class="panel">
+        <h3>Set it up (laptop or desktop)</h3>
+        <ol class="how">
+          <li>Show your bookmarks bar (Ctrl+Shift+B on Windows, Cmd+Shift+B on Mac).</li>
+          <li>Drag this button onto the bar: <div style="margin:10px 0"><a class="bm" id="bookmarklet" href="${esc(bookmarkletHref())}" draggable="true" title="Drag me to your bookmarks bar">ScholarPilot Fill</a></div></li>
+          <li>On a scholarship application, click <b>ScholarPilot Fill</b>. Filled fields turn green.</li>
+          <li>Check every field, paste your essays, then submit yourself.</li>
+        </ol>
+        <p class="small muted">If dragging doesn't work: create any bookmark, edit it, and paste this as its URL.</p>
+        <div class="row"><button data-act="copybm">Copy bookmark code</button><a class="btn" href="test-form.html" target="_blank" rel="noopener">Try it on a practice form</a></div>
+        <p class="small"><b>Update it after you change your profile.</b> The button carries a copy of your answers, so drag a fresh one after edits. Don't share it with anyone.</p>
+      </div>
+      <div class="panel">
+        <h3>What it fills <span class="muted small mono">${n} fields</span></h3>
+        <label class="small row" style="gap:6px"><input type="checkbox" id="incBio" style="width:auto" ${S.prefs.includeBio ? 'checked' : ''}> Include my short bio</label>
+        <label class="small row" style="gap:6px"><input type="checkbox" id="incRefs" style="width:auto" ${S.prefs.includeRefs ? 'checked' : ''}> Include recommender and counselor contacts</label>
+        <div class="facts" style="grid-template-columns:minmax(0,1fr)">${Object.entries(d).map(([k, v]) => `<div class="fact"><span><em>${esc(k)}</em>${esc(v)}</span></div>`).join('')}</div>
+        <p class="small muted">On a phone, bookmarks are awkward. Use the copy buttons in each application's kit on the Apply queue instead.</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* Tracker */
+const TRACK_STATUS = { todo:'Planning', progress:'In progress', submitted:'Submitted', won:'Won', lost:'Not selected', skip:'Skipped' };
+let scamWarn = '';
+function viewTracker() {
+  const byId = {}; ALL().forEach(s => { byId[s.id] = s; });
+  const rows = Object.entries(S.tracker).filter(([id]) => byId[id]).sort((a, b) => (a[1].deadline || '9999').localeCompare(b[1].deadline || '9999'));
+  const won = rows.filter(([, t]) => t.status === 'won').reduce((a, [, t]) => a + (num(t.wonAmount) || 0), 0);
+  const submitted = rows.filter(([, t]) => ['submitted', 'won', 'lost'].includes(t.status)).length;
+  return `<div class="stack" style="gap:18px">
+    <div><h2>Tracker</h2><p class="muted">Every application you've queued, with deadlines and results.</p></div>
+    <div class="tiles"><div class="tile"><b>${rows.length}</b><span>Tracked</span></div><div class="tile"><b>${submitted}</b><span>Submitted</span></div><div class="tile"><b>${rows.filter(([, t]) => t.status === 'won').length}</b><span>Won</span></div><div class="tile"><b>${money(won)}</b><span>Won so far</span></div></div>
+    ${rows.length ? `<div class="tablewrap"><table><thead><tr><th>Scholarship</th><th>Amount</th><th>Status</th><th>Deadline</th><th>Won ($)</th><th>Notes</th></tr></thead><tbody>${rows.map(([id, t]) => {
+      const s = byId[id];
+      return `<tr><td><b>${esc(s.name)}</b><br><span class="small muted">${esc(deadlineText(s))}</span></td><td class="mono">${esc(s.amount || '')}</td>
+        <td><select data-tstatus="${id}">${Object.entries(TRACK_STATUS).map(([k, l]) => `<option value="${k}"${t.status === k ? ' selected' : ''}>${l}</option>`).join('')}</select></td>
+        <td><input type="date" data-deadline="${id}" value="${esc(t.deadline || '')}"></td>
+        <td><input type="number" data-won="${id}" value="${esc(t.wonAmount || '')}" style="width:100px" ${t.status === 'won' ? '' : 'disabled'}></td>
+        <td><input type="text" data-note="${id}" value="${esc(t.notes || '')}" placeholder="Login, contact, next step"></td></tr>`;
+    }).join('')}</tbody></table></div>
+    <div class="row"><button data-act="ics">Download calendar (.ics)</button><button data-act="icscopy">Copy calendar text</button><span class="small muted">Adds every dated deadline with a reminder a week before.</span></div>` : `<div class="empty">Nothing tracked yet. Use "Add to queue" on the Matches tab.</div>`}
+
+    <div class="panel">
+      <h3>Add a scholarship you found</h3>
+      <p class="small muted">From your counselor, a local foundation, an employer or a website. Answer the scam check first.</p>
+      <form id="addForm" class="grid2" autocomplete="off">
+        <div class="field wide"><label class="q" for="c-name">Scholarship name</label><input id="c-name" required></div>
+        <div class="field"><label class="q" for="c-org">Who offers it</label><input id="c-org"></div>
+        <div class="field"><label class="q" for="c-url">Website</label><input id="c-url" type="url" placeholder="https://"></div>
+        <div class="field"><label class="q" for="c-amount">Amount ($)</label><input id="c-amount" type="number"></div>
+        <div class="field"><label class="q" for="c-deadline">Deadline</label><input id="c-deadline" type="date"></div>
+        <div class="field"><label class="q" for="c-gpa">Minimum GPA</label><input id="c-gpa" type="number" step="0.1"></div>
+        <div class="field"><label class="q" for="c-effort">Work required</label><select id="c-effort"><option value="quick">Quick form</option><option value="short">Short essay</option><option value="essay" selected>Essays</option><option value="heavy">Essays + recommendations</option></select></div>
+        <div class="field wide"><div class="q" style="font-weight:600;margin-bottom:6px">Grade levels it's open to (leave blank for any)</div><div class="chips">${GRADES.map(g => `<label><input type="checkbox" name="c-grade" value="${g[0]}">${esc(g[1])}</label>`).join('')}</div></div>
+        <div class="field wide"><div class="q" style="font-weight:600;margin-bottom:6px">Essay topics</div><div class="chips">${THEMES.map(t => `<label><input type="checkbox" name="c-theme" value="${t[0]}">${esc(t[1])}</label>`).join('')}</div></div>
+        <div class="field wide"><div class="q" style="font-weight:600;margin-bottom:6px">Scam check: does it…</div><div class="chips">${['charge an application or processing fee','ask for your SSN, bank or card number up front','guarantee you will win','say you won something you never applied for','have no real website, address or phone number'].map((x, i) => `<label><input type="checkbox" name="c-scam" value="${i}">${x}</label>`).join('')}</div></div>
+        ${scamWarn ? `<div class="wide warnbox">${esc(scamWarn)}</div>` : ''}
+        <div class="wide"><button class="primary" type="submit">Add and track it</button></div>
+      </form>
+    </div>
+
+    <div class="cols">
+      <div class="panel"><h3>Back up your data</h3><p class="small muted">Everything lives in this browser only. Save a backup file, or copy it, before clearing your browser or switching devices.</p>
+        <div class="row"><button data-act="export">Download backup</button><button data-act="exportcopy">Copy backup text</button></div>
+        <label class="q" for="importText" style="margin-top:8px">Restore from backup</label>
+        <textarea id="importText" placeholder="Paste backup text here, or choose a file below"></textarea>
+        <div class="row"><input type="file" id="importFile" accept=".json,application/json" style="width:auto;flex:1 1 200px"><button data-act="import">Restore</button></div>
+      </div>
+      <div class="panel"><h3>Import a scholarship list</h3><p class="small muted">Paste a JSON list from a counselor or another tool. Each item needs at least a <span class="mono">name</span>; optional: <span class="mono">url, amountMax, deadline, effort, themes, rules</span>.</p>
+        <textarea id="importList" placeholder='[{"name":"Rotary Club of Austin Scholarship","url":"https://…","amountMax":2000,"deadline":"2027-03-01","rules":{"grades":["hs12"],"minGpa":3.0}}]'></textarea>
+        <div class="row"><button data-act="importlist">Import list</button></div>
+        <hr class="sep">
+        <h3>Start over</h3>
+        ${confirmClear ? `<div class="warnbox">This deletes your profile, essays and tracker from this browser. It can't be undone.</div><div class="row"><button class="danger" data-act="clearyes">Yes, delete everything</button><button data-act="clearno">Cancel</button></div>` : `<div><button class="danger" data-act="clear">Delete all my data</button></div>`}
+      </div>
+    </div>
+  </div>`;
+}
+let confirmClear = false;
+
+/* ------------------------------------------------------------------ *
+ * Actions
+ * ------------------------------------------------------------------ */
+function setTab(t) { S.tab = t; save(); render(); window.scrollTo(0, 0); }
+function gotoField(k) {
+  const f = FIELD[k]; if (!f) return;
+  if (usingSample()) { toast('Start your own profile first'); }
+  S.tab = 'profile'; S.step = f.step; save(); render();
+  const el = document.querySelector(`[data-field="${k}"]`);
+  if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('flash'); const inp = el.querySelector('input, select, textarea'); if (inp && !inp.disabled) inp.focus({ preventScroll: true }); }
+}
+function track(id, status) {
+  S.tracker[id] = Object.assign({ status: 'todo' }, S.tracker[id] || {}, status ? { status } : {}); save();
+}
+function icsText() {
+  const byId = {}; ALL().forEach(s => { byId[s.id] = s; });
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+  const ev = Object.entries(S.tracker).filter(([id, t]) => t.deadline && byId[id] && !['skip', 'lost', 'won'].includes(t.status)).map(([id, t]) => {
+    const d = t.deadline.replace(/-/g, ''), s = byId[id];
+    const next = new Date(t.deadline + 'T00:00:00'); next.setDate(next.getDate() + 1);
+    const d2 = next.toISOString().slice(0, 10).replace(/-/g, '');
+    const clean = x => String(x || '').replace(/[,;\\]/g, ' ');
+    return ['BEGIN:VEVENT', 'UID:' + id + '-' + d + '@scholarpilot', 'DTSTAMP:' + stamp, 'DTSTART;VALUE=DATE:' + d, 'DTEND;VALUE=DATE:' + d2, 'SUMMARY:DUE: ' + clean(s.name), 'DESCRIPTION:' + clean(s.amount) + ' ' + clean(s.url), 'BEGIN:VALARM', 'TRIGGER:-P7D', 'ACTION:DISPLAY', 'DESCRIPTION:Scholarship due in 1 week', 'END:VALARM', 'END:VEVENT'].join('\r\n');
+  });
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//ScholarPilot//EN'].concat(ev, ['END:VCALENDAR']).join('\r\n');
+}
+function restore(text) {
+  try {
+    const d = JSON.parse(text);
+    if (!d || typeof d !== 'object' || !('profile' in d)) throw new Error('not a backup');
+    Object.assign(S, { profile: d.profile, essays: d.essays || {}, tracker: d.tracker || {}, custom: d.custom || [], prefs: d.prefs || S.prefs });
+    save(); render(); toast('Backup restored');
+  } catch (e) { toast('That is not a ScholarPilot backup. Check you pasted the whole thing.'); }
+}
+
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('button, a[data-gotab]');
+  if (!b) return;
+  const d = b.dataset;
+  if (d.tab) return setTab(d.tab);
+  if (d.step != null) { S.step = +d.step; save(); render(); return; }
+  if (d.goto) return gotoField(d.goto);
+  if (d.filter) { matchFilter = d.filter; render(); return; }
+  if (d.track) { track(d.track); toast('Added to your queue'); render(); return; }
+  if (d.copy != null) return copy(d.copy, d.what);
+  if (d.copyEssay) return copy(E()[d.copyEssay] || '', 'Essay');
+  if (d.tailor) { const [id, th] = d.tailor.split('|'); const s = ALL().find(x => x.id === id); return copy(tailorPrompt(s, th, E()[th] || ''), 'Tailoring prompt'); }
+  if (d.gotab) { S.tab = d.gotab; save(); render(); const el = d.theme && document.getElementById('essay-' + d.theme); if (el) { el.scrollIntoView({ block: 'start' }); const ta = el.querySelector('textarea'); if (ta && !ta.disabled) ta.focus({ preventScroll: true }); } return; }
+  if (d.status) { const [id, st] = d.status.split('|'); track(id, st); toast(st === 'submitted' ? 'Marked submitted. Nice work.' : 'Updated'); render(); return; }
+  switch (d.act) {
+    case 'start': S.profile = {}; S.essays = {}; S.tab = 'profile'; S.step = 0; save(); render(); window.scrollTo(0, 0); setTimeout(() => { const f = $('#f-firstName'); if (f) f.focus(); }, 0); break;
+    case 'prev': S.step = Math.max(0, S.step - 1); save(); render(); window.scrollTo(0, 0); break;
+    case 'next': S.step = Math.min(STEPS.length - 1, S.step + 1); save(); render(); window.scrollTo(0, 0); break;
+    case 'finish': setTab('matches'); break;
+    case 'copybm': copy(bookmarkletHref(), 'Bookmark code'); break;
+    case 'ics': download('scholarship-deadlines.ics', icsText(), 'text/calendar'); break;
+    case 'icscopy': copy(icsText(), 'Calendar text'); break;
+    case 'export': download('scholarpilot-backup.json', JSON.stringify({ profile: S.profile, essays: S.essays, tracker: S.tracker, custom: S.custom, prefs: S.prefs }, null, 2), 'application/json'); break;
+    case 'exportcopy': copy(JSON.stringify({ profile: S.profile, essays: S.essays, tracker: S.tracker, custom: S.custom, prefs: S.prefs }), 'Backup'); break;
+    case 'import': restore($('#importText').value); break;
+    case 'importlist': {
+      try {
+        const arr = JSON.parse($('#importList').value); if (!Array.isArray(arr)) throw 0;
+        let n = 0;
+        arr.forEach((x, i) => { if (!x || !x.name) return; const id = 'c-' + Date.now() + '-' + i; S.custom.push({ id, custom: true, name: String(x.name), org: x.org || '', url: x.url || '', amount: x.amountMax ? money(x.amountMax) : (x.amount || 'Varies'), amountMax: num(x.amountMax) || 1000, effort: x.effort || 'essay', themes: x.themes || [], rules: x.rules || {}, kind: 'scholarship', docs: x.docs || [], notes: x.notes || '' }); if (x.deadline) S.tracker[id] = { status: 'todo', deadline: x.deadline }; n++; });
+        save(); render(); toast('Imported ' + n + ' scholarships');
+      } catch (e) { toast('Could not read that list. It must be a JSON array.'); }
+      break;
+    }
+    case 'clear': confirmClear = true; render(); break;
+    case 'clearno': confirmClear = false; render(); break;
+    case 'clearyes': confirmClear = false; try { localStorage.removeItem(KEY); } catch (e) {} Object.assign(S, { profile: null, essays: {}, tracker: {}, custom: [], prefs: { includeBio: false, includeRefs: false }, tab: 'matches', step: 0 }); render(); toast('All data deleted'); break;
+  }
+});
+
+function onProfileInput(t) {
+  if (usingSample()) return;
+  const k = t.dataset.k; const p = S.profile;
+  if (t.dataset.multi) {
+    const vals = Array.from(document.querySelectorAll(`input[data-k="${k}"]:checked`)).map(x => x.value);
+    if (k === 'military' && t.value === 'none' && t.checked) vals.splice(0, vals.length, 'none');
+    else if (k === 'military') { const i = vals.indexOf('none'); if (i > -1) vals.splice(i, 1); }
+    p[k] = vals;
+    document.querySelectorAll(`input[data-k="${k}"]`).forEach(x => { x.checked = vals.includes(x.value); });
+  } else p[k] = t.value;
+  save();
+}
+document.addEventListener('input', ev => {
+  const t = ev.target;
+  if (t.dataset.k) { onProfileInput(t); renderTabs(); return; }
+  if (t.dataset.essay) { if (usingSample()) return; S.essays[t.dataset.essay] = t.value; save(); const w = document.querySelector(`[data-wc="${t.dataset.essay}"]`); if (w) w.textContent = words(t.value); return; }
+  if (t.id === 'matchSearch') { matchQuery = t.value; const pos = t.selectionStart; render(); const n = $('#matchSearch'); if (n) { n.focus(); n.setSelectionRange(pos, pos); } return; }
+  if (t.dataset.note) { S.tracker[t.dataset.note].notes = t.value; save(); return; }
+  if (t.dataset.won) { S.tracker[t.dataset.won].wonAmount = t.value; save(); return; }
+});
+document.addEventListener('change', ev => {
+  const t = ev.target;
+  if (t.dataset.k) {
+    // conditional questions may appear or disappear
+    if (['gradeLevel', 'ethnicity', 'works', 'research'].includes(t.dataset.k)) { const y = window.scrollY; render(); window.scrollTo(0, y); }
+    return;
+  }
+  if (t.dataset.deadline) { track(t.dataset.deadline); S.tracker[t.dataset.deadline].deadline = t.value; save(); toast('Deadline saved'); return; }
+  if (t.dataset.tstatus) { S.tracker[t.dataset.tstatus].status = t.value; save(); render(); return; }
+  if (t.id === 'showHidden') { showHidden = t.checked; render(); return; }
+  if (t.id === 'incBio') { S.prefs.includeBio = t.checked; save(); render(); return; }
+  if (t.id === 'incRefs') { S.prefs.includeRefs = t.checked; save(); render(); return; }
+  if (t.id === 'importFile' && t.files[0]) { const r = new FileReader(); r.onload = () => { $('#importText').value = r.result; }; r.readAsText(t.files[0]); }
+});
+document.addEventListener('submit', ev => {
+  ev.preventDefault();
+  if (ev.target.id === 'profileForm') return;
+  if (ev.target.id !== 'addForm') return;
+  const f = ev.target;
+  const scams = f.querySelectorAll('input[name="c-scam"]:checked');
+  if (scams.length) { scamWarn = 'Stop: real scholarships never charge fees, need your bank or Social Security number up front, or guarantee a win. Don\'t apply to this one, and tell your counselor about it.'; render(); return; }
+  scamWarn = '';
+  const name = $('#c-name').value.trim(); if (!name) return;
+  const grades = Array.from(f.querySelectorAll('input[name="c-grade"]:checked')).map(x => x.value);
+  const themes = Array.from(f.querySelectorAll('input[name="c-theme"]:checked')).map(x => x.value);
+  const amt = num($('#c-amount').value), gpaMin = num($('#c-gpa').value), id = 'c-' + Date.now();
+  const rules = {}; if (grades.length) rules.grades = grades; if (gpaMin) rules.minGpa = gpaMin;
+  S.custom.push({ id, custom: true, name, org: $('#c-org').value.trim(), url: $('#c-url').value.trim(), amount: amt ? money(amt) : 'Varies', amountMax: amt || 1000, effort: $('#c-effort').value, themes, rules, kind: 'scholarship', docs: [], notes: '' });
+  S.tracker[id] = { status: 'todo', deadline: $('#c-deadline').value };
+  save(); render(); toast('Added ' + name);
+});
+
+if (S.tab === 'profile' && usingSample()) S.tab = 'matches';
+render();
+</script>
+</body>
+</html>
